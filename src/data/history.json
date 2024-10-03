@@ -1,0 +1,16 @@
+[
+  {
+    "role": "Fullstack Developer",
+    "organisation": "Baliola.com",
+    "startDate": "Nov, 2021",
+    "endDate": "Jul, 2022",
+    "experiences": ["Designed and developed a complex relational database with 9 interconnected tables and the APIs for a major project", "Assisted in the design and development of the front end of the companys website", "Collaborated with a colleague to develop and launch a clients landing page within a two-week deadline", "successfully attracting approximately 50 customers in one month", "Created and managed a WordPress-based news website", "increasing monthly visitors by 3%"]
+  },
+  {
+    "role": "Laravel Developer",
+    "organisation": "Sintech",
+    "startDate": "Nov, 2023",
+    "endDate": "Feb, 2024",
+    "experiences": ["Helped organize the Laravel team and successfully completed tasks assigned for four projects", "Monitored ongoing projects, reducing errors by 75% and resolving issues, improving project delivery time by 20%"]
+  }
+]
