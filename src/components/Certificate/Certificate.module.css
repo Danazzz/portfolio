@@ -1,62 +1,26 @@
 @import "../../vars.css";
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .title {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .certificateCard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 15px;
-    margin: 10px;
-    transition: transform 0.3s ease;
-  }
-  
-  .certificateCard:hover {
-    transform: translateY(-5px);
-  }
-  
-  .certificateCard img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-  }
-  
-  .certificateCard h3 {
-    margin-top: 10px;
-    color: #333;
-  }
-  
-  .certificateCard p {
-    font-size: 0.9rem;
-    color: #666;
-  }
-  
-  /* Responsive adjustments */
-  @media (min-width: 600px) {
-    .certificateCard {
-      flex-direction: row;
-    }
-  
-    .certificateCard img {
-      width: 50%;
-      max-width: 300px;
-    }
-  
-    .certificateCard h3, .certificateCard p {
-      padding-left: 15px;
-    }
-  }
+  margin-top: 76px;
+  color: var(--color-text);
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: 700;
+  letter-spacing: 1.75px;
+  text-transform: uppercase;
+}
+
+.projects {
+  margin-top: 37px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+}
