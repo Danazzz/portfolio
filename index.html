@@ -1,10 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dana's Portfolio</title>
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Dana Wardhiana — Portfolio</title>
+    <meta name="description" content="Portfolio of Dana Wardhiana, fullstack developer (MERN, Laravel, Python). Projects, experience, skills and certificates." />
+    <meta name="theme-color" content="#7D5A50" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dana Wardhiana — Portfolio" />
+    <meta property="og:description" content="Projects, experience, skills and certificates of Dana Wardhiana." />
+    <meta property="og:url" content="https://danazzz.github.io/portfolio/" />
+    <meta property="og:image" content="https://danazzz.github.io/portfolio/assets/profile/avatar.png" />
+    <meta name="twitter:card" content="summary" />
+
+    <script>
+      // Pasang tema sebelum halaman tampil supaya tidak berkedip.
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
