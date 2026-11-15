@@ -1,10 +1,110 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Outfit", Arial, Helvetica, sans-serif;
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Palet warna diambil dari desain lama:
+ * #7D5A50 (coklat), #B4846C (coklat muda), #FCDEC0 (krem), #3B2B26 (coklat tua), putih.
+ */
+:root {
+  --bg: #fbf4ec;
+  --surface: #ffffff;
+  --surface-2: #f6e9dc;
+  --ink: #3b2b26;
+  --muted: #8a6e64;
+  --line: #ecdccd;
+  --brand: #7d5a50;
+  --brand-2: #b4846c;
+  --cream: #fcdec0;
+  --on-brand: #ffffff;
+  --danger: #c2410c;
+  --swiper-theme-color: #7d5a50;
+  color-scheme: light;
 }
 
-html {
-  scroll-behavior: smooth;
+.dark {
+  --bg: #1d1512;
+  --surface: #2a201c;
+  --surface-2: #3b2b26;
+  --ink: #fcf1e6;
+  --muted: #c8ab98;
+  --line: #45342d;
+  --brand: #b4846c;
+  --brand-2: #d9a98c;
+  --cream: #fcdec0;
+  --on-brand: #ffffff;
+  --danger: #fb923c;
+  --swiper-theme-color: #fcdec0;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-cream: var(--cream);
+  --color-on-brand: var(--on-brand);
+  --color-danger: var(--danger);
+  --color-espresso: #3b2b26;
+}
+
+@theme {
+  --shadow-card: 0 1px 2px rgb(59 43 38 / 0.06), 0 8px 24px -12px rgb(59 43 38 / 0.18);
+  --shadow-float: 0 12px 40px -12px rgb(59 43 38 / 0.35);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--brand-2);
+    outline-offset: 2px;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility pb-safe {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+/* Swiper: warna & bentuk titik navigasi */
+.swiper-pagination-bullet {
+  background: var(--cream);
+  opacity: 0.6;
+}
+.swiper-pagination-bullet-active {
+  width: 20px;
+  border-radius: 999px;
+  opacity: 1;
+}
+.swiper-button-prev,
+.swiper-button-next {
+  --swiper-navigation-size: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.35);
+  color: #fff;
+  backdrop-filter: blur(6px);
 }
