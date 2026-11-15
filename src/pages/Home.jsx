@@ -1,6 +1,6 @@
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Navigate, Outlet, useParams } from "react-router-dom";
 import { RefreshCw, WifiOff } from "lucide-react";
-import { PortfolioProvider } from "../components/site/PortfolioProvider";
 import { TopBar } from "../components/site/TopBar";
 import { HeroHeader } from "../components/site/HeroHeader";
 import { ServiceGrid } from "../components/site/ServiceGrid";
@@ -15,6 +15,9 @@ import { BottomNav } from "../components/site/BottomNav";
 import { Skeleton } from "../components/ui/Skeleton";
 import { Button } from "../components/ui/Button";
 import { usePortfolio } from "../lib/portfolio";
+import { LanguageProvider } from "../i18n/LanguageProvider";
+import { DEFAULT_LANG, LANGUAGES } from "../i18n/dictionary";
+import { useLang } from "../i18n/language";
 
 function LoadingView() {
   return (
@@ -39,16 +42,17 @@ function LoadingView() {
 }
 
 function ErrorView({ onRetry }) {
+  const { t } = useLang();
   return (
     <div className="grid min-h-dvh place-items-center px-6 text-center">
       <div className="flex flex-col items-center gap-3">
         <span className="grid size-16 place-items-center rounded-full bg-surface-2">
           <WifiOff className="size-8 text-brand" />
         </span>
-        <h1 className="text-xl font-bold">Couldn&apos;t load the page</h1>
-        <p className="max-w-sm text-muted">Please check your internet connection and try again.</p>
+        <h1 className="text-xl font-bold">{t("error.title")}</h1>
+        <p className="max-w-sm text-muted">{t("error.text")}</p>
         <Button icon={RefreshCw} onClick={onRetry}>
-          Try again
+          {t("error.retry")}
         </Button>
       </div>
     </div>
@@ -57,8 +61,14 @@ function ErrorView({ onRetry }) {
 
 function HomeContent() {
   const { status, data, reload } = usePortfolio();
+  const { t, lang } = useLang();
+  const name = data?.profile.name;
 
-  if (status === "error") return <ErrorView onRetry={reload} />;
+  useEffect(() => {
+    if (name) document.title = `${name} — ${t("meta.title")}`;
+  }, [name, lang, t]);
+
+  if (status === "error" && !data) return <ErrorView onRetry={reload} />;
   if (!data) return <LoadingView />;
 
   const { profile, projects, experiences, skills, certificates } = data;
@@ -72,11 +82,11 @@ function HomeContent() {
   ].filter(Boolean);
 
   const stats = [
-    { label: "Projects", value: projects.length },
-    { label: "Experiences", value: experiences.length },
+    { label: t("stats.projects"), value: projects.length },
+    { label: t("stats.experiences"), value: experiences.length },
     certificates.length
-      ? { label: "Certificates", value: certificates.length }
-      : { label: "Skills", value: skills.length },
+      ? { label: t("stats.certificates"), value: certificates.length }
+      : { label: t("stats.skills"), value: skills.length },
   ];
 
   return (
@@ -103,10 +113,17 @@ function HomeContent() {
 }
 
 export default function Home() {
+  const { lang: param } = useParams();
+  const lang = param || DEFAULT_LANG;
+  // Bahasa utama tidak memakai awalan; alamat seperti "/xyz" atau "/en" → kembali ke beranda.
+  if (param !== undefined && (param === DEFAULT_LANG || !LANGUAGES.includes(param))) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
-    <PortfolioProvider>
+    <LanguageProvider lang={lang}>
       <HomeContent />
       <Outlet />
-    </PortfolioProvider>
+    </LanguageProvider>
   );
 }

@@ -1,11 +1,13 @@
 import { Code2 } from "lucide-react";
 import { Section } from "./Section";
 import { assetUrl } from "../../lib/utils";
+import { useLang } from "../../i18n/language";
 
 export function SkillsSection({ skills }) {
+  const { t } = useLang();
   if (!skills.length) return null;
   return (
-    <Section id="skills" title="Skills" subtitle="Tools and technologies I use">
+    <Section id="skills" title={t("nav.skills")} subtitle={t("skills.subtitle")}>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
         {skills.map((skill) => (
           <div

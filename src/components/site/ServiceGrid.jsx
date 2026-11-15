@@ -4,6 +4,7 @@ import {
   Award, Briefcase, Check, Code2, Github, LayoutGrid, Linkedin, MessageCircle, Share2, UserRound,
 } from "lucide-react";
 import { scrollToSection } from "../../lib/utils";
+import { useLang } from "../../i18n/language";
 
 const TONES = [
   "bg-[#7d5a50] text-white",
@@ -14,9 +15,10 @@ const TONES = [
 
 /** Grid ikon bulat seperti menu layanan di aplikasi super-app. */
 export function ServiceGrid({ profile, counts, sections }) {
+  const { t } = useLang();
   const [copied, setCopied] = useState(false);
   const share = async () => {
-    const url = window.location.href.split("#")[0];
+    const url = window.location.href;
     try {
       if (navigator.share) await navigator.share({ title: profile.name, url });
       else {
@@ -30,15 +32,15 @@ export function ServiceGrid({ profile, counts, sections }) {
   };
 
   const items = [
-    { id: "projects", label: "Projects", icon: LayoutGrid, badge: counts.projects },
-    { id: "experience", label: "Experience", icon: Briefcase },
-    { id: "skills", label: "Skills", icon: Code2 },
-    { id: "certificates", label: "Certificates", icon: Award, badge: counts.certificates },
-    { id: "about", label: "About", icon: UserRound },
-    { id: "contact", label: "Contact", icon: MessageCircle },
+    { id: "projects", label: t("nav.projects"), icon: LayoutGrid, badge: counts.projects },
+    { id: "experience", label: t("nav.experience"), icon: Briefcase },
+    { id: "skills", label: t("nav.skills"), icon: Code2 },
+    { id: "certificates", label: t("nav.certificates"), icon: Award, badge: counts.certificates },
+    { id: "about", label: t("nav.about"), icon: UserRound },
+    { id: "contact", label: t("nav.contact"), icon: MessageCircle },
     profile.github_url && { href: profile.github_url, label: "GitHub", icon: Github },
     profile.linkedin_url && { href: profile.linkedin_url, label: "LinkedIn", icon: Linkedin },
-    { label: copied ? "Copied!" : "Share", icon: copied ? Check : Share2, onClick: share },
+    { label: copied ? t("nav.copied") : t("nav.share"), icon: copied ? Check : Share2, onClick: share },
   ]
     .filter((item) => item && (item.href || item.onClick || sections.includes(item.id)))
     .slice(0, 8);

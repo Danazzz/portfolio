@@ -4,9 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FolderOpen, Images, PlayCircle } from "lucide-react";
 import { Section } from "./Section";
 import { cn, mediaThumb } from "../../lib/utils";
+import { useLang } from "../../i18n/language";
+
+const ALL = "__all__";
 
 function ProjectCard({ project }) {
   const navigate = useNavigate();
+  const { t, tr, to } = useLang();
+  const title = tr(project, "title");
+  const summary = tr(project, "summary");
   const cover = mediaThumb(project.media.find((m) => m.type !== "video") || project.media[0]);
   const hasVideo = project.media.some((m) => m.type !== "image");
   const extraTags = project.tags.length - 3;
@@ -19,7 +25,7 @@ function ProjectCard({ project }) {
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.2 }}
       type="button"
-      onClick={() => navigate(`/project/${project.slug}`)}
+      onClick={() => navigate(to(`/project/${project.slug}`))}
       className="group flex flex-col overflow-hidden rounded-3xl bg-surface text-left shadow-card transition hover:-translate-y-1 hover:shadow-float"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-[#b4846c] to-[#7d5a50]">
@@ -32,7 +38,7 @@ function ProjectCard({ project }) {
           />
         ) : (
           <span className="grid h-full place-items-center text-5xl font-bold text-white/70">
-            {project.title.charAt(0)}
+            {title.charAt(0)}
           </span>
         )}
         {project.media.length > 1 && (
@@ -42,7 +48,7 @@ function ProjectCard({ project }) {
         )}
         {hasVideo && (
           <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
-            <PlayCircle className="size-3.5" /> Video
+            <PlayCircle className="size-3.5" /> {t("projects.video")}
           </span>
         )}
       </div>
@@ -52,8 +58,8 @@ function ProjectCard({ project }) {
             {project.category}
           </span>
         )}
-        <h3 className="text-lg font-semibold leading-snug">{project.title}</h3>
-        {project.summary && <p className="line-clamp-2 text-sm text-muted">{project.summary}</p>}
+        <h3 className="text-lg font-semibold leading-snug">{title}</h3>
+        {summary && <p className="line-clamp-2 text-sm text-muted">{summary}</p>}
         {project.tags.length > 0 && (
           <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
             {project.tags.slice(0, 3).map((tag) => (
@@ -70,15 +76,16 @@ function ProjectCard({ project }) {
 }
 
 export function ProjectsSection({ projects }) {
-  const [filter, setFilter] = useState("All");
+  const { t } = useLang();
+  const [filter, setFilter] = useState(ALL);
   const categories = useMemo(
-    () => ["All", ...new Set(projects.map((p) => p.category).filter(Boolean))],
+    () => [ALL, ...new Set(projects.map((p) => p.category).filter(Boolean))],
     [projects],
   );
-  const visible = filter === "All" ? projects : projects.filter((p) => p.category === filter);
+  const visible = filter === ALL ? projects : projects.filter((p) => p.category === filter);
 
   return (
-    <Section id="projects" title="Projects" subtitle="Tap a project to see photos, videos and details">
+    <Section id="projects" title={t("nav.projects")} subtitle={t("projects.subtitle")}>
       {categories.length > 2 && (
         <div className="no-scrollbar -mx-4 mb-5 flex gap-2 overflow-x-auto px-4">
           {categories.map((cat) => (
@@ -93,7 +100,7 @@ export function ProjectsSection({ projects }) {
                   : "border-line bg-surface text-ink hover:border-brand-2",
               )}
             >
-              {cat}
+              {cat === ALL ? t("projects.all") : cat}
             </button>
           ))}
         </div>
@@ -102,7 +109,7 @@ export function ProjectsSection({ projects }) {
       {visible.length === 0 ? (
         <div className="flex flex-col items-center gap-2 rounded-3xl border border-dashed border-line py-12 text-muted">
           <FolderOpen className="size-10" />
-          <p>No projects yet — check back soon.</p>
+          <p>{t("projects.empty")}</p>
         </div>
       ) : (
         <motion.div layout className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -6,8 +6,10 @@ import { Button } from "../ui/Button";
 import { Skeleton } from "../ui/Skeleton";
 import { MediaViewer } from "./MediaViewer";
 import { usePortfolio } from "../../lib/portfolio";
+import { useLang } from "../../i18n/language";
 
 function ShareButton({ title }) {
+  const { t } = useLang();
   const [copied, setCopied] = useState(false);
   const share = async () => {
     const url = window.location.href;
@@ -25,7 +27,7 @@ function ShareButton({ title }) {
   };
   return (
     <Button variant="outline" icon={copied ? Check : Share2} onClick={share}>
-      {copied ? "Link copied" : "Share"}
+      {copied ? t("project.copied") : t("project.share")}
     </Button>
   );
 }
@@ -36,27 +38,31 @@ export function ProjectSheet() {
   const navigate = useNavigate();
   const location = useLocation();
   const { status, data } = usePortfolio();
+  const { t, tr, to } = useLang();
   const [open, setOpen] = useState(true);
 
   const project = data?.projects.find((p) => p.slug === slug);
+  const title = project ? tr(project, "title") : "";
+  const summary = project ? tr(project, "summary") : "";
+  const description = project ? tr(project, "description") : "";
 
   useEffect(() => {
-    if (!project) return;
+    if (!title) return;
     const prev = document.title;
-    document.title = `${project.title} — ${data.profile.name}`;
+    document.title = `${title} — ${data.profile.name}`;
     return () => {
       document.title = prev;
     };
-  }, [project, data]);
+  }, [title, data]);
 
   const goBack = () => {
     // Kembali ke halaman sebelumnya jika berasal dari website ini, kalau tidak ke beranda.
     if (location.key !== "default") navigate(-1);
-    else navigate("/", { replace: true });
+    else navigate(to("/"), { replace: true });
   };
 
   return (
-    <Sheet open={open} onClose={() => setOpen(false)} onExited={goBack} label={project?.title || "Project"} size="lg">
+    <Sheet open={open} onClose={() => setOpen(false)} onExited={goBack} closeLabel={t("common.close")} label={title || "Project"} size="lg">
       {status === "loading" && (
         <div className="space-y-4 p-5 pt-14">
           <Skeleton className="aspect-video" />
@@ -68,9 +74,9 @@ export function ProjectSheet() {
       {status !== "loading" && !project && (
         <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
           <SearchX className="size-12 text-muted" />
-          <p className="text-lg font-semibold">Project not found</p>
-          <p className="text-muted">It may have been moved or removed.</p>
-          <Button onClick={() => setOpen(false)}>Back to home</Button>
+          <p className="text-lg font-semibold">{t("project.notFound")}</p>
+          <p className="text-muted">{t("project.notFoundText")}</p>
+          <Button onClick={() => setOpen(false)}>{t("project.backHome")}</Button>
         </div>
       )}
 
@@ -84,34 +90,34 @@ export function ProjectSheet() {
                   {project.category}
                 </span>
               )}
-              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{project.title}</h2>
-              {project.summary && <p className="mt-1 text-muted sm:text-lg">{project.summary}</p>}
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h2>
+              {summary && <p className="mt-1 text-muted sm:text-lg">{summary}</p>}
             </header>
 
             <div className="flex flex-wrap gap-2">
               {project.demo_url && (
                 <Button icon={ExternalLink} href={project.demo_url}>
-                  Live demo
+                  {t("project.demo")}
                 </Button>
               )}
               {project.source_url && (
                 <Button variant="secondary" icon={Code2} href={project.source_url}>
-                  Source code
+                  {t("project.source")}
                 </Button>
               )}
-              <ShareButton title={project.title} />
+              <ShareButton title={title} />
             </div>
 
-            {project.description && (
+            {description && (
               <section>
-                <h3 className="mb-2 font-semibold">About this project</h3>
-                <p className="whitespace-pre-line leading-relaxed text-ink/85">{project.description}</p>
+                <h3 className="mb-2 font-semibold">{t("project.about")}</h3>
+                <p className="whitespace-pre-line leading-relaxed text-ink/85">{description}</p>
               </section>
             )}
 
             {project.tags.length > 0 && (
               <section>
-                <h3 className="mb-2 font-semibold">Built with</h3>
+                <h3 className="mb-2 font-semibold">{t("project.builtWith")}</h3>
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
                     <span key={tag} className="rounded-full bg-surface-2 px-3 py-1.5 text-sm font-medium">

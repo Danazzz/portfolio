@@ -1,17 +1,19 @@
 import { Briefcase, Home, LayoutGrid, MessageCircle, UserRound } from "lucide-react";
 import { useActiveSection } from "../../lib/hooks";
 import { cn, scrollToSection } from "../../lib/utils";
+import { useLang } from "../../i18n/language";
 
 const ITEMS = [
-  { id: "top", label: "Home", icon: Home },
-  { id: "projects", label: "Projects", icon: LayoutGrid },
-  { id: "experience", label: "Experience", icon: Briefcase },
-  { id: "about", label: "About", icon: UserRound },
-  { id: "contact", label: "Contact", icon: MessageCircle },
+  { id: "top", key: "nav.home", icon: Home },
+  { id: "projects", key: "nav.projects", icon: LayoutGrid },
+  { id: "experience", key: "nav.experience", icon: Briefcase },
+  { id: "about", key: "nav.about", icon: UserRound },
+  { id: "contact", key: "nav.contact", icon: MessageCircle },
 ];
 
 /** Menu bawah khusus HP, seperti tab bar aplikasi. */
 export function BottomNav({ sections }) {
+  const { t } = useLang();
   const items = ITEMS.filter((item) => item.id === "top" || sections.includes(item.id));
   const active = useActiveSection(items.map((i) => i.id));
 
@@ -21,7 +23,7 @@ export function BottomNav({ sections }) {
       className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 pt-2 backdrop-blur-lg md:hidden"
     >
       <ul className="flex justify-around">
-        {items.map(({ id, label, icon: Icon }) => {
+        {items.map(({ id, key, icon: Icon }) => {
           const on = active === id;
           return (
             <li key={id} className="flex-1">
@@ -37,7 +39,7 @@ export function BottomNav({ sections }) {
                 <span className={cn("grid h-7 w-12 place-items-center rounded-full transition", on && "bg-surface-2")}>
                   <Icon className="size-5" strokeWidth={on ? 2.4 : 2} />
                 </span>
-                {label}
+                {t(key)}
               </button>
             </li>
           );

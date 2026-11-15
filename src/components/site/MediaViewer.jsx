@@ -8,6 +8,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/zoom";
 import { assetUrl, cn, youTubeEmbed } from "../../lib/utils";
+import { useLang } from "../../i18n/language";
 
 /** Satu media: gambar, video upload, atau video YouTube. */
 export function MediaItem({ media, fit = "contain", className, zoom = false }) {
@@ -55,11 +56,12 @@ function Caption({ text }) {
 }
 
 function ExpandButton({ onClick }) {
+  const { t } = useLang();
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label="View full screen"
+      aria-label={t("media.fullscreen")}
       className="absolute bottom-3 right-3 z-10 grid size-9 place-items-center rounded-full bg-black/45 text-white backdrop-blur transition hover:bg-black/65"
     >
       <Expand className="size-4" />
@@ -69,6 +71,7 @@ function ExpandButton({ onClick }) {
 
 /** Tampilan layar penuh untuk melihat foto lebih jelas (bisa di-zoom). */
 export function Lightbox({ media, index, onClose }) {
+  const { t } = useLang();
   useEffect(() => {
     // Fase "capture" + stopPropagation: Esc hanya menutup lightbox, bukan sheet di belakangnya.
     const onKey = (e) => {
@@ -81,11 +84,11 @@ export function Lightbox({ media, index, onClose }) {
   }, [onClose]);
 
   return createPortal(
-    <div className="fixed inset-0 z-[70] bg-black/95" role="dialog" aria-modal="true" aria-label="Gallery">
+    <div className="fixed inset-0 z-[70] bg-black/95" role="dialog" aria-modal="true" aria-label={t("media.gallery")}>
       <button
         type="button"
         onClick={onClose}
-        aria-label="Close"
+        aria-label={t("common.close")}
         className="absolute right-4 top-4 z-10 grid size-11 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"
       >
         <X className="size-6" />
@@ -118,6 +121,7 @@ export function Lightbox({ media, index, onClose }) {
  *  - single   : satu gambar sampul saja
  */
 export function MediaViewer({ media = [], mode = "carousel" }) {
+  const { t } = useLang();
   const [lightbox, setLightbox] = useState(null);
 
   if (!media.length) {
@@ -147,7 +151,7 @@ export function MediaViewer({ media = [], mode = "carousel" }) {
             )}
           >
             {m.type === "image" ? (
-              <button type="button" className="h-full w-full" onClick={() => openLightbox(m)} aria-label="View photo">
+              <button type="button" className="h-full w-full" onClick={() => openLightbox(m)} aria-label={t("media.view")}>
                 <MediaItem media={m} fit="cover" className="transition duration-300 hover:scale-105" />
               </button>
             ) : (

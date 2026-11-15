@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
 import { FileText, Github, Linkedin, Mail, MapPin, MessageCircle } from "lucide-react";
 import { assetUrl, whatsappLink } from "../../lib/utils";
+import { useLang } from "../../i18n/language";
 
 /** Header coklat melengkung + kartu profil ala kartu dompet digital. */
 export function HeroHeader({ profile, stats }) {
+  const { t, tr } = useLang();
+  const headline = tr(profile, "headline");
   const actions = [
     profile.email && { label: "Email", icon: Mail, href: `mailto:${profile.email}` },
     profile.whatsapp && { label: "WhatsApp", icon: MessageCircle, href: whatsappLink(profile.whatsapp) },
@@ -35,9 +38,9 @@ export function HeroHeader({ profile, stats }) {
             transition={{ delay: 0.1 }}
             className="min-w-0"
           >
-            <p className="text-sm text-[#fcdec0] sm:text-base">Hi there 👋 I&apos;m</p>
+            <p className="text-sm text-[#fcdec0] sm:text-base">{t("hero.greeting")}</p>
             <h1 className="text-2xl font-bold leading-tight tracking-tight sm:text-5xl">{profile.name}</h1>
-            {profile.headline && <p className="mt-1 text-sm text-white/85 sm:text-lg">{profile.headline}</p>}
+            {headline && <p className="mt-1 text-sm text-white/85 sm:text-lg">{headline}</p>}
             {profile.location && (
               <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-xs">
                 <MapPin className="size-3.5" /> {profile.location}

@@ -9,7 +9,7 @@ import { useMediaQuery } from "../../lib/hooks";
  * Bottom sheet ala aplikasi mobile. Di layar lebar tampil sebagai modal di tengah.
  * Di HP bisa ditutup dengan menarik pegangan ke bawah.
  */
-export function Sheet({ open, onClose, onExited, label, size = "md", children, className }) {
+export function Sheet({ open, onClose, onExited, label, closeLabel = "Tutup", size = "md", children, className }) {
   const desktop = useMediaQuery("(min-width: 640px)");
   const drag = useDragControls();
 
@@ -71,7 +71,7 @@ export function Sheet({ open, onClose, onExited, label, size = "md", children, c
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close"
+              aria-label={closeLabel}
               className="absolute right-3 top-3 z-20 grid size-9 place-items-center rounded-full bg-black/45 text-white backdrop-blur transition hover:bg-black/60"
             >
               <X className="size-5" />

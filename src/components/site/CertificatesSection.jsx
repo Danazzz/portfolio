@@ -7,8 +7,10 @@ import "swiper/css/navigation";
 import { Section } from "./Section";
 import { Lightbox } from "./MediaViewer";
 import { assetUrl } from "../../lib/utils";
+import { useLang } from "../../i18n/language";
 
 export function CertificatesSection({ certificates }) {
+  const { t, date } = useLang();
   const [open, setOpen] = useState(null);
   if (!certificates.length) return null;
 
@@ -17,7 +19,7 @@ export function CertificatesSection({ certificates }) {
     .map((c) => ({ id: c.id, type: "image", url: c.image_url, caption: c.title }));
 
   return (
-    <Section id="certificates" title="Certificates" subtitle="Courses and achievements">
+    <Section id="certificates" title={t("nav.certificates")} subtitle={t("certificates.subtitle")}>
       <Swiper
         modules={[Navigation]}
         spaceBetween={12}
@@ -44,7 +46,7 @@ export function CertificatesSection({ certificates }) {
               </button>
               <div className="flex flex-1 flex-col gap-1 p-4">
                 <h3 className="font-semibold leading-snug">{cert.title}</h3>
-                <p className="text-sm text-muted">{[cert.issuer, cert.issued_at].filter(Boolean).join(" · ")}</p>
+                <p className="text-sm text-muted">{[cert.issuer, date(cert.issued_at)].filter(Boolean).join(" · ")}</p>
                 {cert.credential_url && (
                   <a
                     href={cert.credential_url}
@@ -52,7 +54,7 @@ export function CertificatesSection({ certificates }) {
                     rel="noreferrer"
                     className="mt-auto inline-flex items-center gap-1 pt-2 text-sm font-semibold text-brand dark:text-cream"
                   >
-                    View credential <ExternalLink className="size-3.5" />
+                    {t("certificates.view")} <ExternalLink className="size-3.5" />
                   </a>
                 )}
               </div>

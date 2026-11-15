@@ -5,15 +5,17 @@ import { ArrowRight } from "lucide-react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { cn, mediaThumb } from "../../lib/utils";
+import { useLang } from "../../i18n/language";
 
 /** Banner promo bergeser otomatis berisi project unggulan. */
 export function FeaturedBanner({ projects }) {
   const navigate = useNavigate();
+  const { t, tr, to } = useLang();
   if (!projects.length) return null;
 
   return (
     <section aria-label="Featured projects" className="mx-auto max-w-6xl px-4 pt-10">
-      <h2 className="mb-3 text-lg font-bold tracking-tight sm:text-xl">✨ Featured</h2>
+      <h2 className="mb-3 text-lg font-bold tracking-tight sm:text-xl">{t("featured.title")}</h2>
       <Swiper
         modules={[Autoplay, Pagination]}
         spaceBetween={12}
@@ -30,7 +32,7 @@ export function FeaturedBanner({ projects }) {
             <SwiperSlide key={project.id}>
               <button
                 type="button"
-                onClick={() => navigate(`/project/${project.slug}`)}
+                onClick={() => navigate(to(`/project/${project.slug}`))}
                 className={cn(
                   "group relative block aspect-[16/8] w-full overflow-hidden",
                   projects.length === 1 && "md:aspect-[21/7]",
@@ -52,8 +54,8 @@ export function FeaturedBanner({ projects }) {
                         {project.category}
                       </span>
                     )}
-                    <h3 className="truncate text-lg font-bold sm:text-2xl">{project.title}</h3>
-                    {project.summary && <p className="line-clamp-1 text-sm text-white/85">{project.summary}</p>}
+                    <h3 className="truncate text-lg font-bold sm:text-2xl">{tr(project, "title")}</h3>
+                    {tr(project, "summary") && <p className="line-clamp-1 text-sm text-white/85">{tr(project, "summary")}</p>}
                   </div>
                   <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-[#3b2b26] transition group-hover:translate-x-1">
                     <ArrowRight className="size-5" />
