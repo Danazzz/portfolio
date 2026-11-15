@@ -40,7 +40,8 @@ create table if not exists public.profile (
   linkedin_url text not null default '',
   github_url text not null default '',
   gitlab_url text not null default '',
-  cv_url text not null default ''
+  cv_url text not null default '',
+  translations jsonb not null default '{}'::jsonb
 );
 
 create table if not exists public.projects (
@@ -58,6 +59,7 @@ create table if not exists public.projects (
   featured boolean not null default false,
   published boolean not null default true,
   sort_order int not null default 0,
+  translations jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
 
@@ -80,7 +82,8 @@ create table if not exists public.experiences (
   start_date text not null default '',
   end_date text not null default '',
   highlights text[] not null default '{}',
-  sort_order int not null default 0
+  sort_order int not null default 0,
+  translations jsonb not null default '{}'::jsonb
 );
 
 create table if not exists public.skills (
@@ -99,6 +102,14 @@ create table if not exists public.certificates (
   credential_url text not null default '',
   sort_order int not null default 0
 );
+
+-- ---------------------------------------------------------------------
+--  Terjemahan Bahasa Indonesia (aman untuk database yang dibuat sebelum
+--  fitur dua bahasa). Isi: {"id": {"summary": "...", "description": "..."}}
+-- ---------------------------------------------------------------------
+alter table public.profile add column if not exists translations jsonb not null default '{}'::jsonb;
+alter table public.projects add column if not exists translations jsonb not null default '{}'::jsonb;
+alter table public.experiences add column if not exists translations jsonb not null default '{}'::jsonb;
 
 -- ---------------------------------------------------------------------
 --  Hak akses (Row Level Security)
