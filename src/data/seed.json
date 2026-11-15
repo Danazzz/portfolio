@@ -12,7 +12,13 @@
     "linkedin_url": "https://www.linkedin.com/in/danawardhiana",
     "github_url": "https://github.com/danazzz",
     "gitlab_url": "",
-    "cv_url": ""
+    "cv_url": "",
+    "translations": {
+      "id": {
+        "headline": "Fullstack Developer · MERN, Laravel & Python",
+        "about": "Saya mahasiswa Magister Teknik Informatika, lulusan Teknologi Informasi, dan menguasai MERN stack, Laravel, serta Python. Saat ini studi saya berfokus pada Tata Kelola TI (IT Governance) untuk menganalisis keselarasan strategis TI dengan bisnis. Melalui beberapa program magang dan kursus, saya telah menerapkan pengetahuan dan pengalaman teknis saya dalam situasi nyata. Pendekatan saya praktis dan lugas, dengan tujuan mengintegrasikan solusi teknologi ke dalam bisnis secara efektif."
+      }
+    }
   },
   "projects": [
     {
@@ -22,14 +28,33 @@
       "summary": "Coming soon.",
       "description": "Details of this project are coming soon.",
       "category": "Web App",
-      "tags": ["React", "Express", "Node"],
+      "tags": [
+        "React",
+        "Express",
+        "Node"
+      ],
       "demo_url": "",
       "source_url": "",
       "display_mode": "carousel",
       "featured": true,
       "published": true,
       "sort_order": 0,
-      "media": [{ "id": "seed-media-a", "type": "image", "url": "projects/project.png", "caption": "", "sort_order": 0 }]
+      "media": [
+        {
+          "id": "seed-media-a",
+          "type": "image",
+          "url": "projects/project.png",
+          "caption": "",
+          "sort_order": 0
+        }
+      ],
+      "translations": {
+        "id": {
+          "title": "Proyek A",
+          "summary": "Segera hadir.",
+          "description": "Detail proyek ini akan segera hadir."
+        }
+      }
     },
     {
       "id": "seed-project-b",
@@ -38,14 +63,32 @@
       "summary": "Coming soon.",
       "description": "Details of this project are coming soon.",
       "category": "Web App",
-      "tags": ["Laravel", "MySQL"],
+      "tags": [
+        "Laravel",
+        "MySQL"
+      ],
       "demo_url": "",
       "source_url": "",
       "display_mode": "grid",
       "featured": false,
       "published": true,
       "sort_order": 1,
-      "media": [{ "id": "seed-media-b", "type": "image", "url": "projects/project.png", "caption": "", "sort_order": 0 }]
+      "media": [
+        {
+          "id": "seed-media-b",
+          "type": "image",
+          "url": "projects/project.png",
+          "caption": "",
+          "sort_order": 0
+        }
+      ],
+      "translations": {
+        "id": {
+          "title": "Proyek B",
+          "summary": "Segera hadir.",
+          "description": "Detail proyek ini akan segera hadir."
+        }
+      }
     },
     {
       "id": "seed-project-c",
@@ -54,14 +97,31 @@
       "summary": "Coming soon.",
       "description": "Details of this project are coming soon.",
       "category": "Mobile",
-      "tags": ["Flutter"],
+      "tags": [
+        "Flutter"
+      ],
       "demo_url": "",
       "source_url": "",
       "display_mode": "single",
       "featured": false,
       "published": true,
       "sort_order": 2,
-      "media": [{ "id": "seed-media-c", "type": "image", "url": "projects/project.png", "caption": "", "sort_order": 0 }]
+      "media": [
+        {
+          "id": "seed-media-c",
+          "type": "image",
+          "url": "projects/project.png",
+          "caption": "",
+          "sort_order": 0
+        }
+      ],
+      "translations": {
+        "id": {
+          "title": "Proyek C",
+          "summary": "Segera hadir.",
+          "description": "Detail proyek ini akan segera hadir."
+        }
+      }
     }
   ],
   "experiences": [
@@ -75,7 +135,15 @@
         "Helped organize the Laravel team and successfully completed tasks assigned for four projects",
         "Monitored ongoing projects, reducing errors by 75% and resolving issues, improving project delivery time by 20%"
       ],
-      "sort_order": 0
+      "sort_order": 0,
+      "translations": {
+        "id": {
+          "highlights": [
+            "Membantu mengorganisasi tim Laravel dan menyelesaikan tugas yang diberikan pada empat proyek",
+            "Memantau proyek yang sedang berjalan, menurunkan error hingga 75% dan menyelesaikan kendala, sehingga waktu penyelesaian proyek 20% lebih cepat"
+          ]
+        }
+      }
     },
     {
       "id": "seed-exp-1",
@@ -89,21 +157,86 @@
         "Collaborated with a colleague to develop and launch a client's landing page within a two-week deadline, attracting approximately 50 customers in one month",
         "Created and managed a WordPress-based news website, increasing monthly visitors by 3%"
       ],
-      "sort_order": 1
+      "sort_order": 1,
+      "translations": {
+        "id": {
+          "highlights": [
+            "Merancang dan mengembangkan database relasional kompleks dengan 9 tabel yang saling terhubung beserta API-nya untuk sebuah proyek besar",
+            "Membantu desain dan pengembangan front end website perusahaan",
+            "Bersama rekan kerja mengembangkan dan meluncurkan landing page klien dalam tenggat dua minggu, yang menarik sekitar 50 pelanggan dalam satu bulan",
+            "Membuat dan mengelola website berita berbasis WordPress, meningkatkan jumlah pengunjung bulanan sebesar 3%"
+          ]
+        }
+      }
     }
   ],
   "skills": [
-    { "id": "seed-skill-1", "name": "HTML", "icon_url": "skills/html.png", "sort_order": 0 },
-    { "id": "seed-skill-2", "name": "CSS", "icon_url": "skills/css.png", "sort_order": 1 },
-    { "id": "seed-skill-3", "name": "Python", "icon_url": "skills/python.png", "sort_order": 2 },
-    { "id": "seed-skill-4", "name": "PHP", "icon_url": "skills/php.png", "sort_order": 3 },
-    { "id": "seed-skill-5", "name": "MongoDB", "icon_url": "skills/mongodb.png", "sort_order": 4 },
-    { "id": "seed-skill-6", "name": "Express.js", "icon_url": "skills/express.png", "sort_order": 5 },
-    { "id": "seed-skill-7", "name": "React.js", "icon_url": "skills/react.png", "sort_order": 6 },
-    { "id": "seed-skill-8", "name": "Node.js", "icon_url": "skills/node.png", "sort_order": 7 },
-    { "id": "seed-skill-9", "name": "Flutter", "icon_url": "skills/flutter.png", "sort_order": 8 },
-    { "id": "seed-skill-10", "name": "WordPress", "icon_url": "skills/wordpress.png", "sort_order": 9 },
-    { "id": "seed-skill-11", "name": "Laravel", "icon_url": "skills/laravel.png", "sort_order": 10 }
+    {
+      "id": "seed-skill-1",
+      "name": "HTML",
+      "icon_url": "skills/html.png",
+      "sort_order": 0
+    },
+    {
+      "id": "seed-skill-2",
+      "name": "CSS",
+      "icon_url": "skills/css.png",
+      "sort_order": 1
+    },
+    {
+      "id": "seed-skill-3",
+      "name": "Python",
+      "icon_url": "skills/python.png",
+      "sort_order": 2
+    },
+    {
+      "id": "seed-skill-4",
+      "name": "PHP",
+      "icon_url": "skills/php.png",
+      "sort_order": 3
+    },
+    {
+      "id": "seed-skill-5",
+      "name": "MongoDB",
+      "icon_url": "skills/mongodb.png",
+      "sort_order": 4
+    },
+    {
+      "id": "seed-skill-6",
+      "name": "Express.js",
+      "icon_url": "skills/express.png",
+      "sort_order": 5
+    },
+    {
+      "id": "seed-skill-7",
+      "name": "React.js",
+      "icon_url": "skills/react.png",
+      "sort_order": 6
+    },
+    {
+      "id": "seed-skill-8",
+      "name": "Node.js",
+      "icon_url": "skills/node.png",
+      "sort_order": 7
+    },
+    {
+      "id": "seed-skill-9",
+      "name": "Flutter",
+      "icon_url": "skills/flutter.png",
+      "sort_order": 8
+    },
+    {
+      "id": "seed-skill-10",
+      "name": "WordPress",
+      "icon_url": "skills/wordpress.png",
+      "sort_order": 9
+    },
+    {
+      "id": "seed-skill-11",
+      "name": "Laravel",
+      "icon_url": "skills/laravel.png",
+      "sort_order": 10
+    }
   ],
   "certificates": []
 }
