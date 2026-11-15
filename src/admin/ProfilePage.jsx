@@ -11,9 +11,9 @@ import { useToast } from "./feedback-context";
 
 const IDENTITY = [
   { name: "name", label: "Nama lengkap", type: "text", required: true },
-  { name: "headline", label: "Keahlian singkat", type: "text", placeholder: "Contoh: Fullstack Developer · MERN & Laravel", help: "Tampil di bawah nama Anda." },
+  { name: "headline", label: "Keahlian singkat", type: "text", translatable: true, placeholder: "Contoh: Fullstack Developer · MERN & Laravel", help: "Tampil di bawah nama Anda." },
   { name: "location", label: "Lokasi", type: "text", placeholder: "Contoh: Denpasar, Bali", help: "Opsional." },
-  { name: "about", label: "Tentang saya", type: "textarea", rows: 7, help: "Cerita singkat tentang diri Anda. Tekan Enter untuk paragraf baru." },
+  { name: "about", label: "Tentang saya", type: "textarea", rows: 7, translatable: true, help: "Cerita singkat tentang diri Anda. Tekan Enter untuk paragraf baru." },
 ];
 
 const PHOTOS = [

@@ -56,6 +56,8 @@ export function friendlyError(error) {
   if (/exceeded the maximum allowed size|Payload too large/i.test(msg))
     return `File terlalu besar (maks ${MAX_UPLOAD_MB} MB).`;
   if (/duplicate key/i.test(msg)) return "Data dengan nama yang sama sudah ada.";
+  if (/translations/i.test(msg) && /column|schema cache/i.test(msg))
+    return "Database belum mendukung dua bahasa. Jalankan file supabase/migration-bahasa.sql di Supabase SQL Editor.";
   if (/JWT expired|session/i.test(msg)) return "Sesi login habis. Silakan login ulang.";
   return msg || "Terjadi kesalahan. Coba lagi.";
 }
@@ -132,7 +134,7 @@ async function uniqueSlug(title, ignoreId) {
 
 const PROJECT_FIELDS = [
   "title", "summary", "description", "category", "tags", "demo_url",
-  "source_url", "display_mode", "featured", "published", "sort_order",
+  "source_url", "display_mode", "featured", "published", "sort_order", "translations",
 ];
 
 /**

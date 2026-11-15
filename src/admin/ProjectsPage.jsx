@@ -8,6 +8,8 @@ import { Skeleton } from "../components/ui/Skeleton";
 import { PageHeader } from "./PageHeader";
 import { ReorderButtons } from "./ReorderButtons";
 import { useConfirm, useToast } from "./feedback-context";
+import { hasTranslation } from "./form-utils";
+import { NoIndonesianBadge } from "./NoIndonesianBadge";
 
 export function ProjectsPage() {
   const navigate = useNavigate();
@@ -132,6 +134,7 @@ export function ProjectsPage() {
                         <Images className="size-3" /> {p.media.length}
                       </span>
                     </span>
+                    {!hasTranslation(p) && <NoIndonesianBadge />}
                   </span>
                 </Link>
                 <div className="flex flex-col sm:flex-row">

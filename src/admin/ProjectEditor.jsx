@@ -5,7 +5,8 @@ import { friendlyError, listProjects, removeFiles, saveProject } from "../lib/ap
 import { cn, mediaThumb } from "../lib/utils";
 import { Button } from "../components/ui/Button";
 import { Skeleton } from "../components/ui/Skeleton";
-import { FormCard, TagInput, TextArea, TextInput, Toggle } from "./fields";
+import { BilingualField, FormCard, TagInput, TextInput, Toggle } from "./fields";
+import { cleanTranslations, getTr, setTr } from "./form-utils";
 import { MediaManager } from "./MediaManager";
 import { useConfirm, useToast } from "./feedback-context";
 
@@ -20,6 +21,7 @@ const EMPTY = {
   display_mode: "carousel",
   featured: false,
   published: true,
+  translations: {},
 };
 
 const MODES = [
@@ -146,6 +148,10 @@ export function ProjectEditor() {
     setForm((f) => ({ ...f, [key]: value }));
     setDirty(true);
   };
+  const setId = (key, value) => {
+    setForm((f) => setTr(f, key, value));
+    setDirty(true);
+  };
   const setMediaDirty = (updater) => {
     setMedia(updater);
     setDirty(true);
@@ -193,6 +199,7 @@ export function ProjectEditor() {
         category: form.category.trim(),
         demo_url: form.demo_url.trim(),
         source_url: form.source_url.trim(),
+        translations: cleanTranslations(form.translations),
       };
       await saveProject(clean, media, removed);
       setDirty(false);
@@ -234,27 +241,38 @@ export function ProjectEditor() {
       <div className="grid items-start gap-4 lg:grid-cols-[1fr_300px]">
         <div className="space-y-4">
           <FormCard step="1" title="Info proyek">
-            <TextInput
+            <p className="rounded-2xl bg-surface-2 px-4 py-3 text-sm text-muted">
+              Website tampil dalam <b className="text-ink">English</b> terlebih dahulu. Isi tab{" "}
+              <b className="text-ink">🇮🇩 Indonesia</b> untuk versi Bahasa Indonesia (opsional).
+            </p>
+            <BilingualField
               label="Judul proyek"
               required
               value={form.title}
-              onChange={(e) => set("title", e.target.value)}
+              onChange={(v) => set("title", v)}
+              valueId={getTr(form, "title")}
+              onChangeId={(v) => setId("title", v)}
               error={errors.title}
-              placeholder="Contoh: Aplikasi Kasir Toko"
+              placeholder="Contoh: Point of Sale App"
             />
-            <TextInput
+            <BilingualField
               label="Ringkasan singkat"
               value={form.summary}
-              onChange={(e) => set("summary", e.target.value)}
+              onChange={(v) => set("summary", v)}
+              valueId={getTr(form, "summary")}
+              onChangeId={(v) => setId("summary", v)}
               maxLength={160}
               placeholder="Satu kalimat tentang proyek ini"
               help={`Tampil di kartu proyek. ${form.summary.length}/160 huruf.`}
             />
-            <TextArea
+            <BilingualField
               label="Deskripsi lengkap"
+              kind="textarea"
               rows={6}
               value={form.description}
-              onChange={(e) => set("description", e.target.value)}
+              onChange={(v) => set("description", v)}
+              valueId={getTr(form, "description")}
+              onChangeId={(v) => setId("description", v)}
               placeholder="Ceritakan masalah yang diselesaikan, fitur utama, dan peran Anda."
               help="Tekan Enter untuk membuat paragraf baru."
             />

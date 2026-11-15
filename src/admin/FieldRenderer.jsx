@@ -1,4 +1,5 @@
-import { ImageField, TextArea, TextInput } from "./fields";
+import { BilingualField, ImageField, TextArea, TextInput } from "./fields";
+import { getTr, setTr } from "./form-utils";
 import { cn } from "../lib/utils";
 
 /** Menampilkan daftar isian berdasarkan konfigurasi (lihat collections.js). */
@@ -16,7 +17,19 @@ export function FieldRenderer({ fields, value, onChange, folder, errors = {} }) 
           placeholder: f.placeholder,
         };
         let input;
-        if (f.type === "textarea") {
+        if (f.translatable) {
+          input = (
+            <BilingualField
+              {...common}
+              kind={f.type}
+              rows={f.rows || 5}
+              value={value[f.name]}
+              onChange={(v) => set(f.name, v)}
+              valueId={getTr(value, f.name)}
+              onChangeId={(v) => onChange(setTr(value, f.name, v))}
+            />
+          );
+        } else if (f.type === "textarea") {
           input = <TextArea {...common} rows={f.rows || 5} value={value[f.name] || ""} onChange={(e) => set(f.name, e.target.value)} />;
         } else if (f.type === "lines") {
           input = (

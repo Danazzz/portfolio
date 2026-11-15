@@ -6,11 +6,12 @@ import { Button } from "../components/ui/Button";
 import { Sheet } from "../components/ui/Sheet";
 import { Skeleton } from "../components/ui/Skeleton";
 import { FieldRenderer } from "./FieldRenderer";
-import { changedImages, prepareRow } from "./form-utils";
+import { changedImages, hasTranslation, prepareRow } from "./form-utils";
 import { PageHeader } from "./PageHeader";
 import { ReorderButtons } from "./ReorderButtons";
 import { emptyRow } from "./collections";
 import { useConfirm, useToast } from "./feedback-context";
+import { NoIndonesianBadge } from "./NoIndonesianBadge";
 
 /** Halaman kelola data sederhana: daftar + form tambah/ubah dalam bottom sheet. */
 export function CollectionPage({ config }) {
@@ -138,6 +139,7 @@ export function CollectionPage({ config }) {
                 <button type="button" onClick={() => openForm(row)} className="min-w-0 flex-1 text-left">
                   <p className="truncate font-semibold">{config.primary(row)}</p>
                   {config.secondary && <p className="truncate text-sm text-muted">{config.secondary(row)}</p>}
+                  {config.fields.some((f) => f.translatable) && !hasTranslation(row) && <NoIndonesianBadge />}
                 </button>
                 <Button size="icon" variant="ghost" icon={Pencil} onClick={() => openForm(row)} aria-label="Ubah" title="Ubah" />
                 <Button size="icon" variant="ghost" icon={Trash2} onClick={() => remove(row)} aria-label="Hapus" title="Hapus" className="text-danger" />

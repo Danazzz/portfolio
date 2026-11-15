@@ -243,3 +243,86 @@ export function FormCard({ step, title, description, children, className }) {
     </section>
   );
 }
+
+/**
+ * Isian dua bahasa dengan tab English | Indonesia.
+ * Versi Indonesia opsional — jika kosong, website memakai teks English.
+ * kind: "text" | "textarea" | "lines" (lines = daftar, satu baris satu poin)
+ */
+export function BilingualField({
+  label,
+  help,
+  required,
+  error,
+  kind = "text",
+  rows = 5,
+  placeholder,
+  maxLength,
+  value,
+  onChange,
+  valueId,
+  onChangeId,
+}) {
+  const [tab, setTab] = useState("en");
+  const id = useId();
+  const isLines = kind === "lines";
+  const toText = (v) => (isLines ? (v || []).join("\n") : v || "");
+  const fromText = (text) => (isLines ? text.split("\n") : text);
+  const filledId = isLines ? (valueId || []).some((s) => s.trim()) : Boolean((valueId || "").trim());
+  const english = toText(value);
+  const current = tab === "en" ? english : toText(valueId);
+  const set = (text) => (tab === "en" ? onChange(fromText(text)) : onChangeId(fromText(text)));
+
+  const props = {
+    id,
+    value: current,
+    onChange: (e) => set(e.target.value),
+    maxLength,
+    placeholder:
+      tab === "en" ? placeholder : english ? "Kosongkan untuk memakai versi English" : "Terjemahan Bahasa Indonesia",
+    className: cn(inputCls, kind !== "text" && "resize-y leading-relaxed", tab === "id" && "border-brand-2/60"),
+  };
+
+  const tabs = [
+    { code: "en", text: "English" },
+    { code: "id", text: "Indonesia", done: filledId },
+  ];
+
+  return (
+    <div className="space-y-1.5">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <label htmlFor={id} className="text-sm font-semibold">
+          {label} {required && tab === "en" && <span className="text-danger">*</span>}
+        </label>
+        <div className="flex rounded-full bg-surface-2 p-0.5 text-xs font-semibold" role="tablist" aria-label={`Bahasa untuk ${label}`}>
+          {tabs.map((tb) => (
+            <button
+              key={tb.code}
+              type="button"
+              role="tab"
+              aria-selected={tab === tb.code}
+              onClick={() => setTab(tb.code)}
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full px-3 py-1 transition",
+                tab === tb.code ? "bg-brand text-on-brand shadow-sm" : "text-muted hover:text-ink",
+              )}
+            >
+              {tb.code === "en" ? "🇬🇧" : "🇮🇩"} {tb.text}
+              {tb.done && <span className="size-1.5 rounded-full bg-emerald-500" aria-label="sudah diisi" />}
+            </button>
+          ))}
+        </div>
+      </div>
+      {kind === "text" ? <input {...props} /> : <textarea {...props} rows={rows} />}
+      {error && tab === "en" ? (
+        <p className="text-sm text-danger">{error}</p>
+      ) : (
+        <p className="text-xs text-muted">
+          {tab === "en"
+            ? help
+            : "Opsional. Jika dikosongkan, website versi Indonesia menampilkan teks English."}
+        </p>
+      )}
+    </div>
+  );
+}

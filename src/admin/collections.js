@@ -15,11 +15,11 @@ export const COLLECTIONS = [
         .filter(Boolean)
         .join(" · "),
     fields: [
-      { name: "role", label: "Posisi / jabatan", type: "text", required: true, placeholder: "Contoh: Fullstack Developer" },
+      { name: "role", label: "Posisi / jabatan", type: "text", required: true, translatable: true, placeholder: "Contoh: Fullstack Developer" },
       { name: "organisation", label: "Nama perusahaan", type: "text", placeholder: "Contoh: Baliola.com" },
       { name: "start_date", label: "Mulai", type: "text", placeholder: "Contoh: Nov 2021", half: true },
       { name: "end_date", label: "Selesai", type: "text", placeholder: "Contoh: Jul 2022", help: "Kosongkan jika masih bekerja di sini.", half: true },
-      { name: "highlights", label: "Tugas & pencapaian", type: "lines", help: "Tulis satu poin per baris (tekan Enter untuk poin baru)." },
+      { name: "highlights", label: "Tugas & pencapaian", type: "lines", translatable: true, help: "Tulis satu poin per baris (tekan Enter untuk poin baru)." },
     ],
   },
   {
@@ -54,5 +54,7 @@ export const COLLECTIONS = [
   },
 ];
 
-export const emptyRow = (fields) =>
-  Object.fromEntries(fields.map((f) => [f.name, f.type === "lines" ? [] : ""]));
+export const emptyRow = (fields) => ({
+  ...Object.fromEntries(fields.map((f) => [f.name, f.type === "lines" ? [] : ""])),
+  ...(fields.some((f) => f.translatable) ? { translations: {} } : {}),
+});
