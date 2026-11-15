@@ -1,0 +1,109 @@
+{
+  "profile": {
+    "id": 1,
+    "name": "Dana Wardhiana",
+    "headline": "Fullstack Developer · MERN, Laravel & Python",
+    "location": "",
+    "about": "I am a Master student in Informatics Engineering, graduated in Information Technology and proficient in MERN stack, Laravel and Python. My studies are currently oriented towards IT Governance with the intent to analyze strategic IT alignment. In several internships and courses, I have implemented my technical knowledge and experience in realistic settings. My approach is practical and straightforward, aiming to effectively integrate technology solutions in business.",
+    "avatar_url": "profile/avatar.png",
+    "about_image_url": "profile/about.jpg",
+    "email": "wardhianadana@gmail.com",
+    "whatsapp": "+6289635524614",
+    "linkedin_url": "https://www.linkedin.com/in/danawardhiana",
+    "github_url": "https://github.com/danazzz",
+    "gitlab_url": "",
+    "cv_url": ""
+  },
+  "projects": [
+    {
+      "id": "seed-project-a",
+      "title": "Project A",
+      "slug": "project-a",
+      "summary": "Coming soon.",
+      "description": "Details of this project are coming soon.",
+      "category": "Web App",
+      "tags": ["React", "Express", "Node"],
+      "demo_url": "",
+      "source_url": "",
+      "display_mode": "carousel",
+      "featured": true,
+      "published": true,
+      "sort_order": 0,
+      "media": [{ "id": "seed-media-a", "type": "image", "url": "projects/project.png", "caption": "", "sort_order": 0 }]
+    },
+    {
+      "id": "seed-project-b",
+      "title": "Project B",
+      "slug": "project-b",
+      "summary": "Coming soon.",
+      "description": "Details of this project are coming soon.",
+      "category": "Web App",
+      "tags": ["Laravel", "MySQL"],
+      "demo_url": "",
+      "source_url": "",
+      "display_mode": "grid",
+      "featured": false,
+      "published": true,
+      "sort_order": 1,
+      "media": [{ "id": "seed-media-b", "type": "image", "url": "projects/project.png", "caption": "", "sort_order": 0 }]
+    },
+    {
+      "id": "seed-project-c",
+      "title": "Project C",
+      "slug": "project-c",
+      "summary": "Coming soon.",
+      "description": "Details of this project are coming soon.",
+      "category": "Mobile",
+      "tags": ["Flutter"],
+      "demo_url": "",
+      "source_url": "",
+      "display_mode": "single",
+      "featured": false,
+      "published": true,
+      "sort_order": 2,
+      "media": [{ "id": "seed-media-c", "type": "image", "url": "projects/project.png", "caption": "", "sort_order": 0 }]
+    }
+  ],
+  "experiences": [
+    {
+      "id": "seed-exp-2",
+      "role": "Laravel Developer",
+      "organisation": "Sintech",
+      "start_date": "Nov 2023",
+      "end_date": "Feb 2024",
+      "highlights": [
+        "Helped organize the Laravel team and successfully completed tasks assigned for four projects",
+        "Monitored ongoing projects, reducing errors by 75% and resolving issues, improving project delivery time by 20%"
+      ],
+      "sort_order": 0
+    },
+    {
+      "id": "seed-exp-1",
+      "role": "Fullstack Developer",
+      "organisation": "Baliola.com",
+      "start_date": "Nov 2021",
+      "end_date": "Jul 2022",
+      "highlights": [
+        "Designed and developed a complex relational database with 9 interconnected tables and the APIs for a major project",
+        "Assisted in the design and development of the front end of the company's website",
+        "Collaborated with a colleague to develop and launch a client's landing page within a two-week deadline, attracting approximately 50 customers in one month",
+        "Created and managed a WordPress-based news website, increasing monthly visitors by 3%"
+      ],
+      "sort_order": 1
+    }
+  ],
+  "skills": [
+    { "id": "seed-skill-1", "name": "HTML", "icon_url": "skills/html.png", "sort_order": 0 },
+    { "id": "seed-skill-2", "name": "CSS", "icon_url": "skills/css.png", "sort_order": 1 },
+    { "id": "seed-skill-3", "name": "Python", "icon_url": "skills/python.png", "sort_order": 2 },
+    { "id": "seed-skill-4", "name": "PHP", "icon_url": "skills/php.png", "sort_order": 3 },
+    { "id": "seed-skill-5", "name": "MongoDB", "icon_url": "skills/mongodb.png", "sort_order": 4 },
+    { "id": "seed-skill-6", "name": "Express.js", "icon_url": "skills/express.png", "sort_order": 5 },
+    { "id": "seed-skill-7", "name": "React.js", "icon_url": "skills/react.png", "sort_order": 6 },
+    { "id": "seed-skill-8", "name": "Node.js", "icon_url": "skills/node.png", "sort_order": 7 },
+    { "id": "seed-skill-9", "name": "Flutter", "icon_url": "skills/flutter.png", "sort_order": 8 },
+    { "id": "seed-skill-10", "name": "WordPress", "icon_url": "skills/wordpress.png", "sort_order": 9 },
+    { "id": "seed-skill-11", "name": "Laravel", "icon_url": "skills/laravel.png", "sort_order": 10 }
+  ],
+  "certificates": []
+}
