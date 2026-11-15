@@ -20,7 +20,7 @@ export function FeaturedBanner({ projects }) {
         slidesPerView={1.08}
         breakpoints={{ 768: { slidesPerView: projects.length > 1 ? 2 : 1, spaceBetween: 16 } }}
         autoplay={projects.length > 1 ? { delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true } : false}
-        loop={projects.length > 2}
+        loop={projects.length >= 4}
         pagination={projects.length > 1 ? { clickable: true } : false}
         className="!pb-8"
       >

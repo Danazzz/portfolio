@@ -70,9 +70,14 @@ function ExpandButton({ onClick }) {
 /** Tampilan layar penuh untuk melihat foto lebih jelas (bisa di-zoom). */
 export function Lightbox({ media, index, onClose }) {
   useEffect(() => {
-    const onKey = (e) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // Fase "capture" + stopPropagation: Esc hanya menutup lightbox, bukan sheet di belakangnya.
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      onClose();
+    };
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
   }, [onClose]);
 
   return createPortal(
