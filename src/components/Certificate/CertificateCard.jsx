@@ -9,7 +9,7 @@ export const CertificateCard = ({
   certificate: { title, imageSrc, description, source },
 }) => {
   return (
-    <div className={styles.card}>
+    <div className={styles.container}>
       <img src={getImageUrl(imageSrc)} alt={`Image of ${title}`} className={styles.image} />
       <div className={styles.info}>
         <h3 className={styles.title}>{title}</h3>
