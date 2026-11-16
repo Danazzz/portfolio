@@ -6,7 +6,7 @@
     "location": "",
     "about": "I am a Master student in Informatics Engineering, graduated in Information Technology and proficient in MERN stack, Laravel and Python. My studies are currently oriented towards IT Governance with the intent to analyze strategic IT alignment. In several internships and courses, I have implemented my technical knowledge and experience in realistic settings. My approach is practical and straightforward, aiming to effectively integrate technology solutions in business.",
     "avatar_url": "profile/avatar.png",
-    "about_image_url": "profile/about.jpg",
+    "about_image_url": "",
     "email": "wardhianadana@gmail.com",
     "whatsapp": "+6289635524614",
     "linkedin_url": "https://www.linkedin.com/in/danawardhiana",
@@ -39,15 +39,7 @@
       "featured": true,
       "published": true,
       "sort_order": 0,
-      "media": [
-        {
-          "id": "seed-media-a",
-          "type": "image",
-          "url": "projects/project.png",
-          "caption": "",
-          "sort_order": 0
-        }
-      ],
+      "media": [],
       "translations": {
         "id": {
           "title": "Proyek A",
@@ -73,15 +65,7 @@
       "featured": false,
       "published": true,
       "sort_order": 1,
-      "media": [
-        {
-          "id": "seed-media-b",
-          "type": "image",
-          "url": "projects/project.png",
-          "caption": "",
-          "sort_order": 0
-        }
-      ],
+      "media": [],
       "translations": {
         "id": {
           "title": "Proyek B",
@@ -106,15 +90,7 @@
       "featured": false,
       "published": true,
       "sort_order": 2,
-      "media": [
-        {
-          "id": "seed-media-c",
-          "type": "image",
-          "url": "projects/project.png",
-          "caption": "",
-          "sort_order": 0
-        }
-      ],
+      "media": [],
       "translations": {
         "id": {
           "title": "Proyek C",
@@ -174,67 +150,78 @@
     {
       "id": "seed-skill-1",
       "name": "HTML",
-      "icon_url": "skills/html.png",
+      "category": "Frontend",
+      "icon_url": "",
       "sort_order": 0
     },
     {
       "id": "seed-skill-2",
       "name": "CSS",
-      "icon_url": "skills/css.png",
+      "category": "Frontend",
+      "icon_url": "",
       "sort_order": 1
-    },
-    {
-      "id": "seed-skill-3",
-      "name": "Python",
-      "icon_url": "skills/python.png",
-      "sort_order": 2
-    },
-    {
-      "id": "seed-skill-4",
-      "name": "PHP",
-      "icon_url": "skills/php.png",
-      "sort_order": 3
-    },
-    {
-      "id": "seed-skill-5",
-      "name": "MongoDB",
-      "icon_url": "skills/mongodb.png",
-      "sort_order": 4
-    },
-    {
-      "id": "seed-skill-6",
-      "name": "Express.js",
-      "icon_url": "skills/express.png",
-      "sort_order": 5
     },
     {
       "id": "seed-skill-7",
       "name": "React.js",
-      "icon_url": "skills/react.png",
-      "sort_order": 6
+      "category": "Frontend",
+      "icon_url": "",
+      "sort_order": 2
     },
     {
       "id": "seed-skill-8",
       "name": "Node.js",
-      "icon_url": "skills/node.png",
-      "sort_order": 7
+      "category": "Backend",
+      "icon_url": "",
+      "sort_order": 3
     },
     {
-      "id": "seed-skill-9",
-      "name": "Flutter",
-      "icon_url": "skills/flutter.png",
-      "sort_order": 8
+      "id": "seed-skill-6",
+      "name": "Express.js",
+      "category": "Backend",
+      "icon_url": "",
+      "sort_order": 4
     },
     {
-      "id": "seed-skill-10",
-      "name": "WordPress",
-      "icon_url": "skills/wordpress.png",
-      "sort_order": 9
+      "id": "seed-skill-4",
+      "name": "PHP",
+      "category": "Backend",
+      "icon_url": "",
+      "sort_order": 5
     },
     {
       "id": "seed-skill-11",
       "name": "Laravel",
-      "icon_url": "skills/laravel.png",
+      "category": "Backend",
+      "icon_url": "",
+      "sort_order": 6
+    },
+    {
+      "id": "seed-skill-3",
+      "name": "Python",
+      "category": "Backend",
+      "icon_url": "",
+      "sort_order": 7
+    },
+    {
+      "id": "seed-skill-5",
+      "name": "MongoDB",
+      "category": "Database",
+      "icon_url": "",
+      "sort_order": 8
+    },
+    {
+      "id": "seed-skill-9",
+      "name": "Flutter",
+      "category": "Mobile",
+      "icon_url": "",
+      "sort_order": 9
+    },
+    {
+      "id": "seed-skill-10",
+      "name": "WordPress",
+      "category": "CMS",
+      "icon_url": "",
       "sort_order": 10
     }
   ],
