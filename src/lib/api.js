@@ -58,6 +58,8 @@ export function friendlyError(error) {
   if (/duplicate key/i.test(msg)) return "Data dengan nama yang sama sudah ada.";
   if (/translations/i.test(msg) && /column|schema cache/i.test(msg))
     return "Database belum mendukung dua bahasa. Jalankan file supabase/migration-bahasa.sql di Supabase SQL Editor.";
+  if (/category/i.test(msg) && /column|schema cache/i.test(msg))
+    return "Database belum mendukung kelompok skill. Jalankan file supabase/migration-kategori-skill.sql di Supabase SQL Editor.";
   if (/JWT expired|session/i.test(msg)) return "Sesi login habis. Silakan login ulang.";
   return msg || "Terjadi kesalahan. Coba lagi.";
 }

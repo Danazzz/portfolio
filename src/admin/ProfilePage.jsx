@@ -18,7 +18,7 @@ const IDENTITY = [
 
 const PHOTOS = [
   { name: "avatar_url", label: "Foto profil", type: "image", aspect: "aspect-square max-w-48", help: "Tampil bulat di bagian atas. Sebaiknya foto persegi.", half: true },
-  { name: "about_image_url", label: "Foto bagian \"About\"", type: "image", aspect: "aspect-[3/4] max-w-48", help: "Opsional.", half: true },
+  { name: "about_image_url", label: "Foto bagian \"About\"", type: "image", aspect: "aspect-[3/4] max-w-48", help: "Opsional — tampilan paling bersih tanpa foto ini.", half: true },
 ];
 
 const CONTACT = [

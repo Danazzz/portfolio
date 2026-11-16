@@ -52,13 +52,24 @@ export function FieldRenderer({ fields, value, onChange, folder, errors = {} }) 
             />
           );
         } else {
+          const listId = f.options ? `options-${f.name}` : undefined;
           input = (
-            <TextInput
-              {...common}
-              type={f.type === "url" ? "url" : f.type === "email" ? "email" : "text"}
-              value={value[f.name] || ""}
-              onChange={(e) => set(f.name, e.target.value)}
-            />
+            <>
+              <TextInput
+                {...common}
+                type={f.type === "url" ? "url" : f.type === "email" ? "email" : "text"}
+                list={listId}
+                value={value[f.name] || ""}
+                onChange={(e) => set(f.name, e.target.value)}
+              />
+              {f.options && (
+                <datalist id={listId}>
+                  {f.options.map((o) => (
+                    <option key={o} value={o} />
+                  ))}
+                </datalist>
+              )}
+            </>
           );
         }
         return (

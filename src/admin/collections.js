@@ -29,10 +29,19 @@ export const COLLECTIONS = [
     description: "Teknologi dan tools yang Anda kuasai.",
     itemName: "skill",
     primary: (row) => row.name,
-    image: (row) => row.icon_url,
+    secondary: (row) => row.category || "Tanpa kelompok",
     fields: [
-      { name: "name", label: "Nama skill", type: "text", required: true, placeholder: "Contoh: React.js" },
-      { name: "icon_url", label: "Logo / ikon", type: "image", aspect: "aspect-square max-w-40", help: "Opsional. Sebaiknya gambar persegi berlatar transparan (PNG)." },
+      { name: "name", label: "Nama skill", type: "text", required: true, placeholder: "Contoh: React.js", half: true },
+      {
+        name: "category",
+        label: "Kelompok",
+        type: "text",
+        placeholder: "Contoh: Frontend",
+        options: ["Frontend", "Backend", "Database", "Mobile", "DevOps", "Tools", "CMS"],
+        help: "Skill dengan kelompok sama tampil berdampingan.",
+        half: true,
+      },
+      { name: "icon_url", label: "Logo kecil (opsional)", type: "image", aspect: "aspect-square max-w-32", help: "Tidak wajib. Tampilan paling rapi tanpa logo." },
     ],
   },
   {
