@@ -8,6 +8,7 @@ import { Skeleton } from "../components/ui/Skeleton";
 import { BilingualField, FormCard, TagInput, TextInput, Toggle } from "./fields";
 import { cleanTranslations, getTr, setTr } from "./form-utils";
 import { MediaManager } from "./MediaManager";
+import { ProjectCover } from "../components/site/ProjectCover";
 import { useConfirm, useToast } from "./feedback-context";
 
 const EMPTY = {
@@ -82,7 +83,11 @@ function CardPreview({ form, media }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-line">
       <div className="aspect-[16/10] bg-gradient-to-br from-[#b4846c] to-[#7d5a50]">
-        {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
+        {cover ? (
+          <img src={cover} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <ProjectCover title={form.title || "?"} tags={form.tags} />
+        )}
       </div>
       <div className="space-y-1 p-3">
         {form.category && <span className="text-xs font-semibold text-brand dark:text-cream">{form.category}</span>}

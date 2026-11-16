@@ -6,6 +6,7 @@ import { cn, mediaThumb } from "../lib/utils";
 import { Button } from "../components/ui/Button";
 import { Skeleton } from "../components/ui/Skeleton";
 import { PageHeader } from "./PageHeader";
+import { ProjectCover } from "../components/site/ProjectCover";
 import { ReorderButtons } from "./ReorderButtons";
 import { useConfirm, useToast } from "./feedback-context";
 import { hasTranslation } from "./form-utils";
@@ -112,7 +113,11 @@ export function ProjectsPage() {
                 <ReorderButtons index={i} total={projects.length} onMove={move} />
                 <Link to={`/admin/projects/${p.id}`} className="flex min-w-0 flex-1 items-center gap-3">
                   <span className="aspect-[16/10] w-20 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-[#b4846c] to-[#7d5a50] sm:w-28">
-                    {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
+                    {cover ? (
+                      <img src={cover} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <ProjectCover title={p.title} size="sm" />
+                    )}
                   </span>
                   <span className="min-w-0">
                     <span className="block truncate font-semibold">{p.title}</span>
