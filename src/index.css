@@ -18,7 +18,6 @@
   --cream: #fcdec0;
   --on-brand: #ffffff;
   --danger: #c2410c;
-  --swiper-theme-color: #7d5a50;
   color-scheme: light;
 }
 
@@ -34,7 +33,6 @@
   --cream: #fcdec0;
   --on-brand: #ffffff;
   --danger: #fb923c;
-  --swiper-theme-color: #fcdec0;
   color-scheme: dark;
 }
 
@@ -110,18 +108,30 @@
   padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
 }
 
-/* Swiper: warna & bentuk titik navigasi */
-.swiper-pagination-bullet {
-  background: var(--cream);
-  opacity: 0.6;
+/*
+ * Swiper: warna titik navigasi mengikuti palet coklat.
+ * Variabel dipasang di .swiper (bukan :root) karena CSS Swiper dimuat belakangan
+ * dan menimpa nilai di :root dengan warna biru bawaannya.
+ */
+.swiper {
+  --swiper-theme-color: var(--brand);
+  --swiper-pagination-color: var(--brand);
+  --swiper-pagination-bullet-inactive-color: var(--brand-2);
+  --swiper-pagination-bullet-inactive-opacity: 0.35;
 }
-.swiper-pagination-bullet-active {
+.dark .swiper,
+.swiper.media-swiper {
+  --swiper-theme-color: #fcdec0;
+  --swiper-pagination-color: #fcdec0;
+  --swiper-pagination-bullet-inactive-color: #fcdec0;
+  --swiper-pagination-bullet-inactive-opacity: 0.45;
+}
+.swiper .swiper-pagination-bullet-active {
   width: 20px;
   border-radius: 999px;
-  opacity: 1;
 }
-.swiper-button-prev,
-.swiper-button-next {
+.swiper .swiper-button-prev,
+.swiper .swiper-button-next {
   --swiper-navigation-size: 18px;
   width: 36px;
   height: 36px;

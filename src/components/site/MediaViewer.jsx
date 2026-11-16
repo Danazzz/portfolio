@@ -101,7 +101,7 @@ export function Lightbox({ media, index, onClose }) {
         pagination={{ type: "fraction" }}
         keyboard
         zoom
-        className="h-full w-full text-white"
+        className="media-swiper h-full w-full text-white"
       >
         {media.map((m) => (
           <SwiperSlide key={m.id || m.url} className="!flex items-center justify-center p-4 sm:p-12">
@@ -174,7 +174,7 @@ export function MediaViewer({ media = [], mode = "carousel", title = "", tags = 
         navigation={list.length > 1}
         pagination={list.length > 1 ? { clickable: true } : false}
         keyboard
-        className="aspect-video"
+        className="media-swiper aspect-video"
       >
         {list.map((m) => (
           <SwiperSlide key={m.id || m.url} className="relative">
