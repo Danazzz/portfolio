@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Navigation, Pagination, Zoom } from "swiper/modules";
-import { Expand, ImageOff, X } from "lucide-react";
+import { Expand, X } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/zoom";
 import { assetUrl, cn, youTubeEmbed } from "../../lib/utils";
 import { useLang } from "../../i18n/language";
+import { ProjectCover } from "./ProjectCover";
 
 /** Satu media: gambar, video upload, atau video YouTube. */
 export function MediaItem({ media, fit = "contain", className, zoom = false }) {
@@ -120,14 +121,14 @@ export function Lightbox({ media, index, onClose }) {
  *  - grid     : kotak-kotak foto
  *  - single   : satu gambar sampul saja
  */
-export function MediaViewer({ media = [], mode = "carousel" }) {
+export function MediaViewer({ media = [], mode = "carousel", title = "", tags = [] }) {
   const { t } = useLang();
   const [lightbox, setLightbox] = useState(null);
 
   if (!media.length) {
     return (
-      <div className="grid aspect-video place-items-center bg-surface-2 text-muted">
-        <ImageOff className="size-10" />
+      <div className="aspect-[16/7]">
+        <ProjectCover title={title} tags={tags} size="lg" />
       </div>
     );
   }

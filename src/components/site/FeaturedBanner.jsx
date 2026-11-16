@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { cn, mediaThumb } from "../../lib/utils";
+import { ProjectCover } from "./ProjectCover";
 import { useLang } from "../../i18n/language";
 
 /** Banner promo bergeser otomatis berisi project unggulan. */
@@ -14,7 +15,7 @@ export function FeaturedBanner({ projects }) {
   if (!projects.length) return null;
 
   return (
-    <section aria-label="Featured projects" className="mx-auto max-w-6xl px-4 pt-10">
+    <section aria-label={t("featured.title")} className="mb-6">
       <h2 className="mb-3 text-lg font-bold tracking-tight sm:text-xl">{t("featured.title")}</h2>
       <Swiper
         modules={[Autoplay, Pagination]}
@@ -32,19 +33,21 @@ export function FeaturedBanner({ projects }) {
             <SwiperSlide key={project.id}>
               <button
                 type="button"
-                onClick={() => navigate(to(`/project/${project.slug}`))}
+                onClick={() => navigate(to(`/projects/${project.slug}`))}
                 className={cn(
                   "group relative block aspect-[16/8] w-full overflow-hidden",
-                  projects.length === 1 && "md:aspect-[21/7]",
+                  projects.length === 1 && "md:aspect-[21/7] lg:aspect-[4/1]",
                   "rounded-3xl bg-gradient-to-br from-[#7d5a50] to-[#b4846c] text-left shadow-card",
                 )}
               >
-                {cover && (
+                {cover ? (
                   <img
                     src={cover}
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   />
+                ) : (
+                  <ProjectCover title={tr(project, "title")} className="absolute inset-0" size="lg" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-white sm:p-5">

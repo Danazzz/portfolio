@@ -32,7 +32,7 @@ function ShareButton({ title }) {
   );
 }
 
-/** Detail project dalam bottom sheet; alamatnya bisa dibagikan (#/project/slug). */
+/** Detail proyek dalam bottom sheet; alamatnya bisa dibagikan (#/projects/slug). */
 export function ProjectSheet() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -56,9 +56,9 @@ export function ProjectSheet() {
   }, [title, data]);
 
   const goBack = () => {
-    // Kembali ke halaman sebelumnya jika berasal dari website ini, kalau tidak ke beranda.
+    // Kembali ke halaman sebelumnya jika berasal dari website ini, kalau tidak ke daftar proyek.
     if (location.key !== "default") navigate(-1);
-    else navigate(to("/"), { replace: true });
+    else navigate(to("/projects"), { replace: true });
   };
 
   return (
@@ -82,7 +82,7 @@ export function ProjectSheet() {
 
       {project && (
         <article>
-          <MediaViewer media={project.media} mode={project.display_mode} />
+          <MediaViewer media={project.media} mode={project.display_mode} title={title} tags={project.tags} />
           <div className="space-y-5 p-5 sm:p-7">
             <header>
               {project.category && (

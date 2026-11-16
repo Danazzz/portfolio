@@ -46,15 +46,6 @@ export const mediaThumb = (media) => {
   return media.type === "image" ? assetUrl(media.url) : "";
 };
 
-/** Scroll halus ke section tertentu (aman dipakai bersama HashRouter). */
-export const scrollToSection = (id) => {
-  if (id === "top") {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    return;
-  }
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-};
-
 export const whatsappLink = (number) => {
   const digits = String(number || "").replace(/\D/g, "").replace(/^0/, "62");
   return digits ? `https://wa.me/${digits}` : "";

@@ -30,28 +30,6 @@ export function useTheme() {
   return { dark, toggle };
 }
 
-/** Section mana yang sedang terlihat di layar (untuk menu aktif). */
-export function useActiveSection(ids) {
-  const [active, setActive] = useState(ids[0]);
-  const key = ids.join(",");
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px" },
-    );
-    key.split(",").forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, [key]);
-  return active;
-}
-
 export function useScrolled(offset = 24) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
