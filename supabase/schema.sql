@@ -89,6 +89,7 @@ create table if not exists public.experiences (
 create table if not exists public.skills (
   id uuid primary key default gen_random_uuid(),
   name text not null,
+  category text not null default '',
   icon_url text not null default '',
   sort_order int not null default 0
 );
@@ -110,6 +111,9 @@ create table if not exists public.certificates (
 alter table public.profile add column if not exists translations jsonb not null default '{}'::jsonb;
 alter table public.projects add column if not exists translations jsonb not null default '{}'::jsonb;
 alter table public.experiences add column if not exists translations jsonb not null default '{}'::jsonb;
+
+-- Kelompok skill (Frontend, Backend, ...) — aman untuk database lama
+alter table public.skills add column if not exists category text not null default '';
 
 -- ---------------------------------------------------------------------
 --  Hak akses (Row Level Security)
