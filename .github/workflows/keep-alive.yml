@@ -20,6 +20,9 @@ jobs:
             echo "Secrets Supabase belum diisi, lewati."
             exit 0
           fi
+          # Terima alamat dasar maupun alamat Data API (berakhiran /rest/v1)
+          URL="${URL%/}"
+          URL="${URL%/rest/v1}"
           curl --fail --silent --show-error \
             "$URL/rest/v1/profile?select=id&limit=1" \
             -H "apikey: $KEY" > /dev/null
