@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { LivingName } from "../../components/site/home/LivingName";
 import { CuriousLine } from "../../components/site/home/CuriousLine";
 import { LocalTime } from "../../components/site/home/LocalTime";
-import { AsciiNanas } from "../../components/site/home/AsciiNanas";
+import { FlutedGlass } from "../../components/site/home/FlutedGlass";
 import { MenuRow } from "../../components/site/MenuRow";
 import { usePortfolio } from "../../lib/portfolio";
 import { availableSections } from "../../lib/sections";
@@ -13,8 +13,8 @@ import { useLang } from "../../i18n/language";
 
 /**
  * Beranda satu layar.
- *  Desktop: kiri = nama hidup, minat yang berganti, menu besar · kanan = Nanas ASCII interaktif.
- *  HP: nama → minat → nanas → menu.
+ *  Desktop: kiri = nama hidup, minat yang berganti, menu besar · kanan = panel abstrak di balik kaca bergaris.
+ *  HP: nama → minat → panel → menu.
  * Tidak ada proyek di sini — proyek tampil setelah membuka menu Projects.
  */
 export default function HomePage() {
@@ -49,7 +49,7 @@ export default function HomePage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="relative lg:col-start-2 lg:row-span-2 lg:row-start-1"
         >
-          <AsciiNanas className="h-[42vh] min-h-[280px] w-full lg:h-[min(76vh,700px)]" />
+          <FlutedGlass className="h-[42vh] min-h-[280px] w-full lg:h-[min(76vh,700px)]" />
         </motion.div>
 
         <nav aria-label="Main" className="lg:col-start-1 lg:row-start-2 lg:self-start">
