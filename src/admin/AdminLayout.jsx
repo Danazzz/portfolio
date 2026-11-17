@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { Award, Briefcase, Code2, DownloadCloud, ExternalLink, FolderKanban, LogOut, UserRound } from "lucide-react";
+import { DownloadCloud, ExternalLink, LogOut } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { friendlyError, importSeed, isDatabaseEmpty } from "../lib/api";
 import { Button } from "../components/ui/Button";
@@ -8,14 +8,8 @@ import { ThemeToggle } from "../components/ui/ThemeToggle";
 import { NanasLogo } from "../components/ui/NanasLogo";
 import { cn } from "../lib/utils";
 import { useConfirm, useToast } from "./feedback-context";
+import { ADMIN_TABS, MOBILE_TABS } from "./admin-tabs";
 
-const ADMIN_TABS = [
-  { to: "projects", label: "Proyek", icon: FolderKanban },
-  { to: "experiences", label: "Pengalaman", icon: Briefcase },
-  { to: "skills", label: "Skill", icon: Code2 },
-  { to: "certificates", label: "Sertifikat", icon: Award },
-  { to: "profile", label: "Profil", icon: UserRound },
-];
 
 /** Ajakan impor data website lama saat database masih kosong. */
 function SeedBanner() {
@@ -128,7 +122,7 @@ export function AdminLayout({ email }) {
         className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 pt-2 backdrop-blur-lg md:hidden"
       >
         <ul className="flex">
-          {ADMIN_TABS.map(({ to, label, icon: Icon }) => (
+          {MOBILE_TABS.map(({ to, label, icon: Icon }) => (
             <li key={to} className="flex-1">
               <NavLink
                 to={to}

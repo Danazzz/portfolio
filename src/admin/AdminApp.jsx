@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { supabase, isSupabaseReady } from "../lib/supabase";
 import { checkIsAdmin } from "../lib/api";
+import { logError } from "../lib/errorLog";
 import { FeedbackProvider } from "./FeedbackProvider";
 import { Login } from "./Login";
 import { AdminLayout } from "./AdminLayout";
@@ -11,6 +12,8 @@ import { ProjectsPage } from "./ProjectsPage";
 import { ProjectEditor } from "./ProjectEditor";
 import { CollectionPage } from "./CollectionPage";
 import { ProfilePage } from "./ProfilePage";
+import { SystemPage } from "./SystemPage";
+import { MorePage } from "./MorePage";
 import { COLLECTIONS } from "./collections";
 
 function Loading() {
@@ -35,7 +38,7 @@ function useAdminSession() {
       try {
         isAdmin = await checkIsAdmin();
       } catch (e) {
-        console.error(e);
+        logError(e, "Cek status admin");
       }
       if (active) setState({ status: "ready", session, isAdmin });
     };
@@ -73,6 +76,8 @@ function AdminRoutes() {
           <Route key={c.table} path={c.path} element={<CollectionPage config={c} />} />
         ))}
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="system" element={<SystemPage />} />
+        <Route path="more" element={<MorePage />} />
         <Route path="*" element={<Navigate to="projects" replace />} />
       </Route>
     </Routes>
