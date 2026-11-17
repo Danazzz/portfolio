@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "../../../lib/utils";
 
-const BASE = 380; // ketebalan normal
-const PEAK = 820; // ketebalan tepat di bawah kursor
+const BASE = 340; // ketebalan normal (General Sans variabel: 200–700)
+const PEAK = 700; // ketebalan tepat di bawah kursor
 
 const smooth = (k) => k * k * (3 - 2 * k);
 const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);

@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Search, X } from "lucide-react";
+import { ArrowRight, Menu, Search, X } from "lucide-react";
 import { ThemeToggle } from "../ui/ThemeToggle";
 import { LanguageSwitch } from "./LanguageSwitch";
 import { useScrolled } from "../../lib/hooks";
 import { NanasLogo } from "../ui/NanasLogo";
+import { Magnetic } from "../motion/Magnetic";
 import { lockScroll } from "../../lib/smoothScroll";
 import { cn } from "../../lib/utils";
 import { useLang } from "../../i18n/language";
@@ -87,7 +88,7 @@ function MenuOverlay({ name, sections, active, onClose }) {
  *  Desktop: logo nanas + "nanas" · menu · cari (⌘K) · bahasa · tema
  *  HP:      logo nanas · cari · ☰ (menu layar penuh)
  */
-export function SiteHeader({ name, sections, active, onSearch }) {
+export function SiteHeader({ name, sections, active, onSearch, onContact }) {
   const { t, to } = useLang();
   const scrolled = useScrolled(8);
   const [menu, setMenu] = useState(false);
@@ -104,7 +105,7 @@ export function SiteHeader({ name, sections, active, onSearch }) {
           className={cn(
             "pointer-events-auto mx-auto flex items-center gap-1 border transition-[max-width,margin,padding,height,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(.22,1,.36,1)]",
             scrolled
-              ? "mt-2.5 h-12 max-w-3xl rounded-full border-line/70 bg-surface/80 px-3 shadow-[0_10px_40px_-18px_rgb(43_32_28/0.45)] backdrop-blur-xl backdrop-saturate-150 sm:w-[calc(100%-2rem)]"
+              ? "mt-2.5 h-12 max-w-4xl rounded-full border-line/70 bg-surface/80 px-3 shadow-[0_10px_40px_-18px_rgb(43_32_28/0.45)] backdrop-blur-xl backdrop-saturate-150 sm:w-[calc(100%-2rem)]"
               : "mt-0 h-14 max-w-6xl rounded-full border-transparent px-2 sm:w-full sm:px-8",
           )}
         >
@@ -118,20 +119,31 @@ export function SiteHeader({ name, sections, active, onSearch }) {
             <span className="hidden text-[15px] font-semibold tracking-tight md:inline">nanas</span>
           </Link>
 
-          <nav className="mr-3 hidden items-center gap-6 md:flex" aria-label="Main">
-            {sections.map((id) => (
-              <Link
-                key={id}
-                to={to(`/${id}`)}
-                aria-current={active === id ? "page" : undefined}
-                className={cn(
-                  "text-sm transition",
-                  active === id ? "font-medium text-ink" : "text-muted hover:text-ink",
-                )}
-              >
-                {t(`nav.${id}`)}
-              </Link>
-            ))}
+          {/* grup menu berbentuk kapsul; penanda aktif meluncur antar menu */}
+          <nav className="mr-2 hidden items-center rounded-full bg-surface-2/70 p-1 md:flex" aria-label="Main">
+            {["", ...sections].map((id) => {
+              const on = active === id;
+              return (
+                <Link
+                  key={id || "home"}
+                  to={to(id ? `/${id}` : "/")}
+                  aria-current={on ? "page" : undefined}
+                  className={cn(
+                    "relative rounded-full px-3.5 py-1.5 text-sm transition-colors duration-300",
+                    on ? "text-bg" : "text-muted hover:text-ink",
+                  )}
+                >
+                  {on && (
+                    <motion.span
+                      layoutId="nav-active"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                      className="absolute inset-0 rounded-full bg-ink"
+                    />
+                  )}
+                  <span className="relative">{t(id ? `nav.${id}` : "nav.home")}</span>
+                </Link>
+              );
+            })}
           </nav>
 
           <button
@@ -151,6 +163,18 @@ export function SiteHeader({ name, sections, active, onSearch }) {
               className="size-9 text-muted hover:bg-surface-2 hover:text-ink [&_svg]:size-[18px]"
             />
           </div>
+          <span className="ml-1 hidden lg:inline-flex">
+            <Magnetic strength={0.25} radius={40} max={8}>
+              <button
+                type="button"
+                onClick={onContact}
+                className="group inline-flex h-9 items-center gap-1.5 rounded-full bg-ink pl-4 pr-3 text-xs font-semibold uppercase tracking-[0.1em] text-bg transition-colors duration-300 hover:bg-brand"
+              >
+                {t("contact.cta")}
+                <ArrowRight className="size-3.5 transition-transform duration-500 group-hover:translate-x-0.5" />
+              </button>
+            </Magnetic>
+          </span>
           <button
             type="button"
             onClick={() => setMenu(true)}

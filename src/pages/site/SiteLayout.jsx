@@ -5,7 +5,6 @@ import { RefreshCw } from "lucide-react";
 import { SiteHeader } from "../../components/site/SiteHeader";
 import { CommandPalette } from "../../components/site/CommandPalette";
 import { ContactFab } from "../../components/site/ContactFab";
-import { CursorFollower } from "../../components/site/CursorFollower";
 import { scrollToTop, startSmoothScroll, stopSmoothScroll } from "../../lib/smoothScroll";
 import { Skeleton } from "../../components/ui/Skeleton";
 import { Button } from "../../components/ui/Button";
@@ -129,13 +128,12 @@ function Shell() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <SiteHeader name={name} sections={sections} active={active} onSearch={openSearch} />
+      <SiteHeader name={name} sections={sections} active={active} onSearch={openSearch} onContact={() => setContact(true)} />
       <main className="flex-1">
         <Outlet />
       </main>
       {!isHome && <SiteFooter name={name} />}
       <ContactFab profile={data.profile} open={contact} onOpenChange={setContact} />
-      <CursorFollower />
       <AnimatePresence>
         {search && <CommandPalette sections={sections} projects={data.projects} research={data.research} onClose={closeSearch} />}
       </AnimatePresence>
