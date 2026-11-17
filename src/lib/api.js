@@ -60,6 +60,8 @@ export function friendlyError(error) {
     return "Database belum mendukung dua bahasa. Jalankan file supabase/migration-bahasa.sql di Supabase SQL Editor.";
   if (/category/i.test(msg) && /column|schema cache/i.test(msg))
     return "Database belum mendukung kelompok skill. Jalankan file supabase/migration-kategori-skill.sql di Supabase SQL Editor.";
+  if (/'(interests|timezone|role|year)' column/i.test(msg))
+    return "Database belum mendukung isian minat/peran/tahun. Jalankan file supabase/migration-minat.sql di Supabase SQL Editor.";
   if (/JWT expired|session/i.test(msg)) return "Sesi login habis. Silakan login ulang.";
   return msg || "Terjadi kesalahan. Coba lagi.";
 }
@@ -135,7 +137,7 @@ async function uniqueSlug(title, ignoreId) {
 }
 
 const PROJECT_FIELDS = [
-  "title", "summary", "description", "category", "tags", "demo_url",
+  "title", "summary", "description", "category", "role", "year", "tags", "demo_url",
   "source_url", "display_mode", "featured", "published", "sort_order", "translations",
 ];
 

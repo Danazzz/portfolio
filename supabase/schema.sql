@@ -41,6 +41,8 @@ create table if not exists public.profile (
   github_url text not null default '',
   gitlab_url text not null default '',
   cv_url text not null default '',
+  interests text[] not null default '{}',
+  timezone text not null default '',
   translations jsonb not null default '{}'::jsonb
 );
 
@@ -51,6 +53,8 @@ create table if not exists public.projects (
   summary text not null default '',
   description text not null default '',
   category text not null default '',
+  role text not null default '',
+  year text not null default '',
   tags text[] not null default '{}',
   demo_url text not null default '',
   source_url text not null default '',
@@ -114,6 +118,12 @@ alter table public.experiences add column if not exists translations jsonb not n
 
 -- Kelompok skill (Frontend, Backend, ...) — aman untuk database lama
 alter table public.skills add column if not exists category text not null default '';
+
+-- Minat & zona waktu (beranda), peran & tahun proyek — aman untuk database lama
+alter table public.profile add column if not exists interests text[] not null default '{}';
+alter table public.profile add column if not exists timezone text not null default '';
+alter table public.projects add column if not exists role text not null default '';
+alter table public.projects add column if not exists year text not null default '';
 
 -- ---------------------------------------------------------------------
 --  Hak akses (Row Level Security)
