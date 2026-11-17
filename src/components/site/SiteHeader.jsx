@@ -5,7 +5,7 @@ import { Menu, Search, X } from "lucide-react";
 import { ThemeToggle } from "../ui/ThemeToggle";
 import { LanguageSwitch } from "./LanguageSwitch";
 import { useScrolled } from "../../lib/hooks";
-import { monogram } from "../../lib/sections";
+import { NanasLogo } from "../ui/NanasLogo";
 import { cn } from "../../lib/utils";
 import { useLang } from "../../i18n/language";
 
@@ -39,8 +39,9 @@ function MenuOverlay({ name, sections, active, onClose }) {
       aria-label="Menu"
     >
       <div className="flex h-14 items-center justify-between px-5">
-        <Link to={to("/")} onClick={onClose} className="text-[15px] font-semibold tracking-tight">
-          {monogram(name)}
+        <Link to={to("/")} onClick={onClose} aria-label={name} className="group -ml-1 flex items-center gap-1.5">
+          <NanasLogo />
+          <span className="text-[15px] font-semibold tracking-tight">nanas</span>
         </Link>
         <button
           type="button"
@@ -83,8 +84,8 @@ function MenuOverlay({ name, sections, active, onClose }) {
 
 /**
  * Header tipis bergaya Apple.
- *  Desktop: monogram · menu · cari (⌘K) · bahasa · tema
- *  HP:      monogram · cari · ☰ (menu layar penuh)
+ *  Desktop: logo nanas + "nanas" · menu · cari (⌘K) · bahasa · tema
+ *  HP:      logo nanas · cari · ☰ (menu layar penuh)
  */
 export function SiteHeader({ name, sections, active, onSearch }) {
   const { t, to } = useLang();
@@ -108,9 +109,10 @@ export function SiteHeader({ name, sections, active, onSearch }) {
             to={to("/")}
             aria-label={name}
             title={name}
-            className="mr-auto -ml-1 rounded-md px-1 text-[15px] font-semibold tracking-tight"
+            className="group mr-auto -ml-1.5 flex items-center gap-1.5 rounded-full py-1 pl-1 pr-2"
           >
-            {monogram(name)}
+            <NanasLogo />
+            <span className="hidden text-[15px] font-semibold tracking-tight md:inline">nanas</span>
           </Link>
 
           <nav className="mr-3 hidden items-center gap-6 md:flex" aria-label="Main">

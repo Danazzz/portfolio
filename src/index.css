@@ -94,6 +94,13 @@
   }
 }
 
+/* Daun logo nanas bergoyang */
+@keyframes nanas-sway {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-9deg); }
+  60% { transform: rotate(7deg); }
+}
+
 /* Kursor berkedip (kalimat minat & jam di beranda) */
 @keyframes caret-blink {
   0%, 49% { opacity: 1; }

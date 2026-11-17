@@ -13,12 +13,3 @@ export const availableSections = (data) =>
 /** "/id/projects/abc" → "projects" ; "/" → "" */
 export const sectionFromPath = (pathname) =>
   pathname.replace(/^\/id(?=\/|$)/, "").split("/").filter(Boolean)[0] || "";
-
-/** "Dana Wardhiana" → "DW" */
-export const monogram = (name) =>
-  String(name || "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0].toUpperCase())
-    .join("") || "•";

@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabase";
 import { friendlyError, importSeed, isDatabaseEmpty } from "../lib/api";
 import { Button } from "../components/ui/Button";
 import { ThemeToggle } from "../components/ui/ThemeToggle";
+import { NanasLogo } from "../components/ui/NanasLogo";
 import { cn } from "../lib/utils";
 import { useConfirm, useToast } from "./feedback-context";
 
@@ -71,6 +72,12 @@ export function AdminLayout({ email }) {
     <div className="min-h-dvh pb-28 md:pb-10">
       <header className="bg-gradient-to-br from-[#7d5a50] to-[#b4846c] text-white dark:from-[#3b2b26] dark:to-[#7d5a50]">
         <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 py-4">
+          <span
+            className="grid size-10 shrink-0 place-items-center rounded-full bg-[#faf6f1]"
+            style={{ "--brand": "#7d5a50", "--brand-2": "#b4846c", "--bg": "#faf6f1" }}
+          >
+            <NanasLogo className="size-6" />
+          </span>
           <div className="min-w-0 flex-1">
             <p className="text-lg font-bold leading-tight">Panel Admin</p>
             <p className="truncate text-xs text-white/75">{email}</p>
