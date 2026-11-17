@@ -1,15 +1,13 @@
 import { lazy, Suspense } from "react";
 import { HashRouter, Navigate, Outlet, Route, Routes, useParams } from "react-router-dom";
 import { useLang } from "./i18n/language";
+import { ABOUT_PARTS } from "./lib/sections";
 import { Loader2 } from "lucide-react";
 import { PortfolioProvider } from "./components/site/PortfolioProvider";
-import { ProjectSheet } from "./components/site/ProjectSheet";
 import SiteLayout from "./pages/site/SiteLayout";
 import HomePage from "./pages/site/HomePage";
 import ProjectsPage from "./pages/site/ProjectsPage";
-import ExperiencePage from "./pages/site/ExperiencePage";
-import SkillsPage from "./pages/site/SkillsPage";
-import CertificatesPage from "./pages/site/CertificatesPage";
+import ProjectPage from "./pages/site/ProjectPage";
 import AboutPage from "./pages/site/AboutPage";
 import ContactPage from "./pages/site/ContactPage";
 
@@ -31,16 +29,21 @@ function LegacyProjectRedirect() {
   return <Navigate to={to(`/projects/${slug}`)} replace />;
 }
 
+/** Alamat lama "#/skills" dll. → bagian terkait di halaman About. */
+function AboutPartRedirect({ part }) {
+  const { to } = useLang();
+  return <Navigate to={to("/about")} state={{ part }} replace />;
+}
+
 /** Halaman website (dipakai untuk "/" English dan "/id" Indonesia). */
 const siteRoutes = (
   <>
     <Route index element={<HomePage />} />
-    <Route path="projects" element={<ProjectsPage />}>
-      <Route path=":slug" element={<ProjectSheet />} />
-    </Route>
-    <Route path="experience" element={<ExperiencePage />} />
-    <Route path="skills" element={<SkillsPage />} />
-    <Route path="certificates" element={<CertificatesPage />} />
+    <Route path="projects" element={<ProjectsPage />} />
+    <Route path="projects/:slug" element={<ProjectPage />} />
+    {ABOUT_PARTS.map((part) => (
+      <Route key={part} path={part} element={<AboutPartRedirect part={part} />} />
+    ))}
     <Route path="about" element={<AboutPage />} />
     <Route path="contact" element={<ContactPage />} />
     <Route path="project/:slug" element={<LegacyProjectRedirect />} />
@@ -52,7 +55,7 @@ const siteRoutes = (
  *   #/                       → beranda (English)      #/id            → beranda (Indonesia)
  *   #/projects               → daftar proyek          #/id/projects   → versi Indonesia
  *   #/projects/nama-proyek   → detail proyek
- *   #/experience, #/skills, #/certificates, #/about, #/contact
+ *   #/about, #/contact      (#/experience, #/skills, #/certificates → bagian di About)
  *   #/admin                  → panel admin
  */
 export default function App() {

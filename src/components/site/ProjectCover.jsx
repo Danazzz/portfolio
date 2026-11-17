@@ -1,11 +1,11 @@
 import { cn } from "../../lib/utils";
 
-/* Variasi gradient dari palet coklat portfolio */
+/* Variasi gradient lembut dari palet coklat portfolio */
 const GRADIENTS = [
-  "from-[#7d5a50] via-[#946b5d] to-[#b4846c]",
-  "from-[#3b2b26] via-[#5a4038] to-[#7d5a50]",
-  "from-[#b4846c] via-[#c99a7f] to-[#e8bf9f]",
-  "from-[#5a4038] via-[#7d5a50] to-[#c99a7f]",
+  "from-[#7d5a50] to-[#b4846c]",
+  "from-[#3b2b26] to-[#7d5a50]",
+  "from-[#b4846c] to-[#e8c4a4]",
+  "from-[#5a4038] to-[#b4846c]",
 ];
 
 const hash = (text) => [...String(text)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
@@ -20,38 +20,26 @@ const initials = (title) =>
 
 /**
  * Sampul otomatis untuk proyek yang belum punya gambar:
- * gradient coklat + inisial judul + tag teknologi.
+ * gradient coklat + inisial judul, tanpa hiasan lain.
+ * (`tags` diterima supaya pemanggil lama tetap jalan, tapi tidak ditampilkan.)
  */
-export function ProjectCover({ title, tags = [], size = "md", className }) {
+// eslint-disable-next-line no-unused-vars
+export function ProjectCover({ title, tags, size = "md", className }) {
   const gradient = GRADIENTS[hash(title) % GRADIENTS.length];
   return (
     <div
       className={cn("relative h-full w-full overflow-hidden bg-gradient-to-br text-white", gradient, className)}
       aria-hidden="true"
     >
-      {/* pola titik halus */}
-      <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(rgb(255_255_255/0.5)_1px,transparent_1px)] [background-size:14px_14px]" />
-      <div className="absolute -right-8 -top-10 size-40 rounded-full bg-white/10" />
-      <div className="absolute -bottom-12 -left-6 size-32 rounded-full bg-[#fcdec0]/15" />
-      <div className="relative flex h-full flex-col justify-between p-4">
-        <span
-          className={cn(
-            "font-bold leading-none tracking-tight text-white/90",
-            size === "sm" ? "text-2xl" : size === "lg" ? "text-6xl" : "text-5xl",
-          )}
-        >
-          {initials(title)}
-        </span>
-        {size !== "sm" && tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="rounded-full bg-white/15 px-2.5 py-0.5 text-xs font-medium backdrop-blur">
-                {tag}
-              </span>
-            ))}
-          </div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_10%,rgb(255_255_255/0.22),transparent_55%)]" />
+      <span
+        className={cn(
+          "absolute bottom-[8%] left-[6%] font-semibold leading-none tracking-[-0.05em] text-white/85",
+          size === "sm" ? "text-3xl" : size === "lg" ? "text-[clamp(4rem,12vw,9rem)]" : "text-[clamp(3rem,8vw,5.5rem)]",
         )}
-      </div>
+      >
+        {initials(title)}
+      </span>
     </div>
   );
 }

@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { FolderOpen, Images, PlayCircle } from "lucide-react";
+import { ChevronRight, PlayCircle } from "lucide-react";
 import { Page } from "../../components/site/Page";
-import { FeaturedBanner } from "../../components/site/FeaturedBanner";
 import { ProjectCover } from "../../components/site/ProjectCover";
 import { usePortfolio } from "../../lib/portfolio";
 import { cn, mediaThumb } from "../../lib/utils";
@@ -11,67 +10,52 @@ import { useLang } from "../../i18n/language";
 
 const ALL = "__all__";
 
-function ProjectCard({ project }) {
-  const { t, tr, to } = useLang();
+/** Tile proyek: gambar besar, lalu judul + tahun + ringkasan. */
+function ProjectTile({ project, wide }) {
+  const { tr, to } = useLang();
   const title = tr(project, "title");
   const summary = tr(project, "summary");
   const cover = mediaThumb(project.media.find((m) => m.type !== "video"));
   const hasVideo = project.media.some((m) => m.type !== "image");
-  const extraTags = project.tags.length - 3;
 
   return (
     <motion.li
       layout
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.2 }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className={cn(wide && "sm:col-span-2")}
     >
-      <Link
-        to={to(`/projects/${project.slug}`)}
-        className="group flex h-full flex-col overflow-hidden rounded-3xl bg-surface shadow-card transition hover:-translate-y-1 hover:shadow-float"
-      >
-        <div className="relative aspect-[16/10] overflow-hidden">
+      <Link to={to(`/projects/${project.slug}`)} className="group block">
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-2xl bg-surface-2 sm:rounded-3xl",
+            wide ? "aspect-[16/10] sm:aspect-[2/1]" : "aspect-[16/10]",
+          )}
+        >
           {cover ? (
             <img
               src={cover}
               alt=""
               loading="lazy"
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.03]"
             />
           ) : (
-            <ProjectCover title={title} tags={project.tags} />
-          )}
-          {project.media.length > 1 && (
-            <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
-              <Images className="size-3.5" /> {project.media.length}
-            </span>
+            <ProjectCover title={title} size={wide ? "lg" : "md"} className="transition duration-700 ease-out group-hover:scale-[1.03]" />
           )}
           {hasVideo && (
-            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
-              <PlayCircle className="size-3.5" /> {t("projects.video")}
-            </span>
+            <PlayCircle className="absolute right-4 top-4 size-6 text-white drop-shadow" strokeWidth={1.6} aria-label="Video" />
           )}
         </div>
-        <div className="flex flex-1 flex-col gap-2 p-4">
-          {project.category && (
-            <span className="w-fit rounded-full bg-surface-2 px-2.5 py-0.5 text-xs font-semibold text-brand dark:text-cream">
-              {project.category}
-            </span>
-          )}
-          <h3 className="text-lg font-semibold leading-snug">{title}</h3>
-          {summary && <p className="line-clamp-2 text-sm text-muted">{summary}</p>}
-          {cover && project.tags.length > 0 && (
-            <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
-              {project.tags.slice(0, 3).map((tag) => (
-                <span key={tag} className="rounded-lg border border-line px-2 py-0.5 text-xs text-muted">
-                  {tag}
-                </span>
-              ))}
-              {extraTags > 0 && <span className="px-1 py-0.5 text-xs text-muted">+{extraTags}</span>}
-            </div>
-          )}
+        <div className="mt-4 flex items-baseline justify-between gap-4">
+          <h2 className={cn("font-semibold tracking-tight", wide ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl")}>
+            {title}
+            <ChevronRight className="ml-0.5 inline size-[0.8em] -translate-y-px text-muted transition group-hover:translate-x-1 group-hover:text-accent" />
+          </h2>
+          {project.year && <span className="shrink-0 text-sm tabular-nums text-muted">{project.year}</span>}
         </div>
+        {summary && <p className="mt-1 max-w-2xl text-muted">{summary}</p>}
       </Link>
     </motion.li>
   );
@@ -87,13 +71,13 @@ export default function ProjectsPage() {
     [projects],
   );
   const visible = filter === ALL ? projects : projects.filter((p) => p.category === filter);
+  // Proyek unggulan tampil lebar di urutan atas.
+  const ordered = [...visible.filter((p) => p.featured), ...visible.filter((p) => !p.featured)];
 
   return (
-    <Page subtitle={t("projects.subtitle")}>
-      <FeaturedBanner projects={projects.filter((p) => p.featured)} />
-
+    <Page title={t("nav.projects")}>
       {categories.length > 2 && (
-        <div className="no-scrollbar -mx-4 mb-5 flex gap-2 overflow-x-auto px-4" role="tablist">
+        <div className="no-scrollbar -mx-5 mb-8 flex gap-1 overflow-x-auto px-5 sm:mx-0 sm:px-0" role="tablist">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -102,10 +86,8 @@ export default function ProjectsPage() {
               aria-selected={filter === cat}
               onClick={() => setFilter(cat)}
               className={cn(
-                "shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition",
-                filter === cat
-                  ? "border-brand bg-brand text-on-brand"
-                  : "border-line bg-surface text-ink hover:border-brand-2",
+                "shrink-0 rounded-full px-4 py-1.5 text-sm transition",
+                filter === cat ? "bg-ink text-bg" : "text-muted hover:bg-surface-2 hover:text-ink",
               )}
             >
               {cat === ALL ? t("projects.all") : cat}
@@ -114,23 +96,17 @@ export default function ProjectsPage() {
         </div>
       )}
 
-      {visible.length === 0 ? (
-        <div className="flex flex-col items-center gap-2 rounded-3xl border border-dashed border-line py-12 text-muted">
-          <FolderOpen className="size-10" />
-          <p>{t("projects.empty")}</p>
-        </div>
+      {ordered.length === 0 ? (
+        <p className="border-t border-line py-12 text-muted">{t("projects.empty")}</p>
       ) : (
-        <motion.ul layout className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.ul layout className="grid gap-x-6 gap-y-12 sm:grid-cols-2 sm:gap-y-16">
           <AnimatePresence mode="popLayout">
-            {visible.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+            {ordered.map((project) => (
+              <ProjectTile key={project.id} project={project} wide={project.featured} />
             ))}
           </AnimatePresence>
         </motion.ul>
       )}
-
-      {/* Detail proyek (bottom sheet) */}
-      <Outlet />
     </Page>
   );
 }
