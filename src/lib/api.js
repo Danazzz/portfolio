@@ -19,6 +19,10 @@ const normalize = (data) => ({
   experiences: [...(data.experiences || [])].map((e) => ({ ...e, highlights: e.highlights || [] })).sort(byOrder),
   skills: [...(data.skills || [])].sort(byOrder),
   certificates: [...(data.certificates || [])].sort(byOrder),
+  research: (data.research || [])
+    .filter((r) => r.published !== false)
+    .map((r) => ({ ...r, keywords: r.keywords || [] }))
+    .sort(byOrder),
 });
 
 /** Ambil data dari hasil query; jika gagal lempar AppError (kode, status HTTP, konteks). */
@@ -46,6 +50,7 @@ export async function fetchPortfolio() {
     experiences: supabase.from("experiences").select("*"),
     skills: supabase.from("skills").select("*"),
     certificates: supabase.from("certificates").select("*"),
+    research: supabase.from("research").select("*").eq("published", true),
   };
   const names = Object.keys(parts);
   const results = await Promise.allSettled(
@@ -74,6 +79,7 @@ const MIGRATIONS = {
   timezone: "migration-minat.sql",
   role: "migration-minat.sql",
   year: "migration-minat.sql",
+  research: "migration-research.sql",
 };
 
 /** File SQL yang perlu dijalankan untuk kolom/tabel yang hilang. */
@@ -292,6 +298,7 @@ export async function importSeed() {
   if (seed.experiences.length) unwrap(await supabase.from("experiences").insert(seed.experiences.map(strip)));
   if (seed.skills.length) unwrap(await supabase.from("skills").insert(seed.skills.map(strip)));
   if (seed.certificates.length) unwrap(await supabase.from("certificates").insert(seed.certificates.map(strip)));
+  if (seed.research?.length) unwrap(await supabase.from("research").insert(seed.research.map(strip)));
   for (const { media, ...project } of seed.projects) {
     const saved = unwrap(await supabase.from("projects").insert(strip(project)).select().single());
     if (media?.length) {
