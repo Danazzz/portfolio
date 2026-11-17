@@ -26,7 +26,7 @@ export function CommandPalette({ sections, projects, research = [], onClose }) {
   const groups = useMemo(() => {
     const q = normalize(query.trim());
     const match = (...texts) => !q || texts.some((x) => normalize(x).includes(q));
-    const pages = ["", ...sections]
+    const pages = ["", ...sections, "contact"]
       .map((id) => ({ key: `page-${id}`, label: t(id ? `nav.${id}` : "nav.home"), path: id ? `/${id}` : "/" }))
       .filter((item) => match(item.label));
     const items = projects

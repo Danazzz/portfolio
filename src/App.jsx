@@ -11,7 +11,6 @@ import ProjectsPage from "./pages/site/ProjectsPage";
 import ProjectPage from "./pages/site/ProjectPage";
 import ResearchPage from "./pages/site/ResearchPage";
 import AboutPage from "./pages/site/AboutPage";
-import ContactPage from "./pages/site/ContactPage";
 
 // Halaman admin dimuat terpisah supaya website utama tetap ringan.
 const AdminApp = lazy(() => import("./admin/AdminApp"));
@@ -48,7 +47,8 @@ const siteRoutes = (
       <Route key={part} path={part} element={<AboutPartRedirect part={part} />} />
     ))}
     <Route path="about" element={<AboutPage />} />
-    <Route path="contact" element={<ContactPage />} />
+    {/* #/contact (link lama) → beranda + panel kontak terbuka; ditangani di SiteLayout */}
+    <Route path="contact" element={<HomePage />} />
     <Route path="project/:slug" element={<LegacyProjectRedirect />} />
   </>
 );
@@ -59,7 +59,8 @@ const siteRoutes = (
  *   #/projects               → daftar proyek          #/id/projects   → versi Indonesia
  *   #/projects/nama-proyek   → detail proyek
  *   #/research               → daftar penelitian
- *   #/about, #/contact      (#/experience, #/skills, #/certificates → bagian di About)
+ *   #/about                  (#/experience, #/skills, #/certificates → bagian di About)
+ *   #/contact                → membuka panel kontak melayang
  *   #/admin                  → panel admin
  */
 export default function App() {

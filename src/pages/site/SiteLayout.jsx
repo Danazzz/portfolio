@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { RefreshCw } from "lucide-react";
 import { SiteHeader } from "../../components/site/SiteHeader";
 import { CommandPalette } from "../../components/site/CommandPalette";
+import { ContactFab } from "../../components/site/ContactFab";
 import { Skeleton } from "../../components/ui/Skeleton";
 import { Button } from "../../components/ui/Button";
 import { ErrorDetails } from "../../components/ui/ErrorDetails";
@@ -55,7 +56,7 @@ function ErrorView({ error, onRetry }) {
 export function SiteFooter({ name, className = "" }) {
   return (
     <footer
-      className={`mx-auto mt-20 flex w-full max-w-5xl items-center justify-between gap-4 px-5 py-8 text-xs text-muted sm:px-8 ${className}`}
+      className={`mx-auto mt-20 flex w-full max-w-5xl items-center justify-between gap-4 py-8 pl-5 pr-24 text-xs text-muted sm:pl-8 sm:pr-28 ${className}`}
     >
       <p>
         © {new Date().getFullYear()} {name}
@@ -69,9 +70,11 @@ export function SiteFooter({ name, className = "" }) {
 
 function Shell() {
   const { status, data, error, reload } = usePortfolio();
-  const { t, lang } = useLang();
+  const { t, lang, to } = useLang();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [search, setSearch] = useState(false);
+  const [contact, setContact] = useState(false);
   const active = sectionFromPath(pathname);
   const name = data?.profile.name;
   const isPage = SECTION_ORDER.includes(active);
@@ -81,6 +84,13 @@ function Shell() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  // Alamat #/contact (link lama / dari pencarian) → beranda dengan panel kontak terbuka.
+  useEffect(() => {
+    if (active !== "contact") return;
+    setContact(true);
+    navigate(to("/"), { replace: true });
+  }, [active, navigate, to]);
 
   useEffect(() => {
     if (!name) return;
@@ -99,6 +109,10 @@ function Shell() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
   const closeSearch = useCallback(() => setSearch(false), []);
+  const openSearch = useCallback(() => {
+    setContact(false);
+    setSearch(true);
+  }, []);
 
   if (status === "error" && !data) return <ErrorView error={error} onRetry={reload} />;
   if (!data) return <LoadingView />;
@@ -107,11 +121,12 @@ function Shell() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <SiteHeader name={name} sections={sections} active={active} onSearch={() => setSearch(true)} />
+      <SiteHeader name={name} sections={sections} active={active} onSearch={openSearch} />
       <main className="flex-1">
         <Outlet />
       </main>
       {!isHome && <SiteFooter name={name} />}
+      <ContactFab profile={data.profile} open={contact} onOpenChange={setContact} />
       <AnimatePresence>
         {search && <CommandPalette sections={sections} projects={data.projects} research={data.research} onClose={closeSearch} />}
       </AnimatePresence>

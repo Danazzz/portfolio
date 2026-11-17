@@ -66,7 +66,8 @@ export default function HomePage() {
         </ul>
       </nav>
 
-      <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-6 text-xs text-muted">
+      {/* pr: beri ruang untuk tombol kontak melayang di kanan bawah */}
+      <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-6 pr-20 text-xs text-muted sm:pr-24">
         <p className="flex items-center gap-2">
           {profile.location && <span>{profile.location}</span>}
           {profile.location && profile.timezone && <span aria-hidden="true">·</span>}
