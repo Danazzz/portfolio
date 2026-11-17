@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 import "swiper/css/zoom";
 import { assetUrl, cn, youTubeEmbed } from "../../lib/utils";
 import { useLang } from "../../i18n/language";
+import { lockScroll } from "../../lib/smoothScroll";
 import { ProjectCover } from "./ProjectCover";
 
 /** Satu media: gambar, video upload, atau video YouTube. */
@@ -81,7 +82,11 @@ export function Lightbox({ media, index, onClose }) {
       onClose();
     };
     window.addEventListener("keydown", onKey, true);
-    return () => window.removeEventListener("keydown", onKey, true);
+    const unlock = lockScroll();
+    return () => {
+      window.removeEventListener("keydown", onKey, true);
+      unlock();
+    };
   }, [onClose]);
 
   return createPortal(
