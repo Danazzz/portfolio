@@ -6,6 +6,7 @@ import { MediaViewer } from "../../components/site/MediaViewer";
 import { RevealTitle, SectionTitle } from "../../components/site/Page";
 import { usePortfolio } from "../../lib/portfolio";
 import { fadeUp } from "../../lib/motion";
+import { Reveal } from "../../components/motion/Reveal";
 import { useLang } from "../../i18n/language";
 
 const prettyUrl = (url) => String(url).replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
@@ -29,7 +30,7 @@ function ShareButton({ title }) {
   };
   const Icon = copied ? Check : Share;
   return (
-    <button type="button" onClick={share} className="inline-flex items-center gap-1.5 text-accent hover:underline">
+    <button type="button" onClick={share} className="link-underline inline-flex items-center gap-1.5 text-accent">
       {copied ? t("project.copied") : t("project.share")}
       <Icon className="size-4" />
     </button>
@@ -38,7 +39,7 @@ function ShareButton({ title }) {
 
 function ExternalLink({ href, children }) {
   return (
-    <a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-accent hover:underline">
+    <a href={href} target="_blank" rel="noreferrer" className="link-underline inline-flex items-center gap-1 text-accent">
       {children}
       <ArrowUpRight className="size-4" />
     </a>
@@ -101,7 +102,7 @@ export default function ProjectPage() {
         >
           <ChevronLeft className="size-4" /> {t("nav.projects")}
         </Link>
-        <RevealTitle text={title} className="mt-6 text-5xl font-semibold tracking-[-0.035em] sm:text-7xl" />
+        <RevealTitle text={title} className="mt-6 font-display text-5xl font-medium tracking-[-0.035em] sm:text-7xl" />
         {summary && <p className="mt-4 max-w-2xl text-xl text-muted sm:text-2xl">{summary}</p>}
         <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
           {project.demo_url && <ExternalLink href={project.demo_url}>{t("project.demo")}</ExternalLink>}
@@ -115,16 +116,16 @@ export default function ProjectPage() {
       </motion.div>
 
       {description && (
-        <motion.p
-          {...fadeUp(0.15)}
+        <Reveal
+          as="p"
           className="mt-12 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/85 sm:mt-16 sm:text-xl"
         >
           {description}
-        </motion.p>
+        </Reveal>
       )}
 
       {specs.length > 0 && (
-        <section className="mt-16 sm:mt-20">
+        <Reveal as="section" className="mt-16 sm:mt-20">
           <SectionTitle>{t("project.specs")}</SectionTitle>
           <dl>
             {specs.map(([label, value]) => (
@@ -134,7 +135,7 @@ export default function ProjectPage() {
               </div>
             ))}
           </dl>
-        </section>
+        </Reveal>
       )}
 
       {(prev || next) && (

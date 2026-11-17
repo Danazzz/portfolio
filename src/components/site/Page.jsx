@@ -59,7 +59,7 @@ export function Page({ title, intro, children, className }) {
     <div className={cn("mx-auto max-w-6xl px-5 pt-28 sm:px-8 sm:pt-36", className)}>
       {title && (
         <header className="mb-10 sm:mb-14">
-          <RevealTitle text={title} className="text-5xl font-semibold tracking-[-0.035em] sm:text-7xl" />
+          <RevealTitle text={title} className="font-display text-5xl font-medium tracking-[-0.035em] sm:text-7xl" />
           {intro && (
             <motion.p {...fadeUp(0.2)} className="mt-4 max-w-xl text-lg text-muted sm:text-xl">
               {intro}

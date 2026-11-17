@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { ProjectCover } from "../ProjectCover";
+import { Reveal } from "../../motion/Reveal";
 import { mediaThumb } from "../../../lib/utils";
 import { useLang } from "../../../i18n/language";
 
@@ -39,17 +40,17 @@ export function ProjectList({ projects }) {
         {projects.map((project, i) => {
           const title = tr(project, "title");
           return (
-            <li key={project.id} className="border-b border-line">
+            <Reveal as="li" key={project.id} delay={i * 0.06} className="border-b border-line">
               <Link
                 to={to(`/projects/${project.slug}`)}
-                data-cursor="View"
+               
                 onPointerEnter={() => setHovered(project.id)}
                 className="group grid grid-cols-[3rem_1fr_auto] items-baseline gap-6 py-7 transition-colors duration-500 hover:text-ink"
               >
                 <span className="text-sm tabular-nums text-muted">{String(i + 1).padStart(2, "0")}</span>
                 <span className="min-w-0">
                   <span
-                    className={`block text-[clamp(2rem,4.4vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.035em] transition duration-500 ease-out group-hover:translate-x-3 ${
+                    className={`block font-display text-[clamp(2rem,4.4vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.035em] transition duration-500 ease-out group-hover:translate-x-3 ${
                       hovered && hovered !== project.id ? "opacity-30" : ""
                     }`}
                   >
@@ -66,7 +67,7 @@ export function ProjectList({ projects }) {
                   <ArrowUpRight className="size-5 transition duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
                 </span>
               </Link>
-            </li>
+            </Reveal>
           );
         })}
       </ul>

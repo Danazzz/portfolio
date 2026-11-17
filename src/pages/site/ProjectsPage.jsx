@@ -7,6 +7,7 @@ import { ProjectList } from "../../components/site/projects/ProjectList";
 import { FeaturedShowcase } from "../../components/site/projects/FeaturedShowcase";
 import { useMediaQuery } from "../../lib/hooks";
 import { ProjectCover } from "../../components/site/ProjectCover";
+import { TiltCard } from "../../components/motion/TiltCard";
 import { usePortfolio } from "../../lib/portfolio";
 import { cn, mediaThumb } from "../../lib/utils";
 import { useLang } from "../../i18n/language";
@@ -30,10 +31,11 @@ function ProjectTile({ project, wide }) {
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       className={cn(wide && "sm:col-span-2")}
     >
-      <Link to={to(`/projects/${project.slug}`)} data-cursor="View" className="group block">
-        <div
+      <Link to={to(`/projects/${project.slug}`)} className="group block">
+        <TiltCard
+          max={4}
           className={cn(
-            "relative overflow-hidden rounded-2xl bg-surface-2 sm:rounded-3xl",
+            "overflow-hidden rounded-2xl bg-surface-2 sm:rounded-3xl",
             wide ? "aspect-[16/10] sm:aspect-[2/1]" : "aspect-[16/10]",
           )}
         >
@@ -50,9 +52,9 @@ function ProjectTile({ project, wide }) {
           {hasVideo && (
             <PlayCircle className="absolute right-4 top-4 size-6 text-white drop-shadow" strokeWidth={1.6} aria-label="Video" />
           )}
-        </div>
+        </TiltCard>
         <div className="mt-4 flex items-baseline justify-between gap-4">
-          <h2 className={cn("font-semibold tracking-tight", wide ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl")}>
+          <h2 className={cn("font-display font-medium tracking-tight", wide ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl")}>
             {title}
             <ChevronRight className="ml-0.5 inline size-[0.8em] -translate-y-px text-muted transition group-hover:translate-x-1 group-hover:text-accent" />
           </h2>
