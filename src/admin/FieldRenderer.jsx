@@ -1,4 +1,4 @@
-import { BilingualField, ImageField, TextArea, TextInput } from "./fields";
+import { BilingualField, ImageField, SelectInput, TextArea, TextInput } from "./fields";
 import { getTr, setTr } from "./form-utils";
 import { cn } from "../lib/utils";
 
@@ -39,6 +39,16 @@ export function FieldRenderer({ fields, value, onChange, folder, errors = {} }) 
               value={(value[f.name] || []).join("\n")}
               onChange={(e) => set(f.name, e.target.value.split("\n"))}
             />
+          );
+        } else if (f.type === "select") {
+          input = (
+            <SelectInput {...common} value={value[f.name] || ""} onChange={(e) => set(f.name, e.target.value)}>
+              {f.options.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </SelectInput>
           );
         } else if (f.type === "image") {
           input = (

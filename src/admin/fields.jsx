@@ -45,6 +45,17 @@ export function TextArea({ label, help, required, error, rows = 4, ...props }) {
   );
 }
 
+export function SelectInput({ label, help, required, error, children, ...props }) {
+  const id = useId();
+  return (
+    <Field label={label} help={help} required={required} error={error} htmlFor={id}>
+      <select id={id} className={cn(inputCls, "appearance-auto")} {...props}>
+        {children}
+      </select>
+    </Field>
+  );
+}
+
 /** Saklar on/off besar dengan judul & keterangan. */
 export function Toggle({ checked, onChange, label, description }) {
   return (

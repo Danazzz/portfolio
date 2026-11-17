@@ -9,10 +9,26 @@ import { FormCard } from "./fields";
 import { PageHeader } from "./PageHeader";
 import { useToast } from "./feedback-context";
 
+const TIMEZONES = [
+  { value: "", label: "Tidak ditampilkan" },
+  { value: "Asia/Jakarta", label: "WIB (Jakarta)" },
+  { value: "Asia/Makassar", label: "WITA (Bali, Makassar)" },
+  { value: "Asia/Jayapura", label: "WIT (Jayapura)" },
+  { value: "Asia/Singapore", label: "Singapura / Malaysia" },
+  { value: "Asia/Tokyo", label: "Jepang" },
+  { value: "Europe/London", label: "London" },
+  { value: "Europe/Amsterdam", label: "Eropa Tengah" },
+  { value: "Australia/Sydney", label: "Sydney" },
+  { value: "America/New_York", label: "New York" },
+  { value: "America/Los_Angeles", label: "Los Angeles" },
+];
+
 const IDENTITY = [
   { name: "name", label: "Nama lengkap", type: "text", required: true },
-  { name: "headline", label: "Keahlian singkat", type: "text", translatable: true, placeholder: "Contoh: Fullstack Developer · MERN & Laravel", help: "Tampil di bawah nama Anda." },
-  { name: "location", label: "Lokasi", type: "text", placeholder: "Contoh: Denpasar, Bali", help: "Opsional." },
+  { name: "headline", label: "Keahlian singkat", type: "text", translatable: true, placeholder: "Contoh: Mahasiswa Magister Informatika", help: "Opsional. Tampil di halaman About." },
+  { name: "location", label: "Lokasi", type: "text", placeholder: "Contoh: Denpasar, Bali", help: "Opsional. Tampil di bawah beranda.", half: true },
+  { name: "timezone", label: "Zona waktu (untuk jam di beranda)", type: "select", options: TIMEZONES, half: true, help: "Pilih \"Tidak ditampilkan\" untuk menyembunyikan jam." },
+  { name: "interests", label: "Minat", type: "lines", translatable: true, rows: 5, placeholder: "graphs\ncyber security\nIT audit\nmachine learning", help: "Satu minat per baris. Di beranda tampil bergantian: \"Currently curious about …\"." },
   { name: "about", label: "Tentang saya", type: "textarea", rows: 7, translatable: true, help: "Cerita singkat tentang diri Anda. Tekan Enter untuk paragraf baru." },
 ];
 

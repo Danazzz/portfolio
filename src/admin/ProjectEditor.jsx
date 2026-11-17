@@ -16,6 +16,8 @@ const EMPTY = {
   summary: "",
   description: "",
   category: "",
+  role: "",
+  year: "",
   tags: [],
   demo_url: "",
   source_url: "",
@@ -202,6 +204,8 @@ export function ProjectEditor() {
         summary: form.summary.trim(),
         description: form.description.trim(),
         category: form.category.trim(),
+        role: (form.role || "").trim(),
+        year: (form.year || "").trim(),
         demo_url: form.demo_url.trim(),
         source_url: form.source_url.trim(),
         translations: cleanTranslations(form.translations),
@@ -301,6 +305,25 @@ export function ProjectEditor() {
                 onChange={(tags) => set("tags", tags)}
                 suggestions={suggestions.tags}
                 help="Ketik lalu tekan Enter."
+              />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-[1fr_160px]">
+              <BilingualField
+                label="Peran Anda"
+                value={form.role || ""}
+                onChange={(v) => set("role", v)}
+                valueId={getTr(form, "role")}
+                onChangeId={(v) => setId("role", v)}
+                placeholder="Contoh: Frontend & database"
+                help="Opsional. Tampil di tabel Specs pada detail proyek."
+              />
+              <TextInput
+                label="Tahun"
+                inputMode="numeric"
+                value={form.year || ""}
+                onChange={(e) => set("year", e.target.value)}
+                placeholder="Contoh: 2024"
+                help="Opsional."
               />
             </div>
           </FormCard>
