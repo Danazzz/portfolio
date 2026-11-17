@@ -23,8 +23,7 @@ export function SetupNotice() {
     <NoticeCard icon={DatabaseZap} title="Panel admin belum terhubung ke database">
       <p className="text-muted">
         Website saat ini memakai data bawaan. Supaya bisa menambah project, foto dan video dari sini,
-        hubungkan dulu ke Supabase (gratis). Langkah lengkapnya ada di file <b>README.md</b> bagian
-        <b> &quot;Menghubungkan Supabase&quot;</b>.
+        hubungkan dulu ke Supabase (gratis):
       </p>
       <ol className="list-decimal space-y-1 pl-5 text-sm text-muted">
         <li>Buat project di supabase.com dan jalankan file supabase/schema.sql.</li>
