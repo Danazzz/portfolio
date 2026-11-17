@@ -5,39 +5,45 @@
 /*
  * Palet warna diambil dari desain lama:
  * #7D5A50 (coklat), #B4846C (coklat muda), #FCDEC0 (krem), #3B2B26 (coklat tua), putih.
+ * Latar dibuat lebih netral (krem pucat) supaya coklat tampil sebagai aksen.
  */
 :root {
-  --bg: #fbf4ec;
+  --bg: #faf6f1;
   --surface: #ffffff;
-  --surface-2: #f6e9dc;
-  --ink: #3b2b26;
-  --muted: #8a6e64;
-  --line: #ecdccd;
+  --surface-2: #f3ebe2;
+  --ink: #2b201c;
+  --muted: #8c766b;
+  --line: #e7dbcf;
   --brand: #7d5a50;
   --brand-2: #b4846c;
+  --accent: #7d5a50;
   --cream: #fcdec0;
   --on-brand: #ffffff;
   --danger: #c2410c;
+  /* Tekstur kertas: bintik coklat sangat halus */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .17 0 0 0 0 .15 .16 0 0 0 -.03'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
 .dark {
-  --bg: #1d1512;
-  --surface: #2a201c;
-  --surface-2: #3b2b26;
-  --ink: #fcf1e6;
-  --muted: #c8ab98;
-  --line: #45342d;
+  --bg: #14100e;
+  --surface: #1e1815;
+  --surface-2: #2a211d;
+  --ink: #f4ebe3;
+  --muted: #a3918a;
+  --line: #312823;
   --brand: #b4846c;
   --brand-2: #d9a98c;
+  --accent: #e3b897;
   --cream: #fcdec0;
   --on-brand: #ffffff;
   --danger: #fb923c;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .99 0 0 0 0 .87 0 0 0 0 .75 .09 0 0 0 -.02'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color-scheme: dark;
 }
 
 @theme inline {
-  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
@@ -46,6 +52,7 @@
   --color-line: var(--line);
   --color-brand: var(--brand);
   --color-brand-2: var(--brand-2);
+  --color-accent: var(--accent);
   --color-cream: var(--cream);
   --color-on-brand: var(--on-brand);
   --color-danger: var(--danger);
@@ -64,6 +71,11 @@
   }
   body {
     @apply bg-bg text-ink font-sans antialiased;
+    background-image: var(--grain);
+    font-feature-settings: "cv11", "ss03";
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--brand-2) 35%, transparent);
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
