@@ -65,10 +65,13 @@ function AdminRoutes() {
   if (!session) return <Login />;
   if (!isAdmin) return <NotAdmin email={session.user.email} />;
 
+  // Catatan: semua link & pengalihan di admin memakai alamat absolut ("/admin/...").
+  // Admin berada di rute "/admin/*" dengan opsi v7_relativeSplatPath, sehingga alamat
+  // relatif (mis. "profile") dihitung dari halaman yang sedang dibuka → "/admin/projects/profile".
   return (
     <Routes>
       <Route element={<AdminLayout email={session.user.email} />}>
-        <Route index element={<Navigate to="projects" replace />} />
+        <Route index element={<Navigate to="/admin/projects" replace />} />
         <Route path="projects" element={<ProjectsPage />} />
         <Route path="projects/new" element={<ProjectEditor />} />
         <Route path="projects/:id" element={<ProjectEditor />} />
@@ -78,7 +81,7 @@ function AdminRoutes() {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="system" element={<SystemPage />} />
         <Route path="more" element={<MorePage />} />
-        <Route path="*" element={<Navigate to="projects" replace />} />
+        <Route path="*" element={<Navigate to="/admin/projects" replace />} />
       </Route>
     </Routes>
   );

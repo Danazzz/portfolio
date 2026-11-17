@@ -98,7 +98,7 @@ export function AdminLayout({ email }) {
           {ADMIN_TABS.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
-              to={to}
+              to={`/admin/${to}`}
               className={({ isActive }) =>
                 cn(
                   "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition",
@@ -125,7 +125,7 @@ export function AdminLayout({ email }) {
           {MOBILE_TABS.map(({ to, label, icon: Icon }) => (
             <li key={to} className="flex-1">
               <NavLink
-                to={to}
+                to={`/admin/${to}`}
                 className={({ isActive }) =>
                   cn(
                     "flex flex-col items-center gap-0.5 text-[11px] font-medium",
