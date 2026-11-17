@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, PlayCircle } from "lucide-react";
 import { Page } from "../../components/site/Page";
+import { ProjectList } from "../../components/site/projects/ProjectList";
+import { FeaturedShowcase } from "../../components/site/projects/FeaturedShowcase";
+import { useMediaQuery } from "../../lib/hooks";
 import { ProjectCover } from "../../components/site/ProjectCover";
 import { usePortfolio } from "../../lib/portfolio";
 import { cn, mediaThumb } from "../../lib/utils";
@@ -27,7 +30,7 @@ function ProjectTile({ project, wide }) {
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       className={cn(wide && "sm:col-span-2")}
     >
-      <Link to={to(`/projects/${project.slug}`)} className="group block">
+      <Link to={to(`/projects/${project.slug}`)} data-cursor="View" className="group block">
         <div
           className={cn(
             "relative overflow-hidden rounded-2xl bg-surface-2 sm:rounded-3xl",
@@ -73,6 +76,10 @@ export default function ProjectsPage() {
   const visible = filter === ALL ? projects : projects.filter((p) => p.category === filter);
   // Proyek unggulan tampil lebar di urutan atas.
   const ordered = [...visible.filter((p) => p.featured), ...visible.filter((p) => !p.featured)];
+  // Desktop dengan mouse: proyek unggulan pertama jadi "showcase", sisanya daftar baris besar.
+  const interactive = useMediaQuery("(min-width: 1024px) and (hover: hover) and (pointer: fine)");
+  const showcase = interactive && filter === ALL ? ordered.find((p) => p.featured) : null;
+  const rest = showcase ? ordered.filter((p) => p.id !== showcase.id) : ordered;
 
   return (
     <Page title={t("nav.projects")}>
@@ -96,8 +103,12 @@ export default function ProjectsPage() {
         </div>
       )}
 
+      {showcase && <FeaturedShowcase project={showcase} />}
+
       {ordered.length === 0 ? (
         <p className="border-t border-line py-12 text-muted">{t("projects.empty")}</p>
+      ) : interactive ? (
+        rest.length > 0 && <ProjectList projects={rest} />
       ) : (
         <motion.ul layout className="grid gap-x-6 gap-y-12 sm:grid-cols-2 sm:gap-y-16">
           <AnimatePresence mode="popLayout">

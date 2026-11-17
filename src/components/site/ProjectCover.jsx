@@ -20,7 +20,7 @@ const initials = (title) =>
 
 /**
  * Sampul otomatis untuk proyek yang belum punya gambar:
- * gradient coklat + inisial judul, tanpa hiasan lain.
+ * gradient coklat + motif kisi kulit nanas + inisial judul.
  * (`tags` diterima supaya pemanggil lama tetap jalan, tapi tidak ditampilkan.)
  */
 // eslint-disable-next-line no-unused-vars
@@ -31,6 +31,8 @@ export function ProjectCover({ title, tags, size = "md", className }) {
       className={cn("relative h-full w-full overflow-hidden bg-gradient-to-br text-white", gradient, className)}
       aria-hidden="true"
     >
+      {/* motif kisi kulit nanas */}
+      <div className="absolute inset-0 opacity-70 [background-image:repeating-linear-gradient(45deg,rgb(255_255_255/0.09)_0_1px,transparent_1px_26px),repeating-linear-gradient(-45deg,rgb(255_255_255/0.09)_0_1px,transparent_1px_26px)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_10%,rgb(255_255_255/0.22),transparent_55%)]" />
       <span
         className={cn(

@@ -20,6 +20,7 @@ export const DICTIONARY = {
     "theme.dark": "Switch to dark mode",
 
     "projects.all": "All",
+    "projects.featured": "Featured",
     "projects.empty": "No projects yet — check back soon.",
     "experience.present": "Present",
     "certificates.view": "View credential",
@@ -104,6 +105,7 @@ export const DICTIONARY = {
     "theme.dark": "Ganti ke mode gelap",
 
     "projects.all": "Semua",
+    "projects.featured": "Unggulan",
     "projects.empty": "Belum ada proyek — nantikan segera.",
     "experience.present": "Sekarang",
     "certificates.view": "Lihat kredensial",
