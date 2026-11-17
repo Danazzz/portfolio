@@ -22,9 +22,9 @@ const groupSkills = (skills, otherLabel) => {
 /** Baris daftar: kolom kiri kecil (tahun/kelompok), kolom kanan isi. */
 function Row({ aside, children }) {
   return (
-    <li className="grid gap-1 border-b border-line py-5 sm:grid-cols-[12rem_1fr] sm:gap-6">
+    <li className="grid grid-cols-1 gap-1 border-b border-line py-5 sm:grid-cols-[12rem_1fr] sm:gap-6">
       <div className="text-sm tabular-nums text-muted sm:pt-0.5">{aside}</div>
-      <div>{children}</div>
+      <div className="min-w-0">{children}</div>
     </li>
   );
 }
@@ -37,6 +37,8 @@ export default function AboutPage() {
   const [lightbox, setLightbox] = useState(null);
 
   const headline = tr(profile, "headline");
+  // Foto khusus About (potret) jika diisi; jika tidak, pakai foto profil (bulat).
+  const photo = profile.about_image_url || profile.avatar_url;
   const about = tr(profile, "about");
   const groups = groupSkills(skills, t("skills.other"));
   const certImages = certificates
@@ -52,18 +54,22 @@ export default function AboutPage() {
 
   return (
     <Page title={t("nav.about")}>
-      {(about || profile.about_image_url) && (
+      {(about || photo) && (
         <div className="grid gap-8 sm:grid-cols-[1fr_auto] sm:gap-12">
           <div className="max-w-2xl">
             {headline && <p className="mb-4 text-sm font-medium text-accent">{headline}</p>}
             {about && <p className="whitespace-pre-line text-xl leading-relaxed text-ink/90 sm:text-2xl sm:leading-relaxed">{about}</p>}
           </div>
-          {profile.about_image_url && (
+          {photo && (
             <img
-              src={assetUrl(profile.about_image_url)}
+              src={assetUrl(photo)}
               alt={profile.name}
               loading="lazy"
-              className="aspect-[4/5] w-full max-w-60 rounded-2xl object-cover sm:w-60"
+              className={
+                profile.about_image_url
+                  ? "order-first aspect-[4/5] w-full max-w-60 rounded-2xl object-cover sm:order-none sm:w-60"
+                  : "order-first aspect-square w-32 rounded-full object-cover sm:order-none sm:w-56"
+              }
             />
           )}
         </div>
@@ -106,10 +112,11 @@ export default function AboutPage() {
           <ul>
             {groups.map(([group, items]) => (
               <Row key={group} aside={group}>
-                <p className="text-lg">
+                {/* flex-wrap: nama skill boleh turun baris di layar sempit */}
+                <p className="flex flex-wrap items-baseline gap-x-2 text-lg">
                   {items.map((s, i) => (
-                    <span key={s.id}>
-                      {i > 0 && <span className="px-2 text-muted/60">·</span>}
+                    <span key={s.id} className="inline-flex items-baseline gap-2">
+                      {i > 0 && <span className="text-muted/60">·</span>}
                       {s.name}
                     </span>
                   ))}
