@@ -3,11 +3,7 @@ import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, PlayCircle } from "lucide-react";
 import { Page } from "../../components/site/Page";
-import { ProjectList } from "../../components/site/projects/ProjectList";
-import { FeaturedShowcase } from "../../components/site/projects/FeaturedShowcase";
-import { useMediaQuery } from "../../lib/hooks";
 import { ProjectCover } from "../../components/site/ProjectCover";
-import { TiltCard } from "../../components/motion/TiltCard";
 import { usePortfolio } from "../../lib/portfolio";
 import { cn, mediaThumb } from "../../lib/utils";
 import { useLang } from "../../i18n/language";
@@ -32,10 +28,9 @@ function ProjectTile({ project, wide }) {
       className={cn(wide && "sm:col-span-2")}
     >
       <Link to={to(`/projects/${project.slug}`)} className="group block">
-        <TiltCard
-          max={4}
+        <div
           className={cn(
-            "overflow-hidden rounded-2xl bg-surface-2 sm:rounded-3xl",
+            "relative overflow-hidden rounded-2xl bg-surface-2 sm:rounded-3xl",
             wide ? "aspect-[16/10] sm:aspect-[2/1]" : "aspect-[16/10]",
           )}
         >
@@ -52,9 +47,9 @@ function ProjectTile({ project, wide }) {
           {hasVideo && (
             <PlayCircle className="absolute right-4 top-4 size-6 text-white drop-shadow" strokeWidth={1.6} aria-label="Video" />
           )}
-        </TiltCard>
+        </div>
         <div className="mt-4 flex items-baseline justify-between gap-4">
-          <h2 className={cn("font-display font-medium tracking-tight", wide ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl")}>
+          <h2 className={cn("font-semibold tracking-tight", wide ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl")}>
             {title}
             <ChevronRight className="ml-0.5 inline size-[0.8em] -translate-y-px text-muted transition group-hover:translate-x-1 group-hover:text-accent" />
           </h2>
@@ -78,10 +73,6 @@ export default function ProjectsPage() {
   const visible = filter === ALL ? projects : projects.filter((p) => p.category === filter);
   // Proyek unggulan tampil lebar di urutan atas.
   const ordered = [...visible.filter((p) => p.featured), ...visible.filter((p) => !p.featured)];
-  // Desktop dengan mouse: proyek unggulan pertama jadi "showcase", sisanya daftar baris besar.
-  const interactive = useMediaQuery("(min-width: 1024px) and (hover: hover) and (pointer: fine)");
-  const showcase = interactive && filter === ALL ? ordered.find((p) => p.featured) : null;
-  const rest = showcase ? ordered.filter((p) => p.id !== showcase.id) : ordered;
 
   return (
     <Page title={t("nav.projects")}>
@@ -105,12 +96,8 @@ export default function ProjectsPage() {
         </div>
       )}
 
-      {showcase && <FeaturedShowcase project={showcase} />}
-
       {ordered.length === 0 ? (
         <p className="border-t border-line py-12 text-muted">{t("projects.empty")}</p>
-      ) : interactive ? (
-        rest.length > 0 && <ProjectList projects={rest} />
       ) : (
         <motion.ul layout className="grid gap-x-6 gap-y-12 sm:grid-cols-2 sm:gap-y-16">
           <AnimatePresence mode="popLayout">

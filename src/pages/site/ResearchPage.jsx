@@ -6,32 +6,29 @@ import { Page } from "../../components/site/Page";
 import { usePortfolio } from "../../lib/portfolio";
 import { assetUrl, cn } from "../../lib/utils";
 import { EASE } from "../../lib/motion";
-import { scrollToElement } from "../../lib/smoothScroll";
-import { Reveal } from "../../components/motion/Reveal";
 import { useLang } from "../../i18n/language";
 
-function ResearchItem({ item, open, onToggle, index = 0 }) {
+function ResearchItem({ item, open, onToggle }) {
   const { t, tr } = useLang();
   const title = tr(item, "title");
   const abstract = tr(item, "abstract");
   const status = item.status && item.status !== "published" ? t(`research.status.${item.status}`) : null;
 
   return (
-    <Reveal
-      as="li"
-      delay={Math.min(index, 6) * 0.06}
-      id={`research-${item.id}`}
-      className="grid scroll-mt-24 gap-1 border-b border-line py-6 sm:grid-cols-[12rem_1fr] sm:gap-6"
-    >
+    <li id={`research-${item.id}`} className="grid scroll-mt-24 gap-1 border-b border-line py-6 sm:grid-cols-[12rem_1fr] sm:gap-6">
       <div className="flex items-center gap-2 text-sm tabular-nums text-muted sm:flex-col sm:items-start sm:gap-1.5 sm:pt-1">
         {item.year && <span>{item.year}</span>}
-        {status && <span className="rounded-full border border-line px-2 py-0.5 text-xs text-accent">{status}</span>}
+        {status && (
+          <span className="rounded-full border border-line px-2 py-0.5 text-xs text-accent">{status}</span>
+        )}
       </div>
       <div>
-        <h2 className="font-display text-xl font-medium leading-snug tracking-tight sm:text-2xl">{title}</h2>
+        <h2 className="text-xl font-medium leading-snug tracking-tight sm:text-2xl">{title}</h2>
         {item.authors && <p className="mt-1.5 text-muted">{item.authors}</p>}
         {item.venue && <p className="text-muted italic">{item.venue}</p>}
-        {item.keywords.length > 0 && <p className="mt-2 text-sm text-muted/80">{item.keywords.join(" · ")}</p>}
+        {item.keywords.length > 0 && (
+          <p className="mt-2 text-sm text-muted/80">{item.keywords.join(" · ")}</p>
+        )}
 
         <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
           {abstract && (
@@ -39,29 +36,19 @@ function ResearchItem({ item, open, onToggle, index = 0 }) {
               type="button"
               onClick={onToggle}
               aria-expanded={open}
-              className="link-underline inline-flex items-center gap-1 text-accent"
+              className="inline-flex items-center gap-1 text-accent hover:underline"
             >
               {t("research.abstract")}
               <ChevronDown className={cn("size-4 transition-transform duration-300", open && "rotate-180")} />
             </button>
           )}
           {item.pdf_url && (
-            <a
-              href={assetUrl(item.pdf_url)}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-0.5 text-accent link-underline"
-            >
+            <a href={assetUrl(item.pdf_url)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 text-accent hover:underline">
               PDF <ArrowUpRight className="size-3.5" />
             </a>
           )}
           {item.doi_url && (
-            <a
-              href={item.doi_url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-0.5 text-accent link-underline"
-            >
+            <a href={item.doi_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 text-accent hover:underline">
               {/doi\.org/.test(item.doi_url) ? "DOI" : t("research.link")} <ArrowUpRight className="size-3.5" />
             </a>
           )}
@@ -81,7 +68,7 @@ function ResearchItem({ item, open, onToggle, index = 0 }) {
           )}
         </AnimatePresence>
       </div>
-    </Reveal>
+    </li>
   );
 }
 
@@ -95,7 +82,10 @@ export default function ResearchPage() {
   // Dibuka dari pencarian (⌘K) → gulir ke penelitian itu.
   useEffect(() => {
     if (!state?.open) return;
-    const id = setTimeout(() => scrollToElement(document.getElementById(`research-${state.open}`)), 350);
+    const id = setTimeout(
+      () => document.getElementById(`research-${state.open}`)?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      350,
+    );
     return () => clearTimeout(id);
   }, [state]);
 
@@ -113,14 +103,8 @@ export default function ResearchPage() {
         <p className="border-t border-line py-12 text-muted">{t("research.empty")}</p>
       ) : (
         <ul className="border-t border-line">
-          {data.research.map((item, i) => (
-            <ResearchItem
-              key={item.id}
-              index={i}
-              item={item}
-              open={open.has(item.id)}
-              onToggle={() => toggle(item.id)}
-            />
+          {data.research.map((item) => (
+            <ResearchItem key={item.id} item={item} open={open.has(item.id)} onToggle={() => toggle(item.id)} />
           ))}
         </ul>
       )}

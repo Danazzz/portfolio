@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import { HashRouter, Navigate, Outlet, Route, Routes, useParams } from "react-router-dom";
-import { MotionConfig } from "framer-motion";
 import { useLang } from "./i18n/language";
 import { ABOUT_PARTS } from "./lib/sections";
 import { Loader2 } from "lucide-react";
@@ -67,38 +66,35 @@ const siteRoutes = (
 export default function App() {
   return (
     <ErrorBoundary>
-      {/* Hormati pengaturan "kurangi gerakan" di perangkat pengunjung untuk semua animasi. */}
-      <MotionConfig reducedMotion="user">
-        <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <Routes>
-            <Route
-              path="/admin/*"
-              element={
-                <Suspense fallback={<FullScreenLoader />}>
-                  <AdminApp />
-                </Suspense>
-              }
-            />
-            {/* Data dimuat sekali di sini, jadi pindah halaman/bahasa tidak memuat ulang data. */}
-            <Route
-              element={
-                <PortfolioProvider>
-                  <Outlet />
-                </PortfolioProvider>
-              }
-            >
-              {/* Ditulis eksplisit (bukan "/:lang?") supaya tidak bentrok dengan "/admin/..." */}
-              <Route path="/" element={<SiteLayout lang="en" />}>
-                {siteRoutes}
-              </Route>
-              <Route path="/id" element={<SiteLayout lang="id" />}>
-                {siteRoutes}
-              </Route>
+      <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Routes>
+          <Route
+            path="/admin/*"
+            element={
+              <Suspense fallback={<FullScreenLoader />}>
+                <AdminApp />
+              </Suspense>
+            }
+          />
+          {/* Data dimuat sekali di sini, jadi pindah halaman/bahasa tidak memuat ulang data. */}
+          <Route
+            element={
+              <PortfolioProvider>
+                <Outlet />
+              </PortfolioProvider>
+            }
+          >
+            {/* Ditulis eksplisit (bukan "/:lang?") supaya tidak bentrok dengan "/admin/..." */}
+            <Route path="/" element={<SiteLayout lang="en" />}>
+              {siteRoutes}
             </Route>
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </HashRouter>
-      </MotionConfig>
+            <Route path="/id" element={<SiteLayout lang="id" />}>
+              {siteRoutes}
+            </Route>
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </HashRouter>
     </ErrorBoundary>
   );
 }

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
-import { Page, ScrollText, SectionTitle } from "../../components/site/Page";
-import { Reveal } from "../../components/motion/Reveal";
+import { Page, SectionTitle } from "../../components/site/Page";
 import { Lightbox } from "../../components/site/MediaViewer";
 import { usePortfolio } from "../../lib/portfolio";
 import { assetUrl } from "../../lib/utils";
-import { scrollToElement } from "../../lib/smoothScroll";
 import { useLang } from "../../i18n/language";
 
 /** Kelompokkan skill sesuai kategori; "Lainnya" selalu paling akhir. */
@@ -22,17 +20,12 @@ const groupSkills = (skills, otherLabel) => {
 };
 
 /** Baris daftar: kolom kiri kecil (tahun/kelompok), kolom kanan isi. */
-function Row({ aside, children, i = 0 }) {
+function Row({ aside, children }) {
   return (
-    <Reveal
-      as="li"
-      delay={Math.min(i, 6) * 0.05}
-      y={16}
-      className="grid gap-1 border-b border-line py-5 sm:grid-cols-[12rem_1fr] sm:gap-6"
-    >
+    <li className="grid gap-1 border-b border-line py-5 sm:grid-cols-[12rem_1fr] sm:gap-6">
       <div className="text-sm tabular-nums text-muted sm:pt-0.5">{aside}</div>
       <div>{children}</div>
-    </Reveal>
+    </li>
   );
 }
 
@@ -53,7 +46,7 @@ export default function AboutPage() {
   // Datang dari alamat lama (#/skills dll.) → gulir ke bagian itu.
   useEffect(() => {
     if (!state?.part) return;
-    const id = setTimeout(() => scrollToElement(document.getElementById(state.part)), 350);
+    const id = setTimeout(() => document.getElementById(state.part)?.scrollIntoView({ behavior: "smooth" }), 350);
     return () => clearTimeout(id);
   }, [state]);
 
@@ -63,13 +56,7 @@ export default function AboutPage() {
         <div className="grid gap-8 sm:grid-cols-[1fr_auto] sm:gap-12">
           <div className="max-w-2xl">
             {headline && <p className="mb-4 text-sm font-medium text-accent">{headline}</p>}
-            {about && (
-              <ScrollText
-                key={about}
-                text={about}
-                className="whitespace-pre-line text-xl leading-relaxed text-ink sm:text-2xl sm:leading-relaxed"
-              />
-            )}
+            {about && <p className="whitespace-pre-line text-xl leading-relaxed text-ink/90 sm:text-2xl sm:leading-relaxed">{about}</p>}
           </div>
           {profile.about_image_url && (
             <img
@@ -86,13 +73,13 @@ export default function AboutPage() {
         <section className="mt-20 sm:mt-28">
           <SectionTitle id="experience">{t("nav.experience")}</SectionTitle>
           <ul>
-            {experiences.map((exp, i) => {
+            {experiences.map((exp) => {
               const highlights = tr(exp, "highlights") || [];
               const period = [date(exp.start_date), date(exp.end_date) || t("experience.present")]
                 .filter(Boolean)
                 .join(" — ");
               return (
-                <Row key={exp.id} i={i} aside={exp.start_date || exp.end_date ? period : null}>
+                <Row key={exp.id} aside={exp.start_date || exp.end_date ? period : null}>
                   <h3 className="text-lg font-medium">
                     {tr(exp, "role")}
                     {exp.organisation && <span className="text-muted"> · {exp.organisation}</span>}
@@ -100,10 +87,7 @@ export default function AboutPage() {
                   {highlights.length > 0 && (
                     <ul className="mt-2 space-y-1.5 text-ink/80">
                       {highlights.map((h, i) => (
-                        <li
-                          key={i}
-                          className="relative pl-4 leading-relaxed before:absolute before:left-0 before:top-[0.7em] before:size-1 before:rounded-full before:bg-muted"
-                        >
+                        <li key={i} className="relative pl-4 leading-relaxed before:absolute before:left-0 before:top-[0.7em] before:size-1 before:rounded-full before:bg-muted">
                           {h}
                         </li>
                       ))}
@@ -120,8 +104,8 @@ export default function AboutPage() {
         <section className="mt-20 sm:mt-28">
           <SectionTitle id="skills">{t("nav.skills")}</SectionTitle>
           <ul>
-            {groups.map(([group, items], i) => (
-              <Row key={group} i={i} aside={group}>
+            {groups.map(([group, items]) => (
+              <Row key={group} aside={group}>
                 <p className="text-lg">
                   {items.map((s, i) => (
                     <span key={s.id}>
@@ -140,10 +124,10 @@ export default function AboutPage() {
         <section className="mt-20 sm:mt-28">
           <SectionTitle id="certificates">{t("nav.certificates")}</SectionTitle>
           <ul>
-            {certificates.map((cert, i) => {
+            {certificates.map((cert) => {
               const imageIndex = certImages.findIndex((m) => m.id === cert.id);
               return (
-                <Row key={cert.id} i={i} aside={date(cert.issued_at)}>
+                <Row key={cert.id} aside={date(cert.issued_at)}>
                   <h3 className="text-lg font-medium">{cert.title}</h3>
                   {cert.issuer && <p className="text-muted">{cert.issuer}</p>}
                   <div className="mt-1 flex flex-wrap gap-x-5 text-sm">
@@ -152,17 +136,13 @@ export default function AboutPage() {
                         href={cert.credential_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="link-underline inline-flex items-center gap-0.5 text-accent"
+                        className="inline-flex items-center gap-0.5 text-accent hover:underline"
                       >
                         {t("certificates.view")} <ArrowUpRight className="size-3.5" />
                       </a>
                     )}
                     {imageIndex >= 0 && (
-                      <button
-                        type="button"
-                        onClick={() => setLightbox(imageIndex)}
-                        className="link-underline text-accent"
-                      >
+                      <button type="button" onClick={() => setLightbox(imageIndex)} className="text-accent hover:underline">
                         {t("media.view")}
                       </button>
                     )}

@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
-import { cn } from "../../../lib/utils";
 
-const BASE = 340; // ketebalan normal (General Sans variabel: 200–700)
-const PEAK = 700; // ketebalan tepat di bawah kursor
+const BASE = 380; // ketebalan normal
+const PEAK = 820; // ketebalan tepat di bawah kursor
 
 const smooth = (k) => k * k * (3 - 2 * k);
 const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -13,7 +12,7 @@ const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
  * (atau jari di HP). Saat halaman dibuka, efeknya menyapu sekali dari kiri ke kanan.
  * Pengunjung yang mematikan animasi melihat nama dengan ketebalan tetap.
  */
-export function LivingName({ name, className }) {
+export function LivingName({ name }) {
   const reduce = useReducedMotion();
   const rootRef = useRef(null);
   const letters = useRef([]);
@@ -100,7 +99,7 @@ export function LivingName({ name, className }) {
     <h1
       ref={rootRef}
       aria-label={name}
-      className={cn("select-none text-[clamp(3.4rem,min(14vw,13.5vh),8.75rem)] leading-[0.92] tracking-[-0.045em]", className)}
+      className="select-none text-[clamp(3.4rem,min(14vw,13.5vh),8.75rem)] leading-[0.92] tracking-[-0.045em]"
       style={{ fontWeight: reduce ? 600 : BASE }}
     >
       {words.map((word, w) => (

@@ -20,7 +20,6 @@ export const DICTIONARY = {
     "theme.dark": "Switch to dark mode",
 
     "projects.all": "All",
-    "projects.featured": "Featured",
     "projects.empty": "No projects yet — check back soon.",
     "experience.present": "Present",
     "certificates.view": "View credential",
@@ -57,7 +56,6 @@ export const DICTIONARY = {
     "skills.other": "Other",
     "contact.cv": "Resume / CV",
     "contact.open": "Contact",
-    "contact.cta": "Let's talk",
     "contact.title": "Let's talk",
     "contact.subtitle": "Pick whichever is easiest for you.",
     "contact.waMessage": "Hi! I came across your portfolio and would love to chat.",
@@ -68,7 +66,6 @@ export const DICTIONARY = {
     "media.gallery": "Gallery",
 
     "home.curious": "Currently curious about",
-    "home.cta.projects": "See projects",
     "menu.open": "Open menu",
     "menu.close": "Close menu",
     "search.open": "Search",
@@ -107,7 +104,6 @@ export const DICTIONARY = {
     "theme.dark": "Ganti ke mode gelap",
 
     "projects.all": "Semua",
-    "projects.featured": "Unggulan",
     "projects.empty": "Belum ada proyek — nantikan segera.",
     "experience.present": "Sekarang",
     "certificates.view": "Lihat kredensial",
@@ -144,7 +140,6 @@ export const DICTIONARY = {
     "skills.other": "Lainnya",
     "contact.cv": "Resume / CV",
     "contact.open": "Kontak",
-    "contact.cta": "Mari ngobrol",
     "contact.title": "Mari ngobrol",
     "contact.subtitle": "Pilih cara yang paling mudah untuk Anda.",
     "contact.waMessage": "Halo! Saya melihat portfolio Anda dan ingin ngobrol.",
@@ -155,7 +150,6 @@ export const DICTIONARY = {
     "media.gallery": "Galeri",
 
     "home.curious": "Sedang penasaran dengan",
-    "home.cta.projects": "Lihat proyek",
     "menu.open": "Buka menu",
     "menu.close": "Tutup menu",
     "search.open": "Cari",

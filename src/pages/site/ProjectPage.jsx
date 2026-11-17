@@ -3,10 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Check, ChevronLeft, ChevronRight, Share } from "lucide-react";
 import { MediaViewer } from "../../components/site/MediaViewer";
-import { RevealTitle, SectionTitle } from "../../components/site/Page";
+import { SectionTitle } from "../../components/site/Page";
 import { usePortfolio } from "../../lib/portfolio";
 import { fadeUp } from "../../lib/motion";
-import { Reveal } from "../../components/motion/Reveal";
 import { useLang } from "../../i18n/language";
 
 const prettyUrl = (url) => String(url).replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
@@ -30,7 +29,7 @@ function ShareButton({ title }) {
   };
   const Icon = copied ? Check : Share;
   return (
-    <button type="button" onClick={share} className="link-underline inline-flex items-center gap-1.5 text-accent">
+    <button type="button" onClick={share} className="inline-flex items-center gap-1.5 text-accent hover:underline">
       {copied ? t("project.copied") : t("project.share")}
       <Icon className="size-4" />
     </button>
@@ -39,7 +38,7 @@ function ShareButton({ title }) {
 
 function ExternalLink({ href, children }) {
   return (
-    <a href={href} target="_blank" rel="noreferrer" className="link-underline inline-flex items-center gap-1 text-accent">
+    <a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-accent hover:underline">
       {children}
       <ArrowUpRight className="size-4" />
     </a>
@@ -63,7 +62,7 @@ export default function ProjectPage() {
 
   if (!project) {
     return (
-      <div className="mx-auto max-w-6xl px-5 pt-36 sm:px-8">
+      <div className="mx-auto max-w-5xl px-5 pt-36 sm:px-8">
         <h1 className="text-4xl font-semibold tracking-tight">{t("project.notFound")}</h1>
         <p className="mt-2 text-muted">{t("project.notFoundText")}</p>
         <Link to={to("/projects")} className="mt-6 inline-flex items-center gap-1 text-accent hover:underline">
@@ -94,7 +93,7 @@ export default function ProjectPage() {
   ].filter(Boolean);
 
   return (
-    <article key={project.id} className="mx-auto max-w-6xl px-5 pt-24 sm:px-8 sm:pt-28">
+    <article key={project.id} className="mx-auto max-w-5xl px-5 pt-24 sm:px-8 sm:pt-28">
       <motion.div {...fadeUp()}>
         <Link
           to={to("/projects")}
@@ -102,7 +101,7 @@ export default function ProjectPage() {
         >
           <ChevronLeft className="size-4" /> {t("nav.projects")}
         </Link>
-        <RevealTitle text={title} className="mt-6 font-display text-5xl font-medium tracking-[-0.035em] sm:text-7xl" />
+        <h1 className="mt-6 text-5xl font-semibold tracking-[-0.035em] sm:text-7xl">{title}</h1>
         {summary && <p className="mt-4 max-w-2xl text-xl text-muted sm:text-2xl">{summary}</p>}
         <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
           {project.demo_url && <ExternalLink href={project.demo_url}>{t("project.demo")}</ExternalLink>}
@@ -116,16 +115,16 @@ export default function ProjectPage() {
       </motion.div>
 
       {description && (
-        <Reveal
-          as="p"
+        <motion.p
+          {...fadeUp(0.15)}
           className="mt-12 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/85 sm:mt-16 sm:text-xl"
         >
           {description}
-        </Reveal>
+        </motion.p>
       )}
 
       {specs.length > 0 && (
-        <Reveal as="section" className="mt-16 sm:mt-20">
+        <section className="mt-16 sm:mt-20">
           <SectionTitle>{t("project.specs")}</SectionTitle>
           <dl>
             {specs.map(([label, value]) => (
@@ -135,7 +134,7 @@ export default function ProjectPage() {
               </div>
             ))}
           </dl>
-        </Reveal>
+        </section>
       )}
 
       {(prev || next) && (

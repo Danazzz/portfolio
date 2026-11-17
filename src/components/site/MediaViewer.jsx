@@ -9,7 +9,6 @@ import "swiper/css/pagination";
 import "swiper/css/zoom";
 import { assetUrl, cn, youTubeEmbed } from "../../lib/utils";
 import { useLang } from "../../i18n/language";
-import { lockScroll } from "../../lib/smoothScroll";
 import { ProjectCover } from "./ProjectCover";
 
 /** Satu media: gambar, video upload, atau video YouTube. */
@@ -82,11 +81,7 @@ export function Lightbox({ media, index, onClose }) {
       onClose();
     };
     window.addEventListener("keydown", onKey, true);
-    const unlock = lockScroll();
-    return () => {
-      window.removeEventListener("keydown", onKey, true);
-      unlock();
-    };
+    return () => window.removeEventListener("keydown", onKey, true);
   }, [onClose]);
 
   return createPortal(
@@ -110,7 +105,7 @@ export function Lightbox({ media, index, onClose }) {
       >
         {media.map((m) => (
           <SwiperSlide key={m.id || m.url} className="!flex items-center justify-center p-4 sm:p-12">
-            <MediaItem media={m} zoom={m.type === "image"} className={m.type === "youtube" ? "aspect-video h-auto max-w-6xl" : ""} />
+            <MediaItem media={m} zoom={m.type === "image"} className={m.type === "youtube" ? "aspect-video h-auto max-w-5xl" : ""} />
             {m.caption && <p className="absolute inset-x-0 bottom-12 text-center text-sm text-white/85">{m.caption}</p>}
           </SwiperSlide>
         ))}
