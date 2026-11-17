@@ -41,7 +41,6 @@ function MenuOverlay({ name, sections, active, onClose }) {
       <div className="flex h-14 items-center justify-between px-5">
         <Link to={to("/")} onClick={onClose} aria-label={name} className="group -ml-1 flex items-center gap-1.5">
           <NanasLogo />
-          <span className="text-[15px] font-semibold tracking-tight">nanas</span>
         </Link>
         <button
           type="button"
@@ -84,7 +83,7 @@ function MenuOverlay({ name, sections, active, onClose }) {
 
 /**
  * Header tipis bergaya Apple.
- *  Desktop: logo nanas + "nanas" · menu · cari (⌘K) · bahasa · tema
+ *  Desktop: logo nanas · menu · cari (⌘K) · bahasa · tema
  *  HP:      logo nanas · cari · ☰ (menu layar penuh)
  */
 export function SiteHeader({ name, sections, active, onSearch }) {
@@ -112,7 +111,6 @@ export function SiteHeader({ name, sections, active, onSearch }) {
             className="group mr-auto -ml-1.5 flex items-center gap-1.5 rounded-full py-1 pl-1 pr-2"
           >
             <NanasLogo />
-            <span className="hidden text-[15px] font-semibold tracking-tight md:inline">nanas</span>
           </Link>
 
           <nav className="mr-3 hidden items-center gap-6 md:flex" aria-label="Main">
