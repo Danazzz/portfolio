@@ -66,7 +66,6 @@ export const DICTIONARY = {
     "media.gallery": "Gallery",
 
     "home.curious": "Currently curious about",
-    "menu.open": "Open menu",
     "menu.close": "Close menu",
     "search.open": "Search",
     "search.placeholder": "Type to search…",
@@ -150,7 +149,6 @@ export const DICTIONARY = {
     "media.gallery": "Galeri",
 
     "home.curious": "Sedang penasaran dengan",
-    "menu.open": "Buka menu",
     "menu.close": "Tutup menu",
     "search.open": "Cari",
     "search.placeholder": "Ketik untuk mencari…",

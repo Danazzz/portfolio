@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { RefreshCw } from "lucide-react";
-import { SiteHeader } from "../../components/site/SiteHeader";
+import { PreferenceToggles, SiteHeader } from "../../components/site/SiteHeader";
 import { CommandPalette } from "../../components/site/CommandPalette";
 import { ContactFab } from "../../components/site/ContactFab";
 import { Skeleton } from "../../components/ui/Skeleton";
@@ -61,9 +61,13 @@ export function SiteFooter({ name, className = "" }) {
       <p>
         © {new Date().getFullYear()} {name}
       </p>
-      <Link to="/admin" className="text-muted/50 transition hover:text-muted">
-        Admin
-      </Link>
+      <div className="flex items-center gap-3">
+        {/* HP: bahasa & tema ada di sini (di desktop ada di header) */}
+        <PreferenceToggles className="md:hidden" />
+        <Link to="/admin" className="text-muted/50 transition hover:text-muted">
+          Admin
+        </Link>
+      </div>
     </footer>
   );
 }
