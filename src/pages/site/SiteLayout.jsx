@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { RefreshCw, WifiOff } from "lucide-react";
-import { TopBar } from "../../components/site/TopBar";
-import { BottomNav } from "../../components/site/BottomNav";
+import { AnimatePresence } from "framer-motion";
+import { RefreshCw } from "lucide-react";
+import { SiteHeader } from "../../components/site/SiteHeader";
+import { CommandPalette } from "../../components/site/CommandPalette";
 import { Skeleton } from "../../components/ui/Skeleton";
 import { Button } from "../../components/ui/Button";
 import { usePortfolio } from "../../lib/portfolio";
@@ -12,15 +13,13 @@ import { useLang } from "../../i18n/language";
 
 function LoadingView() {
   return (
-    <div aria-busy="true" aria-label="Loading">
-      <div className="h-64 rounded-b-[2.5rem] bg-gradient-to-br from-[#7d5a50] to-[#b4846c] dark:from-[#3b2b26] dark:to-[#7d5a50]" />
-      <div className="mx-auto -mt-16 max-w-3xl space-y-8 px-4">
-        <Skeleton className="h-28 rounded-3xl bg-surface shadow-float" />
-        <div className="grid grid-cols-4 gap-6">
-          {Array.from({ length: 8 }, (_, i) => (
-            <Skeleton key={i} className="mx-auto size-14 rounded-full" />
-          ))}
-        </div>
+    <div aria-busy="true" aria-label="Loading" className="mx-auto max-w-5xl px-5 pt-32 sm:px-8">
+      <Skeleton className="h-16 w-3/4 max-w-xl sm:h-24" />
+      <Skeleton className="mt-6 h-6 w-1/2 max-w-xs" />
+      <div className="mt-24 space-y-4">
+        {Array.from({ length: 3 }, (_, i) => (
+          <Skeleton key={i} className="h-12" />
+        ))}
       </div>
     </div>
   );
@@ -29,14 +28,11 @@ function LoadingView() {
 function ErrorView({ onRetry }) {
   const { t } = useLang();
   return (
-    <div className="grid min-h-dvh place-items-center px-6 text-center">
-      <div className="flex flex-col items-center gap-3">
-        <span className="grid size-16 place-items-center rounded-full bg-surface-2">
-          <WifiOff className="size-8 text-brand" />
-        </span>
-        <h1 className="text-xl font-bold">{t("error.title")}</h1>
-        <p className="max-w-sm text-muted">{t("error.text")}</p>
-        <Button icon={RefreshCw} onClick={onRetry}>
+    <div className="grid min-h-dvh place-items-center px-6">
+      <div className="max-w-sm">
+        <h1 className="text-3xl font-semibold tracking-tight">{t("error.title")}</h1>
+        <p className="mt-2 text-muted">{t("error.text")}</p>
+        <Button icon={RefreshCw} onClick={onRetry} className="mt-6">
           {t("error.retry")}
         </Button>
       </div>
@@ -44,23 +40,54 @@ function ErrorView({ onRetry }) {
   );
 }
 
+/** Footer kecil di halaman isi (beranda punya baris bawahnya sendiri). */
+export function SiteFooter({ name, className = "" }) {
+  return (
+    <footer
+      className={`mx-auto mt-20 flex w-full max-w-5xl items-center justify-between gap-4 px-5 py-8 text-xs text-muted sm:px-8 ${className}`}
+    >
+      <p>
+        © {new Date().getFullYear()} {name}
+      </p>
+      <Link to="/admin" className="text-muted/50 transition hover:text-muted">
+        Admin
+      </Link>
+    </footer>
+  );
+}
+
 function Shell() {
   const { status, data, reload } = usePortfolio();
   const { t, lang } = useLang();
   const { pathname } = useLocation();
+  const [search, setSearch] = useState(false);
   const active = sectionFromPath(pathname);
   const name = data?.profile.name;
   const isPage = SECTION_ORDER.includes(active);
+  const isHome = active === "";
 
-  // Pindah menu → mulai dari atas (membuka detail proyek tidak ikut menggulir).
+  // Pindah halaman → mulai dari atas.
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [active]);
+  }, [pathname]);
 
   useEffect(() => {
     if (!name) return;
-    document.title = isPage ? `${t(`nav.${active}`)} — ${name}` : `${name} — ${t("meta.title")}`;
+    document.title = isPage ? `${t(`nav.${active}`)} — ${name}` : name;
   }, [name, lang, t, active, isPage]);
+
+  // ⌘K / Ctrl+K membuka pencarian dari halaman mana pun.
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearch((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  const closeSearch = useCallback(() => setSearch(false), []);
 
   if (status === "error" && !data) return <ErrorView onRetry={reload} />;
   if (!data) return <LoadingView />;
@@ -68,21 +95,16 @@ function Shell() {
   const sections = availableSections(data);
 
   return (
-    <>
-      <TopBar name={name} sections={sections} title={isPage ? t(`nav.${active}`) : null} active={active} />
-      <main className="pb-6">
+    <div className="flex min-h-dvh flex-col">
+      <SiteHeader name={name} sections={sections} active={active} onSearch={() => setSearch(true)} />
+      <main className="flex-1">
         <Outlet />
       </main>
-      <footer className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 pb-28 pt-6 text-sm text-muted lg:pb-8">
-        <p>
-          © {new Date().getFullYear()} {name}
-        </p>
-        <Link to="/admin" className="rounded-full px-3 py-1 hover:bg-surface-2">
-          Admin
-        </Link>
-      </footer>
-      <BottomNav sections={sections} active={active} />
-    </>
+      {!isHome && <SiteFooter name={name} />}
+      <AnimatePresence>
+        {search && <CommandPalette sections={sections} projects={data.projects} onClose={closeSearch} />}
+      </AnimatePresence>
+    </div>
   );
 }
 
