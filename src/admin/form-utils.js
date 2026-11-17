@@ -32,7 +32,31 @@ export function cleanTranslations(translations = {}) {
   return { ...translations, [ALT_LANG]: id };
 }
 
-/** Rapikan nilai sebelum disimpan & cek isian wajib. */
+const isUrl = (v) => {
+  try {
+    const u = new URL(v);
+    return /^https?:$/.test(u.protocol) && u.hostname.includes(".");
+  } catch {
+    return false;
+  }
+};
+
+/** Aturan format isian: [cek, pesan jika salah]. */
+const RULES = {
+  email: [(v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v), "Format email tidak valid. Contoh: nama@email.com"],
+  url: [isUrl, "Link harus lengkap diawali https:// — contoh: https://github.com/nama"],
+  phone: [(v) => /^\+?\d[\d\s-]{7,16}$/.test(v), "Nomor hanya berisi angka (boleh diawali +62 atau 0), 8–16 digit."],
+  year: [(v) => /^(19|20)\d{2}$/.test(v), "Tahun harus 4 angka, contoh: 2024."],
+};
+
+/** Pesan error format (null jika kosong atau sudah benar). */
+export const checkFormat = (rule, value) => {
+  if (!value || !RULES[rule]) return null;
+  const [valid, message] = RULES[rule];
+  return valid(String(value).trim()) ? null : message;
+};
+
+/** Rapikan nilai sebelum disimpan, cek isian wajib & format (email, link, nomor, tahun). */
 export function prepareRow(fields, value) {
   const row = { ...value };
   const errors = {};
@@ -40,6 +64,9 @@ export function prepareRow(fields, value) {
     if (f.type === "lines") row[f.name] = (row[f.name] || []).map((s) => s.trim()).filter(Boolean);
     else if (typeof row[f.name] === "string") row[f.name] = row[f.name].trim();
     if (f.required && !row[f.name]) errors[f.name] = `${f.label} wajib diisi.`;
+    const rule = f.validate || (f.type === "email" || f.type === "url" ? f.type : null);
+    const formatError = rule && typeof row[f.name] === "string" && checkFormat(rule, row[f.name]);
+    if (formatError && !errors[f.name]) errors[f.name] = formatError;
   });
   if (fields.some((f) => f.translatable)) row.translations = cleanTranslations(row.translations);
   return { row, errors };

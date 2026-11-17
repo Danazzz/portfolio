@@ -39,7 +39,7 @@ const PHOTOS = [
 
 const CONTACT = [
   { name: "email", label: "Email", type: "email", placeholder: "nama@email.com", half: true },
-  { name: "whatsapp", label: "Nomor WhatsApp", type: "text", placeholder: "Contoh: 081234567890", half: true },
+  { name: "whatsapp", label: "Nomor WhatsApp", type: "text", validate: "phone", placeholder: "Contoh: 081234567890", half: true },
   { name: "linkedin_url", label: "Link LinkedIn", type: "url", placeholder: "https://linkedin.com/in/...", half: true },
   { name: "github_url", label: "Link GitHub", type: "url", placeholder: "https://github.com/...", half: true },
   { name: "gitlab_url", label: "Link GitLab", type: "url", placeholder: "https://gitlab.com/...", half: true },
@@ -78,7 +78,7 @@ export function ProfilePage() {
     const { row, errors } = prepareRow(ALL, value);
     setErrors(errors);
     if (Object.keys(errors).length) {
-      toast("Ada isian wajib yang belum diisi.", "error");
+      toast("Ada isian yang perlu diperbaiki (lihat tulisan merah).", "error");
       return;
     }
     setSaving(true);
@@ -100,7 +100,7 @@ export function ProfilePage() {
   );
 
   return (
-    <form onSubmit={submit} className="space-y-4">
+    <form onSubmit={submit} noValidate className="space-y-4">
       <PageHeader title="Profil" description="Data diri dan kontak yang tampil di website." />
       <FormCard step="1" title="Data diri">{section(IDENTITY)}</FormCard>
       <FormCard step="2" title="Foto">{section(PHOTOS)}</FormCard>

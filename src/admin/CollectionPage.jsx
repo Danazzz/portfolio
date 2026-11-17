@@ -151,7 +151,7 @@ export function CollectionPage({ config }) {
 
       <Sheet open={Boolean(editing)} onClose={closeForm} label={`Form ${config.itemName}`}>
         {editing && (
-          <form onSubmit={submit} className="space-y-5 p-5 pt-8 sm:p-7">
+          <form onSubmit={submit} noValidate className="space-y-5 p-5 pt-8 sm:p-7">
             <h2 className="pr-10 text-xl font-bold">
               {editing.original ? `Ubah ${config.itemName}` : `Tambah ${config.itemName}`}
             </h2>

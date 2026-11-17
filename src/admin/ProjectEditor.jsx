@@ -6,7 +6,7 @@ import { cn, mediaThumb } from "../lib/utils";
 import { Button } from "../components/ui/Button";
 import { Skeleton } from "../components/ui/Skeleton";
 import { BilingualField, FormCard, TagInput, TextInput, Toggle } from "./fields";
-import { cleanTranslations, getTr, setTr } from "./form-utils";
+import { checkFormat, cleanTranslations, getTr, setTr } from "./form-utils";
 import { MediaManager } from "./MediaManager";
 import { ProjectCover } from "../components/site/ProjectCover";
 import { useConfirm, useToast } from "./feedback-context";
@@ -190,9 +190,18 @@ export function ProjectEditor() {
       return;
     }
     const title = form.title.trim();
-    if (!title) {
-      setErrors({ title: "Judul proyek wajib diisi." });
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    const found = Object.fromEntries(
+      [
+        ["title", title ? null : "Judul proyek wajib diisi."],
+        ["year", checkFormat("year", form.year)],
+        ["demo_url", checkFormat("url", form.demo_url)],
+        ["source_url", checkFormat("url", form.source_url)],
+      ].filter(([, msg]) => msg),
+    );
+    if (Object.keys(found).length) {
+      setErrors(found);
+      toast("Ada isian yang perlu diperbaiki (lihat tulisan merah).", "error");
+      if (found.title) window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     setErrors({});
@@ -237,7 +246,7 @@ export function ProjectEditor() {
   );
 
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={submit} noValidate>
       <button
         type="button"
         onClick={leave}
@@ -324,6 +333,7 @@ export function ProjectEditor() {
                 onChange={(e) => set("year", e.target.value)}
                 placeholder="Contoh: 2024"
                 help="Opsional."
+                error={errors.year}
               />
             </div>
           </FormCard>
@@ -344,6 +354,7 @@ export function ProjectEditor() {
                 value={form.demo_url}
                 onChange={(e) => set("demo_url", e.target.value)}
                 placeholder="https://..."
+                error={errors.demo_url}
               />
               <TextInput
                 label="Link source code"
@@ -351,6 +362,7 @@ export function ProjectEditor() {
                 value={form.source_url}
                 onChange={(e) => set("source_url", e.target.value)}
                 placeholder="https://github.com/..."
+                error={errors.source_url}
               />
             </div>
           </FormCard>
