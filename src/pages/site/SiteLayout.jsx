@@ -113,7 +113,7 @@ function Shell() {
       </main>
       {!isHome && <SiteFooter name={name} />}
       <AnimatePresence>
-        {search && <CommandPalette sections={sections} projects={data.projects} onClose={closeSearch} />}
+        {search && <CommandPalette sections={sections} projects={data.projects} research={data.research} onClose={closeSearch} />}
       </AnimatePresence>
     </div>
   );

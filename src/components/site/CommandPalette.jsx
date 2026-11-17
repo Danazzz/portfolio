@@ -15,7 +15,7 @@ const normalize = (s) =>
  * Kotak pencarian cepat (⌘K / Ctrl+K): pindah halaman atau buka proyek
  * dengan mengetik namanya.
  */
-export function CommandPalette({ sections, projects, onClose }) {
+export function CommandPalette({ sections, projects, research = [], onClose }) {
   const { t, tr, to } = useLang();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -38,11 +38,22 @@ export function CommandPalette({ sections, projects, onClose }) {
         search: [p.title, tr(p, "title"), p.category, ...p.tags],
       }))
       .filter((item) => match(...item.search));
+    const papers = research
+      .map((r) => ({
+        key: `research-${r.id}`,
+        label: tr(r, "title"),
+        hint: [r.venue, r.year].filter(Boolean).join(" · "),
+        path: "/research",
+        state: { open: r.id },
+        search: [r.title, tr(r, "title"), r.venue, r.authors, ...r.keywords],
+      }))
+      .filter((item) => match(...item.search));
     return [
       { title: t("search.pages"), items: pages },
       { title: t("search.projects"), items },
+      { title: t("search.research"), items: papers },
     ].filter((g) => g.items.length);
-  }, [query, sections, projects, t, tr]);
+  }, [query, sections, projects, research, t, tr]);
 
   const flat = groups.flatMap((g) => g.items);
   const current = Math.min(index, Math.max(0, flat.length - 1));
@@ -63,7 +74,7 @@ export function CommandPalette({ sections, projects, onClose }) {
   const go = (item) => {
     if (!item) return;
     onClose();
-    navigate(to(item.path));
+    navigate(to(item.path), item.state ? { state: item.state } : undefined);
   };
 
   const onKeyDown = (e) => {

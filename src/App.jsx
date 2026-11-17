@@ -9,6 +9,7 @@ import SiteLayout from "./pages/site/SiteLayout";
 import HomePage from "./pages/site/HomePage";
 import ProjectsPage from "./pages/site/ProjectsPage";
 import ProjectPage from "./pages/site/ProjectPage";
+import ResearchPage from "./pages/site/ResearchPage";
 import AboutPage from "./pages/site/AboutPage";
 import ContactPage from "./pages/site/ContactPage";
 
@@ -42,6 +43,7 @@ const siteRoutes = (
     <Route index element={<HomePage />} />
     <Route path="projects" element={<ProjectsPage />} />
     <Route path="projects/:slug" element={<ProjectPage />} />
+    <Route path="research" element={<ResearchPage />} />
     {ABOUT_PARTS.map((part) => (
       <Route key={part} path={part} element={<AboutPartRedirect part={part} />} />
     ))}
@@ -56,6 +58,7 @@ const siteRoutes = (
  *   #/                       → beranda (English)      #/id            → beranda (Indonesia)
  *   #/projects               → daftar proyek          #/id/projects   → versi Indonesia
  *   #/projects/nama-proyek   → detail proyek
+ *   #/research               → daftar penelitian
  *   #/about, #/contact      (#/experience, #/skills, #/certificates → bagian di About)
  *   #/admin                  → panel admin
  */
