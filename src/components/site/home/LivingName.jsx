@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
+import { cn } from "../../../lib/utils";
 
 const BASE = 380; // ketebalan normal
 const PEAK = 820; // ketebalan tepat di bawah kursor
@@ -12,7 +13,7 @@ const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
  * (atau jari di HP). Saat halaman dibuka, efeknya menyapu sekali dari kiri ke kanan.
  * Pengunjung yang mematikan animasi melihat nama dengan ketebalan tetap.
  */
-export function LivingName({ name }) {
+export function LivingName({ name, className }) {
   const reduce = useReducedMotion();
   const rootRef = useRef(null);
   const letters = useRef([]);
@@ -99,7 +100,7 @@ export function LivingName({ name }) {
     <h1
       ref={rootRef}
       aria-label={name}
-      className="select-none text-[clamp(3.4rem,min(14vw,13.5vh),8.75rem)] leading-[0.92] tracking-[-0.045em]"
+      className={cn("select-none text-[clamp(3.4rem,min(14vw,13.5vh),8.75rem)] leading-[0.92] tracking-[-0.045em]", className)}
       style={{ fontWeight: reduce ? 600 : BASE }}
     >
       {words.map((word, w) => (
