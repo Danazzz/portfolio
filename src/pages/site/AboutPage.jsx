@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
-import { Page, SectionTitle } from "../../components/site/Page";
+import { Page, ScrollText, SectionTitle } from "../../components/site/Page";
 import { Lightbox } from "../../components/site/MediaViewer";
 import { usePortfolio } from "../../lib/portfolio";
 import { assetUrl } from "../../lib/utils";
+import { scrollToElement } from "../../lib/smoothScroll";
 import { useLang } from "../../i18n/language";
 
 /** Kelompokkan skill sesuai kategori; "Lainnya" selalu paling akhir. */
@@ -46,7 +47,7 @@ export default function AboutPage() {
   // Datang dari alamat lama (#/skills dll.) → gulir ke bagian itu.
   useEffect(() => {
     if (!state?.part) return;
-    const id = setTimeout(() => document.getElementById(state.part)?.scrollIntoView({ behavior: "smooth" }), 350);
+    const id = setTimeout(() => scrollToElement(document.getElementById(state.part)), 350);
     return () => clearTimeout(id);
   }, [state]);
 
@@ -56,7 +57,13 @@ export default function AboutPage() {
         <div className="grid gap-8 sm:grid-cols-[1fr_auto] sm:gap-12">
           <div className="max-w-2xl">
             {headline && <p className="mb-4 text-sm font-medium text-accent">{headline}</p>}
-            {about && <p className="whitespace-pre-line text-xl leading-relaxed text-ink/90 sm:text-2xl sm:leading-relaxed">{about}</p>}
+            {about && (
+              <ScrollText
+                key={about}
+                text={about}
+                className="whitespace-pre-line text-xl leading-relaxed text-ink sm:text-2xl sm:leading-relaxed"
+              />
+            )}
           </div>
           {profile.about_image_url && (
             <img

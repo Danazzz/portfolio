@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Check, ChevronLeft, ChevronRight, Share } from "lucide-react";
 import { MediaViewer } from "../../components/site/MediaViewer";
-import { SectionTitle } from "../../components/site/Page";
+import { RevealTitle, SectionTitle } from "../../components/site/Page";
 import { usePortfolio } from "../../lib/portfolio";
 import { fadeUp } from "../../lib/motion";
 import { useLang } from "../../i18n/language";
@@ -62,7 +62,7 @@ export default function ProjectPage() {
 
   if (!project) {
     return (
-      <div className="mx-auto max-w-5xl px-5 pt-36 sm:px-8">
+      <div className="mx-auto max-w-6xl px-5 pt-36 sm:px-8">
         <h1 className="text-4xl font-semibold tracking-tight">{t("project.notFound")}</h1>
         <p className="mt-2 text-muted">{t("project.notFoundText")}</p>
         <Link to={to("/projects")} className="mt-6 inline-flex items-center gap-1 text-accent hover:underline">
@@ -93,7 +93,7 @@ export default function ProjectPage() {
   ].filter(Boolean);
 
   return (
-    <article key={project.id} className="mx-auto max-w-5xl px-5 pt-24 sm:px-8 sm:pt-28">
+    <article key={project.id} className="mx-auto max-w-6xl px-5 pt-24 sm:px-8 sm:pt-28">
       <motion.div {...fadeUp()}>
         <Link
           to={to("/projects")}
@@ -101,7 +101,7 @@ export default function ProjectPage() {
         >
           <ChevronLeft className="size-4" /> {t("nav.projects")}
         </Link>
-        <h1 className="mt-6 text-5xl font-semibold tracking-[-0.035em] sm:text-7xl">{title}</h1>
+        <RevealTitle text={title} className="mt-6 text-5xl font-semibold tracking-[-0.035em] sm:text-7xl" />
         {summary && <p className="mt-4 max-w-2xl text-xl text-muted sm:text-2xl">{summary}</p>}
         <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
           {project.demo_url && <ExternalLink href={project.demo_url}>{t("project.demo")}</ExternalLink>}

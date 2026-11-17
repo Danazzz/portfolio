@@ -6,6 +6,7 @@ import { ThemeToggle } from "../ui/ThemeToggle";
 import { LanguageSwitch } from "./LanguageSwitch";
 import { useScrolled } from "../../lib/hooks";
 import { NanasLogo } from "../ui/NanasLogo";
+import { lockScroll } from "../../lib/smoothScroll";
 import { cn } from "../../lib/utils";
 import { useLang } from "../../i18n/language";
 
@@ -17,12 +18,11 @@ function MenuOverlay({ name, sections, active, onClose }) {
   const items = ["", ...sections];
 
   useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const unlock = lockScroll();
     const onKey = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prev;
+      unlock();
       window.removeEventListener("keydown", onKey);
     };
   }, [onClose]);
@@ -83,7 +83,7 @@ function MenuOverlay({ name, sections, active, onClose }) {
 }
 
 /**
- * Header tipis bergaya Apple.
+ * Header tipis; saat halaman digulir berubah menjadi kapsul mengambang di tengah atas.
  *  Desktop: logo nanas + "nanas" · menu · cari (⌘K) · bahasa · tema
  *  HP:      logo nanas · cari · ☰ (menu layar penuh)
  */
@@ -98,13 +98,16 @@ export function SiteHeader({ name, sections, active, onSearch }) {
 
   return (
     <>
-      <header
-        className={cn(
-          "fixed inset-x-0 top-0 z-40 border-b transition-[background-color,border-color] duration-300",
-          scrolled ? "border-line/70 bg-bg/75 backdrop-blur-xl backdrop-saturate-150" : "border-transparent",
-        )}
-      >
-        <div className="mx-auto flex h-14 max-w-5xl items-center gap-1 px-5 sm:px-8">
+      {/* Di atas halaman: header lebar & transparan. Saat digulir: menyusut jadi kapsul mengambang. */}
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-40 px-3 sm:px-0">
+        <div
+          className={cn(
+            "pointer-events-auto mx-auto flex items-center gap-1 border transition-[max-width,margin,padding,height,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(.22,1,.36,1)]",
+            scrolled
+              ? "mt-2.5 h-12 max-w-3xl rounded-full border-line/70 bg-surface/80 px-3 shadow-[0_10px_40px_-18px_rgb(43_32_28/0.45)] backdrop-blur-xl backdrop-saturate-150 sm:w-[calc(100%-2rem)]"
+              : "mt-0 h-14 max-w-6xl rounded-full border-transparent px-2 sm:w-full sm:px-8",
+          )}
+        >
           <Link
             to={to("/")}
             aria-label={name}

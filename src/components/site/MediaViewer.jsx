@@ -105,7 +105,7 @@ export function Lightbox({ media, index, onClose }) {
       >
         {media.map((m) => (
           <SwiperSlide key={m.id || m.url} className="!flex items-center justify-center p-4 sm:p-12">
-            <MediaItem media={m} zoom={m.type === "image"} className={m.type === "youtube" ? "aspect-video h-auto max-w-5xl" : ""} />
+            <MediaItem media={m} zoom={m.type === "image"} className={m.type === "youtube" ? "aspect-video h-auto max-w-6xl" : ""} />
             {m.caption && <p className="absolute inset-x-0 bottom-12 text-center text-sm text-white/85">{m.caption}</p>}
           </SwiperSlide>
         ))}

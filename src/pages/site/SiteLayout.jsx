@@ -5,6 +5,8 @@ import { RefreshCw } from "lucide-react";
 import { SiteHeader } from "../../components/site/SiteHeader";
 import { CommandPalette } from "../../components/site/CommandPalette";
 import { ContactFab } from "../../components/site/ContactFab";
+import { CursorFollower } from "../../components/site/CursorFollower";
+import { scrollToTop, startSmoothScroll, stopSmoothScroll } from "../../lib/smoothScroll";
 import { Skeleton } from "../../components/ui/Skeleton";
 import { Button } from "../../components/ui/Button";
 import { ErrorDetails } from "../../components/ui/ErrorDetails";
@@ -16,7 +18,7 @@ import { useLang } from "../../i18n/language";
 
 function LoadingView() {
   return (
-    <div aria-busy="true" aria-label="Loading" className="mx-auto max-w-5xl px-5 pt-32 sm:px-8">
+    <div aria-busy="true" aria-label="Loading" className="mx-auto max-w-6xl px-5 pt-32 sm:px-8">
       <Skeleton className="h-16 w-3/4 max-w-xl sm:h-24" />
       <Skeleton className="mt-6 h-6 w-1/2 max-w-xs" />
       <div className="mt-24 space-y-4">
@@ -56,7 +58,7 @@ function ErrorView({ error, onRetry }) {
 export function SiteFooter({ name, className = "" }) {
   return (
     <footer
-      className={`mx-auto mt-20 flex w-full max-w-5xl items-center justify-between gap-4 py-8 pl-5 pr-24 text-xs text-muted sm:pl-8 sm:pr-28 ${className}`}
+      className={`mx-auto mt-20 flex w-full max-w-6xl items-center justify-between gap-4 py-8 pl-5 pr-24 text-xs text-muted sm:pl-8 sm:pr-28 ${className}`}
     >
       <p>
         © {new Date().getFullYear()} {name}
@@ -80,9 +82,15 @@ function Shell() {
   const isPage = SECTION_ORDER.includes(active);
   const isHome = active === "";
 
+  // Scroll halus hanya di website (bukan panel admin).
+  useEffect(() => {
+    startSmoothScroll();
+    return stopSmoothScroll;
+  }, []);
+
   // Pindah halaman → mulai dari atas.
   useEffect(() => {
-    window.scrollTo(0, 0);
+    scrollToTop();
   }, [pathname]);
 
   // Alamat #/contact (link lama / dari pencarian) → beranda dengan panel kontak terbuka.
@@ -127,6 +135,7 @@ function Shell() {
       </main>
       {!isHome && <SiteFooter name={name} />}
       <ContactFab profile={data.profile} open={contact} onOpenChange={setContact} />
+      <CursorFollower />
       <AnimatePresence>
         {search && <CommandPalette sections={sections} projects={data.projects} research={data.research} onClose={closeSearch} />}
       </AnimatePresence>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, CornerDownLeft, Search } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { lockScroll } from "../../lib/smoothScroll";
 import { useLang } from "../../i18n/language";
 
 const normalize = (s) =>
@@ -60,11 +61,7 @@ export function CommandPalette({ sections, projects, research = [], onClose }) {
 
   useEffect(() => {
     inputRef.current?.focus();
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
+    return lockScroll();
   }, []);
 
   useEffect(() => {
@@ -133,7 +130,7 @@ export function CommandPalette({ sections, projects, research = [], onClose }) {
           <kbd className="hidden rounded-md border border-line px-1.5 py-0.5 font-sans text-[11px] text-muted sm:block">esc</kbd>
         </div>
 
-        <ul id="palette-list" ref={listRef} role="listbox" className="max-h-[50vh] overflow-y-auto p-2">
+        <ul id="palette-list" ref={listRef} role="listbox" data-lenis-prevent className="max-h-[50vh] overflow-y-auto overscroll-contain p-2">
           {flat.length === 0 && <li className="px-3 py-8 text-center text-sm text-muted">{t("search.empty")}</li>}
           {groups.map((group) => (
             <li key={group.title} role="presentation">

@@ -6,6 +6,7 @@ import { Page } from "../../components/site/Page";
 import { usePortfolio } from "../../lib/portfolio";
 import { assetUrl, cn } from "../../lib/utils";
 import { EASE } from "../../lib/motion";
+import { scrollToElement } from "../../lib/smoothScroll";
 import { useLang } from "../../i18n/language";
 
 function ResearchItem({ item, open, onToggle }) {
@@ -83,7 +84,7 @@ export default function ResearchPage() {
   useEffect(() => {
     if (!state?.open) return;
     const id = setTimeout(
-      () => document.getElementById(`research-${state.open}`)?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      () => scrollToElement(document.getElementById(`research-${state.open}`)),
       350,
     );
     return () => clearTimeout(id);
