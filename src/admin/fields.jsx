@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from "react";
-import { ImagePlus, Loader2, Trash2, X } from "lucide-react";
+import { FileUp, ImagePlus, Loader2, Trash2, X } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { uploadFile, friendlyError } from "../lib/api";
 import { assetUrl, cn } from "../lib/utils";
@@ -52,6 +52,66 @@ export function SelectInput({ label, help, required, error, children, ...props }
       <select id={id} className={cn(inputCls, "appearance-auto")} {...props}>
         {children}
       </select>
+    </Field>
+  );
+}
+
+/**
+ * File dokumen (mis. PDF penelitian): upload file ATAU tempel link (Google Drive, dll.).
+ */
+export function FileField({ label, help, error, value, onChange, folder = "files", accept = "application/pdf" }) {
+  const toast = useToast();
+  const inputRef = useRef(null);
+  const id = useId();
+  const [busy, setBusy] = useState(false);
+  const isPdf = accept === "application/pdf";
+  const uploaded = value && value.includes("/storage/v1/object/public/");
+  const fileName = uploaded ? decodeURIComponent(value.split("/").pop()) : "";
+
+  const handle = async (file) => {
+    if (!file) return;
+    if (isPdf && file.type !== "application/pdf") {
+      toast(`"${file.name}" bukan file PDF. Simpan dokumen sebagai PDF terlebih dahulu.`, "error");
+      return;
+    }
+    setBusy(true);
+    try {
+      onChange(await uploadFile(file, folder));
+    } catch (e) {
+      toast(friendlyError(e, "Upload file"), "error");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Field label={label} help={help} error={error} htmlFor={id}>
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <input
+          id={id}
+          type="url"
+          value={uploaded ? "" : value || ""}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={uploaded ? `File terupload: ${fileName}` : "Tempel link, atau upload file →"}
+          disabled={uploaded}
+          className={cn(inputCls, "min-w-0 flex-1 disabled:opacity-80")}
+        />
+        <input ref={inputRef} type="file" accept={accept} hidden onChange={(e) => handle(e.target.files?.[0])} />
+        {value ? (
+          <Button type="button" variant="secondary" icon={Trash2} onClick={() => onChange("")}>
+            Hapus
+          </Button>
+        ) : (
+          <Button type="button" variant="secondary" icon={busy ? Loader2 : FileUp} loading={busy} onClick={() => inputRef.current?.click()}>
+            Upload {isPdf ? "PDF" : "file"}
+          </Button>
+        )}
+      </div>
+      {uploaded && (
+        <a href={value} target="_blank" rel="noreferrer" className="text-sm font-medium text-brand underline dark:text-cream">
+          Lihat file
+        </a>
+      )}
     </Field>
   );
 }

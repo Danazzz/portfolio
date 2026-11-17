@@ -1,4 +1,4 @@
-import { BilingualField, ImageField, SelectInput, TextArea, TextInput } from "./fields";
+import { BilingualField, FileField, ImageField, SelectInput, TagInput, TextArea, TextInput, Toggle } from "./fields";
 import { getTr, setTr } from "./form-utils";
 import { cn } from "../lib/utils";
 
@@ -49,6 +49,22 @@ export function FieldRenderer({ fields, value, onChange, folder, errors = {} }) 
                 </option>
               ))}
             </SelectInput>
+          );
+        } else if (f.type === "toggle") {
+          input = <Toggle label={f.label} description={f.help} checked={value[f.name] !== false} onChange={(v) => set(f.name, v)} />;
+        } else if (f.type === "tags") {
+          input = <TagInput label={f.label} help={f.help} value={value[f.name] || []} onChange={(v) => set(f.name, v)} />;
+        } else if (f.type === "file") {
+          input = (
+            <FileField
+              label={f.label}
+              help={f.help}
+              error={errors[f.name]}
+              accept={f.accept}
+              folder={folder}
+              value={value[f.name] || ""}
+              onChange={(url) => set(f.name, url)}
+            />
           );
         } else if (f.type === "image") {
           input = (

@@ -72,9 +72,9 @@ export function prepareRow(fields, value) {
   return { row, errors };
 }
 
-/** URL gambar yang berubah antara dua versi data (untuk membersihkan file lama). */
+/** URL gambar/file yang berubah antara dua versi data (untuk membersihkan file lama). */
 export function changedImages(fields, before = {}, after = {}) {
   return fields
-    .filter((f) => f.type === "image" && before[f.name] && before[f.name] !== after[f.name])
+    .filter((f) => (f.type === "image" || f.type === "file") && before[f.name] && before[f.name] !== after[f.name])
     .map((f) => before[f.name]);
 }

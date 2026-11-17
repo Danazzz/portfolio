@@ -10,6 +10,7 @@ export const TABLE_SPECS = [
   { table: "experiences", label: "Pengalaman", columns: ["id", "translations"] },
   { table: "skills", label: "Skill", columns: ["id", "category"] },
   { table: "certificates", label: "Sertifikat", columns: ["id"] },
+  { table: "research", label: "Penelitian", columns: ["id", "title", "status", "keywords", "published", "translations"] },
 ];
 
 // Hasil cek sudah tampil di layar, jadi tidak perlu ikut masuk log error.
@@ -56,14 +57,15 @@ function checkKey() {
 
 async function checkConnection() {
   const label = "Koneksi ke database";
-  const res = await supabase.from("profile").select("id", { head: true, count: "exact" });
+  const res = await supabase.from("profile").select("id").limit(1);
   if (!res.error) return ok(label, "Terhubung.");
   const error = { ...res.error, status: res.status };
   return fail(label, friendlyError(error, "Cek Sistem", QUIET), null, error);
 }
 
 async function checkTable({ table, label, columns }) {
-  const res = await supabase.from(table).select(columns.join(","), { head: true, count: "exact" });
+  // GET (bukan HEAD) supaya pesan error-nya ikut terbawa, mis. nama kolom yang hilang.
+  const res = await supabase.from(table).select(columns.join(","), { count: "exact" }).limit(1);
   if (!res.error) return ok(`Tabel ${label}`, `${res.count ?? 0} baris`);
   const error = { ...res.error, status: res.status };
   if (errorKind(error) === "schema") {
@@ -72,7 +74,7 @@ async function checkTable({ table, label, columns }) {
     return fail(
       `Tabel ${label}`,
       isColumn ? `Kolom "${name}" belum ada.` : "Tabel belum dibuat.",
-      `Jalankan supabase/${isColumn ? migrationFor(name) : "schema.sql"} di Supabase → SQL Editor.`,
+      `Jalankan supabase/${migrationFor(isColumn ? name : table)} di Supabase → SQL Editor.`,
       error,
     );
   }
