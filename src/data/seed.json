@@ -2,7 +2,7 @@
   "profile": {
     "id": 1,
     "name": "Dana Wardhiana",
-    "headline": "Fullstack Developer · MERN, Laravel & Python",
+    "headline": "",
     "location": "",
     "about": "I am a Master student in Informatics Engineering, graduated in Information Technology and proficient in MERN stack, Laravel and Python. My studies are currently oriented towards IT Governance with the intent to analyze strategic IT alignment. In several internships and courses, I have implemented my technical knowledge and experience in realistic settings. My approach is practical and straightforward, aiming to effectively integrate technology solutions in business.",
     "avatar_url": "profile/avatar.png",
@@ -13,10 +13,22 @@
     "github_url": "https://github.com/danazzz",
     "gitlab_url": "",
     "cv_url": "",
+    "interests": [
+      "graphs",
+      "cyber security",
+      "IT audit",
+      "machine learning"
+    ],
+    "timezone": "",
     "translations": {
       "id": {
-        "headline": "Fullstack Developer · MERN, Laravel & Python",
-        "about": "Saya mahasiswa Magister Teknik Informatika, lulusan Teknologi Informasi, dan menguasai MERN stack, Laravel, serta Python. Saat ini studi saya berfokus pada Tata Kelola TI (IT Governance) untuk menganalisis keselarasan strategis TI dengan bisnis. Melalui beberapa program magang dan kursus, saya telah menerapkan pengetahuan dan pengalaman teknis saya dalam situasi nyata. Pendekatan saya praktis dan lugas, dengan tujuan mengintegrasikan solusi teknologi ke dalam bisnis secara efektif."
+        "about": "Saya mahasiswa Magister Teknik Informatika, lulusan Teknologi Informasi, dan menguasai MERN stack, Laravel, serta Python. Saat ini studi saya berfokus pada Tata Kelola TI (IT Governance) untuk menganalisis keselarasan strategis TI dengan bisnis. Melalui beberapa program magang dan kursus, saya telah menerapkan pengetahuan dan pengalaman teknis saya dalam situasi nyata. Pendekatan saya praktis dan lugas, dengan tujuan mengintegrasikan solusi teknologi ke dalam bisnis secara efektif.",
+        "interests": [
+          "graph",
+          "keamanan siber",
+          "audit TI",
+          "machine learning"
+        ]
       }
     }
   },
@@ -28,6 +40,8 @@
       "summary": "Coming soon.",
       "description": "Details of this project are coming soon.",
       "category": "Web App",
+      "role": "",
+      "year": "",
       "tags": [
         "React",
         "Express",
@@ -55,6 +69,8 @@
       "summary": "Coming soon.",
       "description": "Details of this project are coming soon.",
       "category": "Web App",
+      "role": "",
+      "year": "",
       "tags": [
         "Laravel",
         "MySQL"
@@ -81,6 +97,8 @@
       "summary": "Coming soon.",
       "description": "Details of this project are coming soon.",
       "category": "Mobile",
+      "role": "",
+      "year": "",
       "tags": [
         "Flutter"
       ],
