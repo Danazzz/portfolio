@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchPortfolio } from "../../lib/api";
 import { PortfolioContext } from "../../lib/portfolio";
+import { logError } from "../../lib/errorLog";
 
 export function PortfolioProvider({ children }) {
   const [state, setState] = useState({ status: "loading", data: null, error: null });
@@ -11,7 +12,7 @@ export function PortfolioProvider({ children }) {
       const data = await fetchPortfolio();
       setState({ status: "ready", data, error: null });
     } catch (error) {
-      console.error(error);
+      logError(error, "Memuat website");
       setState({ status: "error", data: null, error });
     }
   }, []);

@@ -4,6 +4,7 @@ import { useLang } from "./i18n/language";
 import { ABOUT_PARTS } from "./lib/sections";
 import { Loader2 } from "lucide-react";
 import { PortfolioProvider } from "./components/site/PortfolioProvider";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import SiteLayout from "./pages/site/SiteLayout";
 import HomePage from "./pages/site/HomePage";
 import ProjectsPage from "./pages/site/ProjectsPage";
@@ -60,34 +61,36 @@ const siteRoutes = (
  */
 export default function App() {
   return (
-    <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <Routes>
-        <Route
-          path="/admin/*"
-          element={
-            <Suspense fallback={<FullScreenLoader />}>
-              <AdminApp />
-            </Suspense>
-          }
-        />
-        {/* Data dimuat sekali di sini, jadi pindah halaman/bahasa tidak memuat ulang data. */}
-        <Route
-          element={
-            <PortfolioProvider>
-              <Outlet />
-            </PortfolioProvider>
-          }
-        >
-          {/* Ditulis eksplisit (bukan "/:lang?") supaya tidak bentrok dengan "/admin/..." */}
-          <Route path="/" element={<SiteLayout lang="en" />}>
-            {siteRoutes}
+    <ErrorBoundary>
+      <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Routes>
+          <Route
+            path="/admin/*"
+            element={
+              <Suspense fallback={<FullScreenLoader />}>
+                <AdminApp />
+              </Suspense>
+            }
+          />
+          {/* Data dimuat sekali di sini, jadi pindah halaman/bahasa tidak memuat ulang data. */}
+          <Route
+            element={
+              <PortfolioProvider>
+                <Outlet />
+              </PortfolioProvider>
+            }
+          >
+            {/* Ditulis eksplisit (bukan "/:lang?") supaya tidak bentrok dengan "/admin/..." */}
+            <Route path="/" element={<SiteLayout lang="en" />}>
+              {siteRoutes}
+            </Route>
+            <Route path="/id" element={<SiteLayout lang="id" />}>
+              {siteRoutes}
+            </Route>
           </Route>
-          <Route path="/id" element={<SiteLayout lang="id" />}>
-            {siteRoutes}
-          </Route>
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </HashRouter>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </HashRouter>
+    </ErrorBoundary>
   );
 }

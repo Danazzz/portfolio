@@ -2,12 +2,15 @@ import seed from "../data/seed.json";
 import { supabase, isSupabaseReady, MEDIA_BUCKET } from "./supabase";
 import { compressImage, MAX_UPLOAD_MB } from "./media";
 import { byOrder, slugify } from "./utils";
+import { errorKind, fromResponse, missingName, withTimeout } from "./errors";
+import { logError } from "./errorLog";
 
 /* ------------------------------------------------------------------ */
 /*  Data publik (dipakai halaman website)                              */
 /* ------------------------------------------------------------------ */
 
 const normalize = (data) => ({
+  warnings: data.warnings || [],
   profile: data.profile || seed.profile,
   projects: (data.projects || [])
     .filter((p) => p.published !== false)
@@ -18,52 +21,108 @@ const normalize = (data) => ({
   certificates: [...(data.certificates || [])].sort(byOrder),
 });
 
-const unwrap = ({ data, error }) => {
-  if (error) throw error;
-  return data;
-};
+/** Ambil data dari hasil query; jika gagal lempar AppError (kode, status HTTP, konteks). */
+const unwrap = (res, context) => fromResponse(res, context);
 
 /**
  * Ambil semua isi website. Tanpa Supabase (atau database masih kosong),
  * website memakai data bawaan di src/data/seed.json.
+ *
+ * Profil wajib berhasil; bagian lain boleh gagal sendiri-sendiri (mis. tabel
+ * baru belum dibuat) — bagian itu dikosongkan, errornya dicatat di `warnings`.
  */
 export async function fetchPortfolio() {
   if (!isSupabaseReady) return normalize(seed);
 
-  const [profile, projects, experiences, skills, certificates] = await Promise.all([
-    supabase.from("profile").select("*").eq("id", 1).maybeSingle().then(unwrap),
-    supabase.from("projects").select("*, media:project_media(*)").eq("published", true).then(unwrap),
-    supabase.from("experiences").select("*").then(unwrap),
-    supabase.from("skills").select("*").then(unwrap),
-    supabase.from("certificates").select("*").then(unwrap),
-  ]);
-
+  const profile = await withTimeout(
+    supabase.from("profile").select("*").eq("id", 1).maybeSingle().then((r) => unwrap(r, "profile")),
+    15000,
+    "profile",
+  );
   if (!profile) return normalize(seed);
-  return normalize({ profile, projects, experiences, skills, certificates });
+
+  const parts = {
+    projects: supabase.from("projects").select("*, media:project_media(*)").eq("published", true),
+    experiences: supabase.from("experiences").select("*"),
+    skills: supabase.from("skills").select("*"),
+    certificates: supabase.from("certificates").select("*"),
+  };
+  const names = Object.keys(parts);
+  const results = await Promise.allSettled(
+    names.map((name) => withTimeout(parts[name].then((r) => unwrap(r, name)), 15000, name)),
+  );
+
+  const data = { profile, warnings: [] };
+  results.forEach((r, i) => {
+    if (r.status === "fulfilled") data[names[i]] = r.value;
+    else {
+      data[names[i]] = [];
+      data.warnings.push(logError(r.reason, `Memuat ${names[i]}`));
+    }
+  });
+  return normalize(data);
 }
 
 /* ------------------------------------------------------------------ */
 /*  Pesan error yang mudah dipahami                                    */
 /* ------------------------------------------------------------------ */
 
-export function friendlyError(error) {
+const MIGRATIONS = {
+  translations: "migration-bahasa.sql",
+  category: "migration-kategori-skill.sql",
+  interests: "migration-minat.sql",
+  timezone: "migration-minat.sql",
+  role: "migration-minat.sql",
+  year: "migration-minat.sql",
+};
+
+/** File SQL yang perlu dijalankan untuk kolom/tabel yang hilang. */
+export const migrationFor = (name) => MIGRATIONS[name] || "schema.sql";
+
+/**
+ * Pesan error untuk panel admin (Bahasa Indonesia), sekaligus mencatatnya
+ * ke log error (Admin → Cek Sistem). Kode error ditampilkan di akhir pesan.
+ */
+export function friendlyError(error, where = "Admin", { log = true } = {}) {
+  if (typeof error === "string") return error;
+  if (log) logError(error, where);
   const msg = String(error?.message || error || "");
+  const tag = error?.code || (error?.status ? `HTTP ${error.status}` : "");
+  const withCode = (text) => (tag ? `${text} (kode: ${tag})` : text);
+
   if (/Invalid login credentials/i.test(msg)) return "Email atau password salah.";
   if (/Email not confirmed/i.test(msg)) return "Email belum dikonfirmasi. Cek kotak masuk email Anda.";
-  if (/Failed to fetch|NetworkError|network/i.test(msg)) return "Tidak ada koneksi internet. Coba lagi.";
-  if (/row-level security|permission denied|not authorized/i.test(msg))
-    return "Akses ditolak. Pastikan Anda login dengan akun admin.";
   if (/exceeded the maximum allowed size|Payload too large/i.test(msg))
     return `File terlalu besar (maks ${MAX_UPLOAD_MB} MB).`;
+  if (/mime type .* is not supported|invalid_mime_type/i.test(msg))
+    return "Jenis file tidak didukung. Gunakan gambar, video, atau PDF.";
   if (/duplicate key/i.test(msg)) return "Data dengan nama yang sama sudah ada.";
-  if (/translations/i.test(msg) && /column|schema cache/i.test(msg))
-    return "Database belum mendukung dua bahasa. Jalankan file supabase/migration-bahasa.sql di Supabase SQL Editor.";
-  if (/category/i.test(msg) && /column|schema cache/i.test(msg))
-    return "Database belum mendukung kelompok skill. Jalankan file supabase/migration-kategori-skill.sql di Supabase SQL Editor.";
-  if (/'(interests|timezone|role|year)' column/i.test(msg))
-    return "Database belum mendukung isian minat/peran/tahun. Jalankan file supabase/migration-minat.sql di Supabase SQL Editor.";
   if (/JWT expired|session/i.test(msg)) return "Sesi login habis. Silakan login ulang.";
-  return msg || "Terjadi kesalahan. Coba lagi.";
+  if (/Bucket not found/i.test(msg))
+    return withCode("Tempat penyimpanan file belum dibuat. Jalankan supabase/schema.sql di Supabase SQL Editor.");
+
+  switch (errorKind(error)) {
+    case "offline":
+      return "Perangkat tidak terhubung ke internet. Periksa koneksi lalu coba lagi.";
+    case "network":
+      return "Server Supabase tidak bisa dihubungi. Periksa alamat VITE_SUPABASE_URL atau koneksi internet.";
+    case "timeout":
+      return "Server terlalu lama menjawab. Coba lagi beberapa saat lagi.";
+    case "config":
+      return withCode("Alamat atau kunci Supabase salah. Buka Cek Sistem untuk detailnya.");
+    case "schema": {
+      const name = missingName(error);
+      return withCode(
+        `Database belum lengkap${name ? ` ("${name}" belum ada)` : ""}. Jalankan file supabase/${migrationFor(name)} di Supabase SQL Editor.`,
+      );
+    }
+    case "permission":
+      return withCode("Akses ditolak. Pastikan Anda login dengan akun yang terdaftar sebagai admin.");
+    case "server":
+      return withCode("Server Supabase sedang bermasalah. Coba lagi beberapa menit lagi.");
+    default:
+      return withCode(msg || "Terjadi kesalahan. Coba lagi.");
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -71,13 +130,11 @@ export function friendlyError(error) {
 /* ------------------------------------------------------------------ */
 
 export async function checkIsAdmin() {
-  const { data, error } = await supabase.rpc("is_admin");
-  if (error) throw error;
-  return Boolean(data);
+  return Boolean(unwrap(await supabase.rpc("is_admin"), "is_admin"));
 }
 
 export async function listRows(table) {
-  return unwrap(await supabase.from(table).select("*").order("sort_order"));
+  return unwrap(await supabase.from(table).select("*").order("sort_order"), table);
 }
 
 /** Simpan satu baris: update jika sudah punya id, insert jika baru. */
@@ -98,7 +155,7 @@ export async function saveOrder(table, rows) {
   const results = await Promise.all(
     rows.map((row, index) => supabase.from(table).update({ sort_order: index }).eq("id", row.id)),
   );
-  results.forEach(unwrap);
+  results.forEach((r) => unwrap(r, table));
 }
 
 export async function getProfile() {

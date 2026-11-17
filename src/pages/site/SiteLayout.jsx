@@ -6,6 +6,8 @@ import { SiteHeader } from "../../components/site/SiteHeader";
 import { CommandPalette } from "../../components/site/CommandPalette";
 import { Skeleton } from "../../components/ui/Skeleton";
 import { Button } from "../../components/ui/Button";
+import { ErrorDetails } from "../../components/ui/ErrorDetails";
+import { errorKind } from "../../lib/errors";
 import { usePortfolio } from "../../lib/portfolio";
 import { availableSections, sectionFromPath, SECTION_ORDER } from "../../lib/sections";
 import { LanguageProvider } from "../../i18n/LanguageProvider";
@@ -25,13 +27,22 @@ function LoadingView() {
   );
 }
 
-function ErrorView({ onRetry }) {
+const SHOWN_KINDS = ["offline", "network", "config", "schema", "permission", "timeout", "server"];
+
+/** Halaman gagal dimuat: sebutkan penyebabnya + detail teknis yang bisa disalin. */
+function ErrorView({ error, onRetry }) {
   const { t } = useLang();
+  const kind = SHOWN_KINDS.includes(errorKind(error)) ? errorKind(error) : "unknown";
   return (
-    <div className="grid min-h-dvh place-items-center px-6">
-      <div className="max-w-sm">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("error.title")}</h1>
-        <p className="mt-2 text-muted">{t("error.text")}</p>
+    <div className="grid min-h-dvh place-items-center px-5">
+      <div className="w-full max-w-md">
+        <h1 className="text-3xl font-semibold tracking-tight">{t(`error.${kind}.title`)}</h1>
+        <p className="mt-2 text-muted">{t(`error.${kind}.text`)}</p>
+        <ErrorDetails
+          error={error}
+          labels={{ details: t("error.details"), copy: t("error.copy"), copied: t("error.copied") }}
+          className="mt-5"
+        />
         <Button icon={RefreshCw} onClick={onRetry} className="mt-6">
           {t("error.retry")}
         </Button>
@@ -57,7 +68,7 @@ export function SiteFooter({ name, className = "" }) {
 }
 
 function Shell() {
-  const { status, data, reload } = usePortfolio();
+  const { status, data, error, reload } = usePortfolio();
   const { t, lang } = useLang();
   const { pathname } = useLocation();
   const [search, setSearch] = useState(false);
@@ -89,7 +100,7 @@ function Shell() {
   }, []);
   const closeSearch = useCallback(() => setSearch(false), []);
 
-  if (status === "error" && !data) return <ErrorView onRetry={reload} />;
+  if (status === "error" && !data) return <ErrorView error={error} onRetry={reload} />;
   if (!data) return <LoadingView />;
 
   const sections = availableSections(data);
