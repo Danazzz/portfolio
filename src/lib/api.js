@@ -1,7 +1,7 @@
 import seed from "../data/seed.json";
 import { supabase, isSupabaseReady, MEDIA_BUCKET } from "./supabase";
 import { compressImage, MAX_UPLOAD_MB } from "./media";
-import { byOrder, slugify } from "./utils";
+import { byOrder, slugify, withSafeUrls } from "./utils";
 import { errorKind, fromResponse, missingName, withTimeout } from "./errors";
 import { logError } from "./errorLog";
 
@@ -9,19 +9,25 @@ import { logError } from "./errorLog";
 /*  Data publik (dipakai halaman website)                              */
 /* ------------------------------------------------------------------ */
 
+// Semua link (kolom "_url" & URL media) disaring di sini, jadi setiap halaman otomatis aman
+// walau data diubah langsung di dashboard Supabase tanpa lewat validasi form admin.
 const normalize = (data) => ({
   warnings: data.warnings || [],
-  profile: data.profile || seed.profile,
+  profile: withSafeUrls(data.profile || seed.profile),
   projects: (data.projects || [])
     .filter((p) => p.published !== false)
-    .map((p) => ({ ...p, tags: p.tags || [], media: [...(p.media || [])].sort(byOrder) }))
+    .map((p) => ({
+      ...withSafeUrls(p),
+      tags: p.tags || [],
+      media: [...(p.media || [])].map(withSafeUrls).filter((m) => m.url).sort(byOrder),
+    }))
     .sort(byOrder),
   experiences: [...(data.experiences || [])].map((e) => ({ ...e, highlights: e.highlights || [] })).sort(byOrder),
-  skills: [...(data.skills || [])].sort(byOrder),
-  certificates: [...(data.certificates || [])].sort(byOrder),
+  skills: [...(data.skills || [])].map(withSafeUrls).sort(byOrder),
+  certificates: [...(data.certificates || [])].map(withSafeUrls).sort(byOrder),
   research: (data.research || [])
     .filter((r) => r.published !== false)
-    .map((r) => ({ ...r, keywords: r.keywords || [] }))
+    .map((r) => ({ ...withSafeUrls(r), keywords: r.keywords || [] }))
     .sort(byOrder),
 });
 

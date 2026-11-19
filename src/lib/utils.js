@@ -52,3 +52,30 @@ export const whatsappLink = (number) => {
 };
 
 export const byOrder = (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0);
+
+/**
+ * Penyaring link dari database. Hanya mengizinkan https/http, mailto, tel, path aset
+ * (mis. "profile/foto.png") dan gambar data:image. Selain itu (mis. "javascript:...") → "".
+ * Spasi & karakter kontrol tersembunyi dibuang dulu, karena sering dipakai untuk mengelabui pengecekan.
+ */
+export const safeUrl = (value) => {
+  if (typeof value !== "string") return "";
+  // eslint-disable-next-line no-control-regex
+  const url = value.replace(/[\u0000-\u001F\u007F\s]+/g, "");
+  if (!url) return "";
+  const scheme = url.match(/^([a-z][a-z0-9+.-]*):/i)?.[1]?.toLowerCase();
+  if (!scheme) return url.startsWith("//") ? "" : value.trim(); // path relatif (aset)
+  if (["https", "http", "mailto", "tel"].includes(scheme)) return value.trim();
+  if (scheme === "data" && /^data:image\//i.test(url)) return value.trim();
+  return "";
+};
+
+/** Saring semua kolom berakhiran "_url" pada satu baris data. */
+export const withSafeUrls = (row) => {
+  if (!row || typeof row !== "object") return row;
+  const out = { ...row };
+  for (const key of Object.keys(out)) {
+    if (key.endsWith("_url") || key === "url") out[key] = safeUrl(out[key]);
+  }
+  return out;
+};
