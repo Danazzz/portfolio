@@ -4,6 +4,7 @@ import { ArrowUpRight, Check, Copy, MessageCircle, X } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { contactLinks } from "../../lib/contacts";
 import { EASE } from "../../lib/motion";
+import { Magnetic, MagneticLabel } from "../motion/Magnetic";
 import { useLang } from "../../i18n/language";
 
 function CopyButton({ text, label, copiedLabel }) {
@@ -114,32 +115,37 @@ export function ContactFab({ profile, open, onOpenChange }) {
         )}
       </AnimatePresence>
 
-      <motion.button
-        ref={buttonRef}
-        type="button"
-        onClick={() => onOpenChange(!open)}
-        aria-expanded={open}
-        aria-controls="contact-panel"
-        aria-label={open ? t("menu.close") : t("contact.open")}
-        title={t("contact.open")}
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.8, type: "spring", stiffness: 260, damping: 20 }}
-        whileTap={{ scale: 0.92 }}
-        className="pointer-events-auto grid size-14 place-items-center rounded-full bg-ink text-bg shadow-[0_12px_32px_-8px_rgb(43_32_28/0.55)] transition-colors hover:bg-brand"
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.span
-            key={open ? "x" : "chat"}
-            initial={{ rotate: -90, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: 90, opacity: 0 }}
-            transition={{ duration: 0.18 }}
-          >
-            {open ? <X className="size-6" /> : <MessageCircle className="size-6" />}
-          </motion.span>
-        </AnimatePresence>
-      </motion.button>
+      {/* Magnetik: tombol tertarik ke kursor saat didekati, ikonnya ikut sedikit lebih jauh */}
+      <Magnetic strength={0.35} reach={36}>
+        <motion.button
+          ref={buttonRef}
+          type="button"
+          onClick={() => onOpenChange(!open)}
+          aria-expanded={open}
+          aria-controls="contact-panel"
+          aria-label={open ? t("menu.close") : t("contact.open")}
+          title={t("contact.open")}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.8, type: "spring", stiffness: 260, damping: 20 }}
+          whileTap={{ scale: 0.92 }}
+          className="pointer-events-auto grid size-14 place-items-center rounded-full bg-ink text-bg shadow-[0_12px_32px_-8px_rgb(43_32_28/0.55)] transition-colors duration-500 hover:bg-brand"
+        >
+          <MagneticLabel factor={0.35}>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={open ? "x" : "chat"}
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.18 }}
+              >
+                {open ? <X className="size-6" /> : <MessageCircle className="size-6" />}
+              </motion.span>
+            </AnimatePresence>
+          </MagneticLabel>
+        </motion.button>
+      </Magnetic>
     </div>
   );
 }

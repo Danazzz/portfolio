@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, MotionConfig } from "framer-motion";
 import { RefreshCw } from "lucide-react";
 import { PreferenceToggles, SiteHeader } from "../../components/site/SiteHeader";
 import { CommandPalette } from "../../components/site/CommandPalette";
@@ -16,7 +16,7 @@ import { useLang } from "../../i18n/language";
 
 function LoadingView() {
   return (
-    <div aria-busy="true" aria-label="Loading" className="mx-auto max-w-5xl px-5 pt-32 sm:px-8">
+    <div aria-busy="true" aria-label="Loading" className="frame pt-32 sm:pt-40">
       <Skeleton className="h-16 w-3/4 max-w-xl sm:h-24" />
       <Skeleton className="mt-6 h-6 w-1/2 max-w-xs" />
       <div className="mt-24 space-y-4">
@@ -55,18 +55,19 @@ function ErrorView({ error, onRetry }) {
 /** Footer kecil di halaman isi (beranda punya baris bawahnya sendiri). */
 export function SiteFooter({ name, className = "" }) {
   return (
-    <footer
-      className={`mx-auto mt-20 flex w-full max-w-5xl items-center justify-between gap-4 py-8 pl-5 pr-24 text-xs text-muted sm:pl-8 sm:pr-28 ${className}`}
-    >
-      <p>
-        © {new Date().getFullYear()} {name}
-      </p>
-      <div className="flex items-center gap-3">
-        {/* HP: bahasa & tema ada di sini (di desktop ada di header) */}
-        <PreferenceToggles className="md:hidden" />
-        <Link to="/admin" className="text-muted/50 transition hover:text-muted">
-          Admin
-        </Link>
+    <footer className={`frame mt-24 sm:mt-32 ${className}`}>
+      {/* pr: beri ruang untuk tombol kontak melayang di kanan bawah */}
+      <div className="flex items-center justify-between gap-4 border-t border-line py-6 pr-20 text-xs text-muted sm:pr-24">
+        <p>
+          © {new Date().getFullYear()} {name}
+        </p>
+        <div className="flex items-center gap-3">
+          {/* HP: bahasa & tema ada di sini (di desktop ada di header) */}
+          <PreferenceToggles className="md:hidden" />
+          <Link to="/admin" className="link-line text-muted/50 transition-colors hover:text-muted">
+            Admin
+          </Link>
+        </div>
       </div>
     </footer>
   );
@@ -124,17 +125,21 @@ function Shell() {
   const sections = availableSections(data);
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <SiteHeader name={name} sections={sections} active={active} onSearch={openSearch} />
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      {!isHome && <SiteFooter name={name} />}
-      <ContactFab profile={data.profile} open={contact} onOpenChange={setContact} />
-      <AnimatePresence>
-        {search && <CommandPalette sections={sections} projects={data.projects} research={data.research} onClose={closeSearch} />}
-      </AnimatePresence>
-    </div>
+    // reducedMotion="user": bagi pengunjung yang memilih "kurangi gerakan", semua gerak geser/skala
+    // dari Framer Motion langsung ke posisi akhir (hanya pudar yang tetap).
+    <MotionConfig reducedMotion="user">
+      <div className="flex min-h-dvh flex-col">
+        <SiteHeader name={name} sections={sections} active={active} onSearch={openSearch} />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        {!isHome && <SiteFooter name={name} />}
+        <ContactFab profile={data.profile} open={contact} onOpenChange={setContact} />
+        <AnimatePresence>
+          {search && <CommandPalette sections={sections} projects={data.projects} research={data.research} onClose={closeSearch} />}
+        </AnimatePresence>
+      </div>
+    </MotionConfig>
   );
 }
 
