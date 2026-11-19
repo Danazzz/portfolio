@@ -62,6 +62,42 @@
 @theme {
   --shadow-card: 0 1px 2px rgb(59 43 38 / 0.06), 0 8px 24px -12px rgb(59 43 38 / 0.18);
   --shadow-float: 0 12px 40px -12px rgb(59 43 38 / 0.35);
+  /* Kurva gerak (sama dengan src/lib/motion.js) → kelas ease-out-expo, ease-in-out-expo */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+/*
+ * Bingkai halaman website: lebar penuh dengan tepi yang lega (gaya editorial),
+ * dipakai bersama oleh header, halaman dan footer supaya semua sejajar.
+ */
+@utility frame {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 90rem;
+  padding-inline: 1.25rem;
+  @media (width >= 40rem) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 3rem;
+  }
+}
+
+/* Label kecil berhuruf kapital (nomor bagian, kategori, tahun). */
+@utility eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Judul besar: Inter versi "Display" otomatis terpakai di ukuran besar (sumbu optical size). */
+@utility display {
+  font-weight: 450;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
 }
 
 @layer base {
@@ -112,6 +148,72 @@
 
 @utility pb-safe {
   padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+/*
+ * Topeng per kata untuk judul yang naik dari balik garis (MaskText).
+ * Padding + margin negatif memberi ruang untuk huruf menjulang/menurun (d, g, j, p)
+ * tanpa mengubah jarak baris.
+ */
+.mask-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0.08em 0.04em 0.16em;
+  margin: -0.08em -0.04em -0.16em;
+}
+
+/* Teks menggulung saat disorot (RollText). */
+.roll {
+  display: inline-grid;
+  overflow: hidden;
+  vertical-align: top;
+}
+.roll > span {
+  grid-area: 1 / 1;
+  transition: transform 0.55s var(--ease-out-expo);
+}
+.roll > span + span {
+  transform: translateY(105%);
+}
+.group:hover .roll > span:first-child,
+.group:focus-visible .roll > span:first-child {
+  transform: translateY(-105%);
+}
+.group:hover .roll > span + span,
+.group:focus-visible .roll > span + span {
+  transform: translateY(0);
+}
+
+/*
+ * Garis bawah link yang tumbuh dari kiri saat disorot, lalu keluar ke kanan saat dilepas.
+ * .link-line          → link itu sendiri
+ * .group .link-line-group → teks di dalam kartu/baris yang disorot
+ */
+.link-line,
+.link-line-group {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.6s var(--ease-out-expo);
+}
+.link-line:hover,
+.link-line:focus-visible,
+.group:hover .link-line-group,
+.group:focus-visible .link-line-group {
+  background-position: 0% 100%;
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roll > span {
+    transition: none;
+  }
+  .link-line,
+  .link-line-group {
+    transition: none;
+  }
 }
 
 /*
