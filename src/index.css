@@ -132,6 +132,16 @@
   --swiper-pagination-bullet-inactive-color: #fcdec0;
   --swiper-pagination-bullet-inactive-opacity: 0.45;
 }
+/*
+ * Swiper 14: wadah titik navigasi selebar slide dan cukup tinggi sehingga menutupi
+ * tombol "layar penuh" di pojok kanan bawah. Wadahnya dibuat tembus klik; titiknya tetap bisa diklik.
+ */
+.swiper .swiper-pagination {
+  pointer-events: none;
+}
+.swiper .swiper-pagination-bullet {
+  pointer-events: auto;
+}
 .swiper .swiper-pagination-bullet-active {
   width: 20px;
   border-radius: 999px;
@@ -145,4 +155,9 @@
   background: rgb(0 0 0 / 0.35);
   color: #fff;
   backdrop-filter: blur(6px);
+}
+/* Swiper 14 memakai ikon SVG (bukan font) → ukurannya diatur langsung supaya muat di lingkaran. */
+.swiper .swiper-navigation-icon {
+  width: auto;
+  height: 14px;
 }
