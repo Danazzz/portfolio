@@ -1,14 +1,34 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Check, ChevronLeft, ChevronRight, Share } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Share } from "lucide-react";
 import { MediaViewer } from "../../components/site/MediaViewer";
-import { SectionTitle } from "../../components/site/Page";
+import { SplitSection } from "../../components/site/Page";
+import { Magnetic, MagneticLabel } from "../../components/motion/Magnetic";
+import { MaskText, Reveal, RevealFrame } from "../../components/motion/Reveal";
 import { usePortfolio } from "../../lib/portfolio";
 import { fadeUp } from "../../lib/motion";
+import { cn } from "../../lib/utils";
 import { useLang } from "../../i18n/language";
 
 const prettyUrl = (url) => String(url).replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+
+/** Tombol kapsul magnetik: label & ikon ikut bergeser sedikit lebih jauh dari bingkainya. */
+const pillClass =
+  "group inline-flex h-11 items-center rounded-full border border-line px-5 text-sm font-medium transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-bg focus-visible:border-ink";
+
+function PillLink({ href, children }) {
+  return (
+    <Magnetic strength={0.3}>
+      <a href={href} target="_blank" rel="noreferrer" className={pillClass}>
+        <MagneticLabel className="gap-1.5">
+          {children}
+          <ArrowUpRight className="size-4 transition-transform duration-500 ease-out-expo group-hover:rotate-45" />
+        </MagneticLabel>
+      </a>
+    </Magnetic>
+  );
+}
 
 function ShareButton({ title }) {
   const { t } = useLang();
@@ -29,23 +49,37 @@ function ShareButton({ title }) {
   };
   const Icon = copied ? Check : Share;
   return (
-    <button type="button" onClick={share} className="inline-flex items-center gap-1.5 text-accent hover:underline">
-      {copied ? t("project.copied") : t("project.share")}
-      <Icon className="size-4" />
-    </button>
+    <Magnetic strength={0.3}>
+      <button type="button" onClick={share} className={pillClass}>
+        <MagneticLabel className="gap-1.5">
+          {copied ? t("project.copied") : t("project.share")}
+          <Icon className="size-4" />
+        </MagneticLabel>
+      </button>
+    </Magnetic>
   );
 }
 
 function ExternalLink({ href, children }) {
   return (
-    <a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-accent hover:underline">
-      {children}
-      <ArrowUpRight className="size-4" />
+    <a href={href} target="_blank" rel="noreferrer" className="group inline-flex items-center gap-1 text-accent">
+      <span className="link-line">{children}</span>
+      <ArrowUpRight className="size-4 transition-transform duration-500 ease-out-expo group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
     </a>
   );
 }
 
-/** Detail proyek seperti halaman produk: judul, link, media, cerita, lalu tabel spesifikasi. */
+/** Tautan kembali dengan panah yang mundur sedikit saat disorot. */
+function BackLink({ to, children }) {
+  return (
+    <Link to={to} className="group -ml-0.5 inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-ink">
+      <ArrowLeft className="size-4 transition-transform duration-500 ease-out-expo group-hover:-translate-x-1" />
+      <span className="link-line">{children}</span>
+    </Link>
+  );
+}
+
+/** Detail proyek bergaya editorial: judul raksasa, tombol aksi, media yang membuka seperti tirai, cerita, spesifikasi. */
 export default function ProjectPage() {
   const { slug } = useParams();
   const { data } = usePortfolio();
@@ -62,12 +96,12 @@ export default function ProjectPage() {
 
   if (!project) {
     return (
-      <div className="mx-auto max-w-5xl px-5 pt-36 sm:px-8">
-        <h1 className="text-4xl font-semibold tracking-tight">{t("project.notFound")}</h1>
-        <p className="mt-2 text-muted">{t("project.notFoundText")}</p>
-        <Link to={to("/projects")} className="mt-6 inline-flex items-center gap-1 text-accent hover:underline">
-          {t("project.backHome")} <ChevronRight className="size-4" />
-        </Link>
+      <div className="frame pt-36 sm:pt-44">
+        <h1 className="display text-5xl sm:text-7xl">{t("project.notFound")}</h1>
+        <p className="mt-4 text-muted">{t("project.notFoundText")}</p>
+        <div className="mt-8">
+          <BackLink to={to("/projects")}>{t("project.backHome")}</BackLink>
+        </div>
       </div>
     );
   }
@@ -76,7 +110,9 @@ export default function ProjectPage() {
   const description = tr(project, "description");
   const role = tr(project, "role");
   const prev = projects[index - 1];
-  const next = projects[index + 1];
+  // Selalu ada "proyek berikutnya": setelah yang terakhir, kembali ke yang pertama.
+  const next = projects[index + 1] ?? (projects.length > 1 ? projects[0] : null);
+  const meta = [project.category, project.year].filter(Boolean).join(" · ");
 
   const specs = [
     role && [t("project.role"), role],
@@ -85,7 +121,7 @@ export default function ProjectPage() {
     project.tags.length > 0 && [t("project.stack"), project.tags.join(" · ")],
     (project.demo_url || project.source_url) && [
       t("project.links"),
-      <span key="links" className="flex flex-col gap-1">
+      <span key="links" className="flex flex-col items-start gap-1">
         {project.demo_url && <ExternalLink href={project.demo_url}>{prettyUrl(project.demo_url)}</ExternalLink>}
         {project.source_url && <ExternalLink href={project.source_url}>{prettyUrl(project.source_url)}</ExternalLink>}
       </span>,
@@ -93,72 +129,84 @@ export default function ProjectPage() {
   ].filter(Boolean);
 
   return (
-    <article key={project.id} className="mx-auto max-w-5xl px-5 pt-24 sm:px-8 sm:pt-28">
-      <motion.div {...fadeUp()}>
-        <Link
-          to={to("/projects")}
-          className="-ml-1 inline-flex items-center gap-0.5 text-sm text-muted transition hover:text-ink"
-        >
-          <ChevronLeft className="size-4" /> {t("nav.projects")}
-        </Link>
-        <h1 className="mt-6 text-5xl font-semibold tracking-[-0.035em] sm:text-7xl">{title}</h1>
-        {summary && <p className="mt-4 max-w-2xl text-xl text-muted sm:text-2xl">{summary}</p>}
-        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
-          {project.demo_url && <ExternalLink href={project.demo_url}>{t("project.demo")}</ExternalLink>}
-          {project.source_url && <ExternalLink href={project.source_url}>{t("project.source")}</ExternalLink>}
-          <ShareButton title={title} />
-        </div>
+    <article key={project.id} className="frame pt-24 sm:pt-32">
+      <motion.div {...fadeUp()} className="flex flex-wrap items-center justify-between gap-4">
+        <BackLink to={to("/projects")}>{t("nav.projects")}</BackLink>
+        {meta && <span className="eyebrow">{meta}</span>}
       </motion.div>
 
-      <motion.div {...fadeUp(0.1)} className="mt-10 overflow-hidden rounded-2xl sm:mt-14 sm:rounded-3xl">
+      <h1 className="display mt-10 text-[clamp(3rem,12vw,10rem)] sm:mt-14">
+        <MaskText text={title} delay={0.1} />
+      </h1>
+
+      <div className="mt-8 grid gap-8 sm:mt-12 sm:grid-cols-12 sm:items-end">
+        {summary && (
+          <motion.p {...fadeUp(0.35)} className="max-w-2xl text-xl leading-snug text-muted sm:col-span-7 sm:text-2xl">
+            {summary}
+          </motion.p>
+        )}
+        <motion.div {...fadeUp(0.45)} className="flex flex-wrap gap-2 sm:col-span-5 sm:col-start-8 sm:justify-end">
+          {project.demo_url && <PillLink href={project.demo_url}>{t("project.demo")}</PillLink>}
+          {project.source_url && <PillLink href={project.source_url}>{t("project.source")}</PillLink>}
+          <ShareButton title={title} />
+        </motion.div>
+      </div>
+
+      <RevealFrame onView={false} delay={0.3} className="mt-12 rounded-[1.25rem] sm:mt-16 sm:rounded-[1.75rem]">
         <MediaViewer media={project.media} mode={project.display_mode} title={title} tags={project.tags} />
-      </motion.div>
+      </RevealFrame>
 
       {description && (
-        <motion.p
-          {...fadeUp(0.15)}
-          className="mt-12 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/85 sm:mt-16 sm:text-xl"
-        >
-          {description}
-        </motion.p>
+        <SplitSection title={t("project.overview")} index={1} className="mt-20 sm:mt-28">
+          <Reveal as="p" className="max-w-3xl whitespace-pre-line text-xl leading-relaxed text-ink/85 sm:text-2xl sm:leading-relaxed">
+            {description}
+          </Reveal>
+        </SplitSection>
       )}
 
       {specs.length > 0 && (
-        <section className="mt-16 sm:mt-20">
-          <SectionTitle>{t("project.specs")}</SectionTitle>
-          <dl>
-            {specs.map(([label, value]) => (
-              <div key={label} className="grid gap-1 border-b border-line py-4 sm:grid-cols-[12rem_1fr] sm:gap-6">
+        <SplitSection title={t("project.specs")} index={description ? 2 : 1} className="mt-20 sm:mt-28">
+          <dl className="border-t border-line sm:border-t-0">
+            {specs.map(([label, value], i) => (
+              <Reveal
+                key={label}
+                index={i}
+                className="grid gap-1 border-b border-line py-4 first:sm:pt-1 sm:grid-cols-[10rem_1fr] sm:gap-6"
+              >
                 <dt className="text-sm text-muted">{label}</dt>
                 <dd>{value}</dd>
-              </div>
+              </Reveal>
             ))}
           </dl>
-        </section>
+        </SplitSection>
       )}
 
       {(prev || next) && (
-        <nav className="mt-16 grid grid-cols-2 gap-4 border-t border-line pt-6 sm:mt-20" aria-label={t("nav.projects")}>
-          <div>
-            {prev && (
-              <Link to={to(`/projects/${prev.slug}`)} className="group block">
-                <span className="flex items-center gap-0.5 text-sm text-muted">
-                  <ChevronLeft className="size-4" /> {t("project.prev")}
+        <nav className="mt-24 border-t border-line pt-6 sm:mt-36 sm:pt-8" aria-label={t("nav.projects")}>
+          {prev && (
+            <Link
+              to={to(`/projects/${prev.slug}`)}
+              className="group inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-ink"
+            >
+              <ArrowLeft className="size-4 transition-transform duration-500 ease-out-expo group-hover:-translate-x-1" />
+              {t("project.prev")}: <span className="link-line">{tr(prev, "title")}</span>
+            </Link>
+          )}
+          {next && next !== project && (
+            <Link to={to(`/projects/${next.slug}`)} className={cn("group block", prev && "mt-10 sm:mt-14")}>
+              <span className="eyebrow">{t("project.nextProject")}</span>
+              <span className="mt-3 flex items-end justify-between gap-6 sm:mt-5">
+                <span className="display block min-w-0 text-[clamp(2.5rem,9vw,8rem)] transition-transform duration-700 ease-out-expo group-hover:translate-x-3 sm:group-hover:translate-x-6">
+                  {tr(next, "title")}
                 </span>
-                <span className="mt-1 block font-medium transition group-hover:text-accent">{tr(prev, "title")}</span>
-              </Link>
-            )}
-          </div>
-          <div className="text-right">
-            {next && (
-              <Link to={to(`/projects/${next.slug}`)} className="group block">
-                <span className="flex items-center justify-end gap-0.5 text-sm text-muted">
-                  {t("project.next")} <ChevronRight className="size-4" />
-                </span>
-                <span className="mt-1 block font-medium transition group-hover:text-accent">{tr(next, "title")}</span>
-              </Link>
-            )}
-          </div>
+                <Magnetic strength={0.35} reach={40} className="mb-[0.6vw] shrink-0">
+                  <span className="grid size-14 place-items-center rounded-full bg-ink text-bg transition-colors duration-500 group-hover:bg-brand sm:size-24">
+                    <ArrowRight className="size-6 transition-transform duration-500 ease-out-expo group-hover:-rotate-45 sm:size-8" />
+                  </span>
+                </Magnetic>
+              </span>
+            </Link>
+          )}
         </nav>
       )}
     </article>
