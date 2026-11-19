@@ -1,18 +1,22 @@
 import { useEffect, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { DURATION, EASE } from "../../../lib/motion";
+import { cn } from "../../../lib/utils";
 
 const BASE = 380; // ketebalan normal
 const PEAK = 820; // ketebalan tepat di bawah kursor
+const RISE_DELAY = 0.15; // kata-kata naik dari balik garis saat halaman dibuka
 
 const smooth = (k) => k * k * (3 - 2 * k);
 const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 
 /**
  * Nama besar yang "bernapas": ketebalan tiap huruf berubah mengikuti kursor
- * (atau jari di HP). Saat halaman dibuka, efeknya menyapu sekali dari kiri ke kanan.
+ * (atau jari di HP). Saat halaman dibuka, tiap kata naik dari balik garis,
+ * lalu efek tebal menyapu sekali dari kiri ke kanan.
  * Pengunjung yang mematikan animasi melihat nama dengan ketebalan tetap.
  */
-export function LivingName({ name }) {
+export function LivingName({ name, className }) {
   const reduce = useReducedMotion();
   const rootRef = useRef(null);
   const letters = useRef([]);
@@ -27,7 +31,7 @@ export function LivingName({ name }) {
     const weights = els.map(() => BASE);
     let pointer = null;
     let raf = 0;
-    const introStart = performance.now() + 450;
+    const introStart = performance.now() + 700; // setelah kata-kata selesai naik
     const INTRO_MS = 1700;
 
     const tick = (now) => {
@@ -99,26 +103,33 @@ export function LivingName({ name }) {
     <h1
       ref={rootRef}
       aria-label={name}
-      className="select-none text-[clamp(3.4rem,min(14vw,13.5vh),8.75rem)] leading-[0.92] tracking-[-0.045em]"
+      className={cn("select-none leading-[0.92] tracking-[-0.045em]", className)}
       style={{ fontWeight: reduce ? 600 : BASE }}
     >
       {words.map((word, w) => (
         <span key={w} aria-hidden="true">
           {w > 0 && " "}
-          <span className="inline-block whitespace-nowrap">
-            {[...word].map((ch, i) => {
-              const index = n++;
-              return (
-                <span
-                  key={i}
-                  ref={(el) => (letters.current[index] = el)}
-                  className="inline-block"
-                  style={reduce ? undefined : { fontVariationSettings: `"wght" ${BASE}` }}
-                >
-                  {ch}
-                </span>
-              );
-            })}
+          <span className="mask-word">
+            <motion.span
+              className="inline-block whitespace-nowrap"
+              initial={{ y: "112%" }}
+              animate={{ y: "0%" }}
+              transition={{ duration: DURATION.slow, ease: EASE, delay: RISE_DELAY + w * 0.09 }}
+            >
+              {[...word].map((ch, i) => {
+                const index = n++;
+                return (
+                  <span
+                    key={i}
+                    ref={(el) => (letters.current[index] = el)}
+                    className="inline-block"
+                    style={reduce ? undefined : { fontVariationSettings: `"wght" ${BASE}` }}
+                  >
+                    {ch}
+                  </span>
+                );
+              })}
+            </motion.span>
           </span>
         </span>
       ))}
