@@ -11,13 +11,14 @@ const TONES = [
 
 const hash = (text) => [...String(text)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
 
+// Hanya kata yang diawali huruf/angka (tanda baca seperti "—" atau "&" dilewati).
 const initials = (title) =>
   String(title || "?")
     .split(/\s+/)
-    .filter(Boolean)
+    .filter((w) => /^[\p{L}\p{N}]/u.test(w))
     .slice(0, 2)
     .map((w) => w[0].toUpperCase())
-    .join("");
+    .join("") || "?";
 
 /**
  * Sampul otomatis untuk proyek yang belum punya gambar, bergaya sampul buku:
