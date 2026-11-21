@@ -74,7 +74,7 @@ export const COLLECTIONS = [
         label: "Kelompok",
         type: "text",
         placeholder: "Contoh: Frontend",
-        options: ["Frontend", "Backend", "Database", "Mobile", "DevOps", "Tools", "CMS"],
+        options: ["Frontend", "Backend", "Database", "Mobile", "AI", "Testing", "DevOps", "Tools", "CMS"],
         help: "Skill dengan kelompok sama tampil berdampingan.",
         half: true,
       },
