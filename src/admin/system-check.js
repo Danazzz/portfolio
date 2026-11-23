@@ -8,6 +8,7 @@ export const TABLE_SPECS = [
   { table: "projects", label: "Proyek", columns: ["id", "title", "category", "role", "year", "translations"] },
   { table: "project_media", label: "Media proyek", columns: ["id", "url"] },
   { table: "experiences", label: "Pengalaman", columns: ["id", "translations"] },
+  { table: "education", label: "Pendidikan", columns: ["id", "institution", "start_year", "end_year", "translations"] },
   { table: "skills", label: "Skill", columns: ["id", "category"] },
   { table: "certificates", label: "Sertifikat", columns: ["id"] },
   { table: "research", label: "Penelitian", columns: ["id", "title", "status", "keywords", "published", "translations"] },

@@ -12,6 +12,7 @@ export const DICTIONARY = {
     "nav.projects": "Projects",
     "nav.research": "Research",
     "nav.experience": "Experience",
+    "nav.education": "Education",
     "nav.skills": "Skills",
     "nav.certificates": "Certificates",
     "nav.contact": "Contact",
@@ -22,6 +23,7 @@ export const DICTIONARY = {
     "projects.all": "All",
     "projects.empty": "No projects yet — check back soon.",
     "experience.present": "Present",
+    "education.ongoing": "Ongoing",
     "certificates.view": "View credential",
 
     "project.demo": "Live demo",
@@ -97,6 +99,7 @@ export const DICTIONARY = {
     "nav.projects": "Proyek",
     "nav.research": "Penelitian",
     "nav.experience": "Pengalaman",
+    "nav.education": "Pendidikan",
     "nav.skills": "Keahlian",
     "nav.certificates": "Sertifikat",
     "nav.contact": "Kontak",
@@ -107,6 +110,7 @@ export const DICTIONARY = {
     "projects.all": "Semua",
     "projects.empty": "Belum ada proyek — nantikan segera.",
     "experience.present": "Sekarang",
+    "education.ongoing": "Berjalan",
     "certificates.view": "Lihat kredensial",
 
     "project.demo": "Lihat demo",

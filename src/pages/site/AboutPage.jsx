@@ -37,7 +37,7 @@ export default function AboutPage() {
   const { data } = usePortfolio();
   const { t, tr, date } = useLang();
   const { state } = useLocation();
-  const { profile, experiences, skills, certificates } = data;
+  const { profile, experiences, education = [], skills, certificates } = data;
   const [lightbox, setLightbox] = useState(null);
 
   const headline = tr(profile, "headline");
@@ -116,6 +116,26 @@ export default function AboutPage() {
                       ))}
                     </ul>
                   )}
+                </Row>
+              );
+            })}
+          </ul>
+        </SplitSection>
+      )}
+
+      {education.length > 0 && (
+        <SplitSection id="education" index={nextIndex()} title={t("nav.education")} className="mt-24 sm:mt-36">
+          <ul>
+            {education.map((edu, i) => {
+              const description = tr(edu, "description");
+              const period = edu.start_year || edu.end_year
+                ? [edu.start_year, edu.end_year || t("education.ongoing")].filter(Boolean).join(" — ")
+                : null;
+              return (
+                <Row key={edu.id} index={i} aside={period}>
+                  <h3 className="text-xl font-medium tracking-[-0.015em] sm:text-2xl">{edu.institution}</h3>
+                  {tr(edu, "degree") && <p className="mt-1 text-muted">{tr(edu, "degree")}</p>}
+                  {description && <p className="mt-3 whitespace-pre-line leading-relaxed text-ink/80">{description}</p>}
                 </Row>
               );
             })}

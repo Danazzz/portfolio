@@ -60,6 +60,23 @@ export const COLLECTIONS = [
     ],
   },
   {
+    table: "education",
+    path: "education",
+    title: "Pendidikan",
+    description: "Riwayat pendidikan yang tampil di halaman About.",
+    itemName: "pendidikan",
+    primary: (row) => row.institution,
+    secondary: (row) =>
+      [row.degree, [row.start_year, row.end_year].filter(Boolean).join(" – ")].filter(Boolean).join(" · "),
+    fields: [
+      { name: "institution", label: "Nama kampus / sekolah", type: "text", required: true, placeholder: "Contoh: Institut Teknologi Sepuluh Nopember (ITS)" },
+      { name: "degree", label: "Jenjang & jurusan", type: "text", translatable: true, placeholder: "Contoh: Master of Informatics Engineering" },
+      { name: "start_year", label: "Tahun masuk", type: "text", validate: "year", placeholder: "Contoh: 2024", half: true },
+      { name: "end_year", label: "Tahun lulus", type: "text", validate: "year", placeholder: "Contoh: 2026", help: "Kosongkan jika masih berjalan.", half: true },
+      { name: "description", label: "Keterangan (opsional)", type: "textarea", rows: 3, translatable: true, help: "Mis. judul tesis/skripsi atau fokus studi." },
+    ],
+  },
+  {
     table: "skills",
     path: "skills",
     title: "Skill",

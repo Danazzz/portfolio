@@ -164,6 +164,22 @@
       }
     }
   ],
+  "education": [
+    {
+      "id": "seed-edu-1",
+      "institution": "Institut Teknologi Sepuluh Nopember (ITS)",
+      "degree": "Master of Informatics Engineering",
+      "start_year": "",
+      "end_year": "",
+      "description": "",
+      "sort_order": 0,
+      "translations": {
+        "id": {
+          "degree": "Magister Teknik Informatika"
+        }
+      }
+    }
+  ],
   "skills": [
     {
       "id": "seed-skill-1",

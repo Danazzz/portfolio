@@ -23,6 +23,7 @@ const normalize = (data) => ({
     }))
     .sort(byOrder),
   experiences: [...(data.experiences || [])].map((e) => ({ ...e, highlights: e.highlights || [] })).sort(byOrder),
+  education: [...(data.education || [])].sort(byOrder),
   skills: [...(data.skills || [])].map(withSafeUrls).sort(byOrder),
   certificates: [...(data.certificates || [])].map(withSafeUrls).sort(byOrder),
   research: (data.research || [])
@@ -54,6 +55,7 @@ export async function fetchPortfolio() {
   const parts = {
     projects: supabase.from("projects").select("*, media:project_media(*)").eq("published", true),
     experiences: supabase.from("experiences").select("*"),
+    education: supabase.from("education").select("*"),
     skills: supabase.from("skills").select("*"),
     certificates: supabase.from("certificates").select("*"),
     research: supabase.from("research").select("*").eq("published", true),
@@ -86,6 +88,9 @@ const MIGRATIONS = {
   role: "migration-minat.sql",
   year: "migration-minat.sql",
   research: "migration-research.sql",
+  education: "migration-pendidikan.sql",
+  start_year: "migration-pendidikan.sql",
+  end_year: "migration-pendidikan.sql",
 };
 
 /** File SQL yang perlu dijalankan untuk kolom/tabel yang hilang. */
@@ -302,6 +307,7 @@ export async function importSeed() {
   };
   unwrap(await supabase.from("profile").upsert({ ...seed.profile, id: 1 }));
   if (seed.experiences.length) unwrap(await supabase.from("experiences").insert(seed.experiences.map(strip)));
+  if (seed.education?.length) unwrap(await supabase.from("education").insert(seed.education.map(strip)));
   if (seed.skills.length) unwrap(await supabase.from("skills").insert(seed.skills.map(strip)));
   if (seed.certificates.length) unwrap(await supabase.from("certificates").insert(seed.certificates.map(strip)));
   if (seed.research?.length) unwrap(await supabase.from("research").insert(seed.research.map(strip)));
