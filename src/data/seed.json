@@ -4,7 +4,7 @@
     "name": "Dana Wardhiana",
     "headline": "",
     "location": "Denpasar, Bali",
-    "about": "I am a Master student in Informatics Engineering, graduated in Information Technology and proficient in MERN stack, Laravel and Python. My studies are currently oriented towards IT Governance with the intent to analyze strategic IT alignment. In several internships and courses, I have implemented my technical knowledge and experience in realistic settings. My approach is practical and straightforward, aiming to effectively integrate technology solutions in business.",
+    "about": "I work across full-stack development and data science, and have applied both in practical and academic settings. My approach is practical and straightforward, aiming to integrate technology solutions effectively into business.",
     "avatar_url": "profile/avatar.png",
     "about_image_url": "",
     "email": "wardhianadana@gmail.com",
@@ -22,7 +22,7 @@
     "timezone": "Asia/Makassar",
     "translations": {
       "id": {
-        "about": "Saya mahasiswa Magister Teknik Informatika, lulusan Teknologi Informasi, dan menguasai MERN stack, Laravel, serta Python. Saat ini studi saya berfokus pada Tata Kelola TI (IT Governance) untuk menganalisis keselarasan strategis TI dengan bisnis. Melalui beberapa program magang dan kursus, saya telah menerapkan pengetahuan dan pengalaman teknis saya dalam situasi nyata. Pendekatan saya praktis dan lugas, dengan tujuan mengintegrasikan solusi teknologi ke dalam bisnis secara efektif.",
+        "about": "Saya bekerja di bidang pengembangan full-stack dan data science, dan telah menerapkan keduanya dalam konteks praktis maupun akademik. Pendekatan saya praktis dan lugas, dengan tujuan mengintegrasikan solusi teknologi ke dalam bisnis secara efektif.",
         "interests": [
           "graph",
           "keamanan siber",
