@@ -27,3 +27,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Skema & migrasi database (dijalankan manual di Supabase)
+supabase/
