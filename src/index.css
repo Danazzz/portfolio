@@ -263,3 +263,14 @@
   width: auto;
   height: 14px;
 }
+
+/* Beranda di layar sentuh: halaman dikunci (tanpa gulir, pantul, tarik-untuk-refresh) supaya
+   geseran jari dipakai untuk memainkan patung partikel. Kelas dipasang oleh HomePage. */
+@media (pointer: coarse) {
+  html.home-touch-lock,
+  html.home-touch-lock body {
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
+  }
+}

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LivingName } from "../../components/site/home/LivingName";
@@ -40,6 +40,13 @@ export default function HomePage() {
   const { t, tr, lang } = useLang();
   const { profile } = data;
   const placement = useHeroPlacement();
+
+  // Layar sentuh: kunci gulir selama di beranda (lihat .home-touch-lock di index.css).
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add("home-touch-lock");
+    return () => root.classList.remove("home-touch-lock");
+  }, []);
 
   const interests = useMemo(
     () => (tr(profile, "interests") || []).map((s) => s.trim()).filter(Boolean),
