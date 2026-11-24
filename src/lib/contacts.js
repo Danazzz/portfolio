@@ -1,4 +1,4 @@
-import { FileText, Github, Gitlab, Linkedin, Mail, MessageCircle } from "lucide-react";
+import { FileText, Github, Instagram, Linkedin, Mail, MessageCircle } from "lucide-react";
 import { assetUrl, whatsappLink } from "./utils";
 
 const prettyUrl = (url) => String(url).replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
@@ -19,7 +19,7 @@ export function contactLinks(profile, t) {
     profile.email && { id: "email", label: "Email", value: profile.email, icon: Mail, href: `mailto:${profile.email}`, copy: profile.email },
     profile.linkedin_url && { id: "linkedin", label: "LinkedIn", value: handle(profile.linkedin_url), icon: Linkedin, href: profile.linkedin_url },
     profile.github_url && { id: "github", label: "GitHub", value: handle(profile.github_url), icon: Github, href: profile.github_url },
-    profile.gitlab_url && { id: "gitlab", label: "GitLab", value: handle(profile.gitlab_url), icon: Gitlab, href: profile.gitlab_url },
+    profile.instagram_url && { id: "instagram", label: "Instagram", value: handle(profile.instagram_url), icon: Instagram, href: profile.instagram_url },
     profile.cv_url && { id: "cv", label: t("contact.cv"), value: "PDF", icon: FileText, href: assetUrl(profile.cv_url) },
   ].filter(Boolean);
 }

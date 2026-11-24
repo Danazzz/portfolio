@@ -42,7 +42,7 @@ const CONTACT = [
   { name: "whatsapp", label: "Nomor WhatsApp", type: "text", validate: "phone", placeholder: "Contoh: 081234567890", half: true },
   { name: "linkedin_url", label: "Link LinkedIn", type: "url", placeholder: "https://linkedin.com/in/...", half: true },
   { name: "github_url", label: "Link GitHub", type: "url", placeholder: "https://github.com/...", half: true },
-  { name: "gitlab_url", label: "Link GitLab", type: "url", placeholder: "https://gitlab.com/...", half: true },
+  { name: "instagram_url", label: "Link Instagram", type: "url", placeholder: "https://instagram.com/...", half: true },
   { name: "cv_url", label: "Link CV (PDF / Google Drive)", type: "url", placeholder: "https://...", help: "Jika diisi, muncul tombol CV di website.", half: true },
 ];
 
